@@ -1,0 +1,30 @@
+{
+    "answers": [
+        {
+            "attempt_question_id": 101,
+            "answer_payload": {
+                "selected_option_id": "opt_a1"
+            }
+        },
+        {
+            "attempt_question_id": 102,
+            "answer_payload": {
+                "selected_option_ids": [
+                    "opt_b2",
+                    "opt_b3"
+                ]
+            }
+        },
+        {
+            "attempt_question_id": 103,
+            "answer_payload": {
+                "rows": [
+                    {
+                        "row_id": "row_1",
+                        "option_id": "opt_c4"
+                    }
+                ]
+            }
+        }
+    ]
+}
