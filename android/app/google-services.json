@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "340579925002",
+    "project_id": "ubt-nkt",
+    "storage_bucket": "ubt-nkt.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340579925002:android:d2d8aac7472aeae85333f3",
+        "android_client_info": {
+          "package_name": "com.example.ubt_pbb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgWCJvAEKCMsMo1wTJ3uV4fK-jg3oXto8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
