@@ -6,3 +6,5 @@ void enterFullscreenWeb() {
 void exitFullscreenWeb() {
   // Пустая реализация для не-веб платформ
 }
+
+

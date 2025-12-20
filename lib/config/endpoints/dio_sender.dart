@@ -17,6 +17,8 @@ String mapError(String code) {
       return 'Неправильно ввели данные';
     case 'otp_rate_limited':
       return 'Кейінірек байқап көріңіз';
+    case 'attempt_state_conflict':
+      return 'У вас уже есть активный тест';
     default:
       return 'Ошибка, попробуйте ещё раз';
   }

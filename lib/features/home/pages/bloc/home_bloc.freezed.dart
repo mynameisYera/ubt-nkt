@@ -55,13 +55,14 @@ extension HomeEventPatterns on HomeEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _GetPairs value)?  getPairs,TResult Function( _StartExam value)?  startExam,TResult Function( _SetExamAttempt value)?  setExamAttempt,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _GetPairs value)?  getPairs,TResult Function( _StartExam value)?  startExam,TResult Function( _SetExamAttempt value)?  setExamAttempt,TResult Function( _ContinueExam value)?  continueExam,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _GetPairs() when getPairs != null:
 return getPairs(_that);case _StartExam() when startExam != null:
 return startExam(_that);case _SetExamAttempt() when setExamAttempt != null:
-return setExamAttempt(_that);case _:
+return setExamAttempt(_that);case _ContinueExam() when continueExam != null:
+return continueExam(_that);case _:
   return orElse();
 
 }
@@ -79,13 +80,14 @@ return setExamAttempt(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _GetPairs value)  getPairs,required TResult Function( _StartExam value)  startExam,required TResult Function( _SetExamAttempt value)  setExamAttempt,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _GetPairs value)  getPairs,required TResult Function( _StartExam value)  startExam,required TResult Function( _SetExamAttempt value)  setExamAttempt,required TResult Function( _ContinueExam value)  continueExam,}){
 final _that = this;
 switch (_that) {
 case _GetPairs():
 return getPairs(_that);case _StartExam():
 return startExam(_that);case _SetExamAttempt():
-return setExamAttempt(_that);case _:
+return setExamAttempt(_that);case _ContinueExam():
+return continueExam(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -102,13 +104,14 @@ return setExamAttempt(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _GetPairs value)?  getPairs,TResult? Function( _StartExam value)?  startExam,TResult? Function( _SetExamAttempt value)?  setExamAttempt,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _GetPairs value)?  getPairs,TResult? Function( _StartExam value)?  startExam,TResult? Function( _SetExamAttempt value)?  setExamAttempt,TResult? Function( _ContinueExam value)?  continueExam,}){
 final _that = this;
 switch (_that) {
 case _GetPairs() when getPairs != null:
 return getPairs(_that);case _StartExam() when startExam != null:
 return startExam(_that);case _SetExamAttempt() when setExamAttempt != null:
-return setExamAttempt(_that);case _:
+return setExamAttempt(_that);case _ContinueExam() when continueExam != null:
+return continueExam(_that);case _:
   return null;
 
 }
@@ -125,12 +128,13 @@ return setExamAttempt(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  getPairs,TResult Function( int id)?  startExam,TResult Function( ExamAttempt examAttempt)?  setExamAttempt,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  getPairs,TResult Function( int id)?  startExam,TResult Function( ExamAttempt examAttempt)?  setExamAttempt,TResult Function( int attemptId)?  continueExam,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GetPairs() when getPairs != null:
 return getPairs();case _StartExam() when startExam != null:
 return startExam(_that.id);case _SetExamAttempt() when setExamAttempt != null:
-return setExamAttempt(_that.examAttempt);case _:
+return setExamAttempt(_that.examAttempt);case _ContinueExam() when continueExam != null:
+return continueExam(_that.attemptId);case _:
   return orElse();
 
 }
@@ -148,12 +152,13 @@ return setExamAttempt(_that.examAttempt);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  getPairs,required TResult Function( int id)  startExam,required TResult Function( ExamAttempt examAttempt)  setExamAttempt,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  getPairs,required TResult Function( int id)  startExam,required TResult Function( ExamAttempt examAttempt)  setExamAttempt,required TResult Function( int attemptId)  continueExam,}) {final _that = this;
 switch (_that) {
 case _GetPairs():
 return getPairs();case _StartExam():
 return startExam(_that.id);case _SetExamAttempt():
-return setExamAttempt(_that.examAttempt);case _:
+return setExamAttempt(_that.examAttempt);case _ContinueExam():
+return continueExam(_that.attemptId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +175,13 @@ return setExamAttempt(_that.examAttempt);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  getPairs,TResult? Function( int id)?  startExam,TResult? Function( ExamAttempt examAttempt)?  setExamAttempt,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  getPairs,TResult? Function( int id)?  startExam,TResult? Function( ExamAttempt examAttempt)?  setExamAttempt,TResult? Function( int attemptId)?  continueExam,}) {final _that = this;
 switch (_that) {
 case _GetPairs() when getPairs != null:
 return getPairs();case _StartExam() when startExam != null:
 return startExam(_that.id);case _SetExamAttempt() when setExamAttempt != null:
-return setExamAttempt(_that.examAttempt);case _:
+return setExamAttempt(_that.examAttempt);case _ContinueExam() when continueExam != null:
+return continueExam(_that.attemptId);case _:
   return null;
 
 }
@@ -354,6 +360,72 @@ $ExamAttemptCopyWith<$Res> get examAttempt {
     return _then(_self.copyWith(examAttempt: value));
   });
 }
+}
+
+/// @nodoc
+
+
+class _ContinueExam implements HomeEvent {
+  const _ContinueExam({required this.attemptId});
+  
+
+ final  int attemptId;
+
+/// Create a copy of HomeEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ContinueExamCopyWith<_ContinueExam> get copyWith => __$ContinueExamCopyWithImpl<_ContinueExam>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ContinueExam&&(identical(other.attemptId, attemptId) || other.attemptId == attemptId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,attemptId);
+
+@override
+String toString() {
+  return 'HomeEvent.continueExam(attemptId: $attemptId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ContinueExamCopyWith<$Res> implements $HomeEventCopyWith<$Res> {
+  factory _$ContinueExamCopyWith(_ContinueExam value, $Res Function(_ContinueExam) _then) = __$ContinueExamCopyWithImpl;
+@useResult
+$Res call({
+ int attemptId
+});
+
+
+
+
+}
+/// @nodoc
+class __$ContinueExamCopyWithImpl<$Res>
+    implements _$ContinueExamCopyWith<$Res> {
+  __$ContinueExamCopyWithImpl(this._self, this._then);
+
+  final _ContinueExam _self;
+  final $Res Function(_ContinueExam) _then;
+
+/// Create a copy of HomeEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? attemptId = null,}) {
+  return _then(_ContinueExam(
+attemptId: null == attemptId ? _self.attemptId : attemptId // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
 }
 
 /// @nodoc

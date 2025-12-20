@@ -357,7 +357,6 @@ class _TestPageState extends State<TestPage> {
       }
     } on ApiException catch (e) {
       debugPrint('❌ ApiException sending answers: ${e.message}');
-      // Не показываем ошибку пользователю, чтобы не мешать прохождению теста
     } on DioException catch (e) {
       debugPrint('❌ DioException sending answers:');
       debugPrint('   Message: ${e.message}');
@@ -368,7 +367,6 @@ class _TestPageState extends State<TestPage> {
     } catch (e, stackTrace) {
       debugPrint('❌ Unexpected error sending answers: $e');
       debugPrint('   StackTrace: $stackTrace');
-      // Не показываем ошибку пользователю, чтобы не мешать прохождению теста
     }
   }
 
@@ -558,6 +556,18 @@ class _TestPageState extends State<TestPage> {
                           isLoading: false,
                           isDisabled: false,
                         ),
+                        const SizedBox(height: 10),
+                        AppButton(
+                          onPressed: () async {
+                            final attemptId = await FlutterSecureStorageFunc.getAttemptId();
+                            if (attemptId != null) {
+                              _homeBloc.add(HomeEvent.continueExam(attemptId: attemptId));
+                            }
+                          },
+                          text: 'Тестті жалғастыру',
+                          isLoading: false,
+                          isDisabled: false,
+                        ),
                       ],
                     ),
                   ),
@@ -579,12 +589,10 @@ class _TestPageState extends State<TestPage> {
                     _currentQuestionIndex = 0;
                   }
 
-                  // Адаптивная структура: боковая панель слева на десктопе
                   if (isDesktop) {
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Боковая панель с предметами (скрываемая)
                         if (!_isSidebarCollapsed)
                           _buildSubjectsSidebar(testModel, isDesktop),
                         if (!_isSidebarCollapsed)
@@ -592,7 +600,6 @@ class _TestPageState extends State<TestPage> {
                             width: 1,
                             color: Colors.grey.shade300,
                           ),
-                        // Основной контент
                         Expanded(
                           child: _buildMainContent(
                             selectedSubject,
@@ -603,12 +610,9 @@ class _TestPageState extends State<TestPage> {
                       ],
                     );
                   } else {
-                    // Мобильная версия: предметы в выпадающем списке или вверху
                     return Column(
                       children: [
-                        // Компактная панель предметов для мобильных
                         _buildMobileSubjectsBar(testModel),
-                        // Основной контент
                         Expanded(
                           child: _buildMainContent(
                             selectedSubject,
@@ -1900,7 +1904,6 @@ class _TestPageState extends State<TestPage> {
               ),
             );
           } catch (e) {
-            // Если ошибка при парсинге формулы, возвращаем обычный текст
             return Text(ctx.innerHtml);
           }
         },
@@ -1932,7 +1935,6 @@ class _TestPageState extends State<TestPage> {
               ),
             );
           } catch (e) {
-            // Если ошибка при парсинге формулы, возвращаем обычный текст
             return Text(ctx.innerHtml);
           }
         },

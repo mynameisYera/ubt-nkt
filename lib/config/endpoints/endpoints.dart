@@ -41,4 +41,7 @@ class Endpoints {
   // history
   static const String history = 'exams/history';
   static String historyResults(int attemptId) => 'exams/attempts/$attemptId/results';
+
+  // continue exam
+  static String continueExam(int attemptId) => 'exams/attempts/${attemptId}';
 }

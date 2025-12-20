@@ -9,5 +9,7 @@ abstract class HomeEvent with _$HomeEvent {
   const factory HomeEvent.setExamAttempt({
     required ExamAttempt examAttempt,
   }) = _SetExamAttempt;
-
+  const factory HomeEvent.continueExam({
+    required int attemptId,
+  }) = _ContinueExam;
 }

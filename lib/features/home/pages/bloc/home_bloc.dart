@@ -29,12 +29,53 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       getPairs: (e) => _onGetPairs(e, emit),
       startExam: (value) => _onExamStart(value, emit),
       setExamAttempt: (value) => _onSetExamAttempt(value, emit),
+      continueExam: (value) => _onContinueExam(value, emit),
     );
   }
 
   Future<void> _onSetExamAttempt(_SetExamAttempt event, Emitter<HomeState> emit) async {
     emit(HomeState.loaded(examModel: HomeViewModel(testModel: event.examAttempt)));
   }
+
+  Future<void> _onContinueExam(_ContinueExam event, Emitter<HomeState> emit) async {
+    emit(const HomeState.loading());
+
+    try {
+      final response = await DioSender.get(
+        Endpoints.continueExam(event.attemptId),
+      );
+
+      final responseData = response.data;
+      if (responseData == null) {
+        throw Exception('Response data is null');
+      }
+
+      final Map<String, dynamic> jsonData;
+      if (responseData is Map<String, dynamic>) {
+        if (responseData.containsKey('data') && responseData['data'] is Map<String, dynamic>) {
+          jsonData = responseData['data'] as Map<String, dynamic>;
+        } else {
+          jsonData = responseData;
+        }
+      } else {
+        throw Exception('Response data is not a Map: ${responseData.runtimeType}');
+      }
+
+      L.log('PARSING', 'Parsing response for continue exam: $jsonData');
+
+      final testModel = ExamAttempt.fromJson(jsonData);
+      // ------------ save attempt id ------------
+      await FlutterSecureStorageFunc.saveAttemptId(testModel.id);
+      emit(HomeState.loaded(examModel: HomeViewModel(testModel: testModel)));
+    } on ApiException catch (e) {
+      emit(HomeState.loadingFailure(message: e.message));
+    } catch (e, stackTrace) {
+      L.error('EXAM_START_ERROR', 'Error: $e\nStackTrace: $stackTrace');
+      emit(HomeState.loadingFailure(message: "Ошибка: ${e.toString()}"));
+    }
+  }
+
+
   Future<void> _onExamStart(_StartExam event, Emitter<HomeState> emit) async {
     emit(const HomeState.loading());
 
@@ -58,7 +99,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         throw Exception('Response data is null');
       }
 
-      // Если данные обернуты в другой объект (например, {"data": {...}})
       final Map<String, dynamic> jsonData;
       if (responseData is Map<String, dynamic>) {
         if (responseData.containsKey('data') && responseData['data'] is Map<String, dynamic>) {
@@ -72,7 +112,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       L.log('PARSING', 'Parsing response for role $role: $jsonData');
 
-      // Both teacher and student get ExamAttempt structure when starting exam
       final testModel = ExamAttempt.fromJson(jsonData);
       // ------------ save attempt id ------------
       await FlutterSecureStorageFunc.saveAttemptId(testModel.id);
@@ -98,14 +137,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       final responseData = response.data as Map<String, dynamic>;
       
-      // Try to parse as NktExamModel for teacher, fallback to ExamModel
       if (role == "teacher") {
         try {
           final nktExamModel = NktExamModel.fromJson(responseData);
           emit(HomeState.loaded(examModel: HomeViewModel(nktExamModel: nktExamModel)));
           return;
         } catch (e) {
-          // If parsing as NktExamModel fails, try ExamModel
           L.log('PARSING', 'Failed to parse as NktExamModel, trying ExamModel: $e');
         }
       }

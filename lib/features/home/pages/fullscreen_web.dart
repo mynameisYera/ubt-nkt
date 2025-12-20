@@ -16,3 +16,5 @@ void exitFullscreenWeb() {
     // Игнорируем ошибки
   }
 }
+
+
