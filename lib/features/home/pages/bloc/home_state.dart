@@ -19,5 +19,6 @@ abstract class HomeViewModel with _$HomeViewModel {
     ExamModel? examModel,
     ExamAttempt? testModel,
     NktExamModel? nktExamModel,
+    SolutionQuestion? solutionQuestion,
   }) = _HomeViewModel;
 }

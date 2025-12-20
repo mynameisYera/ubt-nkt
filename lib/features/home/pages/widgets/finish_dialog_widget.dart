@@ -135,7 +135,7 @@ class _FinishDialogWidgetState extends State<FinishDialogWidget> {
     } catch (e) {
       setState(() {
         _currentStep = FinishDialogStep.error;
-        _errorMessage = 'Ошибка: ${e.toString()}';
+        _errorMessage = 'Қате жауап қайталап көріңіз';
       });
     }
   }

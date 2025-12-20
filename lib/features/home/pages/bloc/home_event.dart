@@ -12,4 +12,8 @@ abstract class HomeEvent with _$HomeEvent {
   const factory HomeEvent.continueExam({
     required int attemptId,
   }) = _ContinueExam;
+  const factory HomeEvent.getSolutionQuestion({
+    required int attemptId,
+    required int attemptQuestionId,
+  }) = _GetSolutionQuestion;
 }

@@ -35,26 +35,25 @@ class _TestPageState extends State<TestPage> {
   int _currentQuestionIndex = 0;
   final Map<String, dynamic> _answers = {};
   final ScrollController _scrollController = ScrollController();
+  final ScrollController _questionsNavScrollController = ScrollController();
+  // ignore: unused_field
   String? _selectedRowId;
   Timer? _autoSaveTimer;
   Timer? _countdownTimer;
   int _remainingSeconds = 0;
   bool _isTimeExpired = false;
   bool _timerInitialized = false;
-  bool _isSidebarCollapsed = true; // Боковая панель скрыта по умолчанию
+  bool _isSidebarCollapsed = true;
 
   @override
   void initState() {
     super.initState();
     _homeBloc = sl.get<HomeBloc>();
-    // Если examAttempt передан, устанавливаем его в блок напрямую
     if (widget.examAttempt != null && !_homeBloc.isClosed) {
       _homeBloc.add(HomeEvent.setExamAttempt(examAttempt: widget.examAttempt!));
     } else if (widget.pairId != null && !_homeBloc.isClosed) {
-      // Если передан pairId, запускаем экзамен
       _homeBloc.add(HomeEvent.startExam(id: widget.pairId!));
     }
-    // Запускаем таймер для автоматической отправки ответов каждые 20 секунд
     _startAutoSaveTimer();
   }
 
@@ -63,6 +62,7 @@ class _TestPageState extends State<TestPage> {
     _autoSaveTimer?.cancel();
     _countdownTimer?.cancel();
     _scrollController.dispose();
+    _questionsNavScrollController.dispose();
     super.dispose();
   }
 
@@ -205,6 +205,16 @@ class _TestPageState extends State<TestPage> {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
           0.0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+      // Прокрутка навигационных кнопок к текущему вопросу
+      if (_questionsNavScrollController.hasClients) {
+        final buttonWidth = 32.0; // 28 + 4 (margin)
+        final scrollPosition = (index * buttonWidth) - 100; // Центрируем с отступом
+        _questionsNavScrollController.animateTo(
+          scrollPosition.clamp(0.0, _questionsNavScrollController.position.maxScrollExtent),
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
@@ -699,7 +709,6 @@ class _TestPageState extends State<TestPage> {
                       }
                     }
                   } catch (e) {
-                    // Игнорируем ошибки
                   }
                 }
 
@@ -816,7 +825,6 @@ class _TestPageState extends State<TestPage> {
     );
   }
 
-  // Компактная панель предметов для мобильных
   Widget _buildMobileSubjectsBar(ExamAttempt testModel) {
     return Container(
       height: 50,
@@ -914,55 +922,57 @@ class _TestPageState extends State<TestPage> {
                   ],
                 ),
               ),
-              // Компактная навигация по вопросам (только первые 5 кнопок)
-              if (questions.isNotEmpty && questions.length <= 10)
-                SizedBox(
-                  height: 32,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: questions.length,
-                    itemBuilder: (context, index) {
-                      final question = questions[index] as Map<String, dynamic>;
-                      final isCurrent = index == _currentQuestionIndex;
-                      final answerKey = '${selectedSubject.id}_${question['attempt_question_id'] as int}';
-                      final hasAnswer = _answers.containsKey(answerKey) && _answers[answerKey] != null;
-                      
-                      return GestureDetector(
-                        onTap: () => _scrollToQuestion(index),
-                        child: Container(
-                          width: 28,
-                          height: 28,
-                          margin: const EdgeInsets.symmetric(horizontal: 2),
-                          decoration: BoxDecoration(
-                            color: isCurrent
-                                ? AppColors.mainBlue
-                                : hasAnswer
-                                    ? Colors.green.shade400
-                                    : Colors.white,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(
+              // Компактная навигация по вопросам с прокруткой
+              if (questions.isNotEmpty)
+                Flexible(
+                  child: SizedBox(
+                    height: 32,
+                    child: ListView.builder(
+                      controller: _questionsNavScrollController,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: questions.length,
+                      itemBuilder: (context, index) {
+                        final question = questions[index] as Map<String, dynamic>;
+                        final isCurrent = index == _currentQuestionIndex;
+                        final answerKey = '${selectedSubject.id}_${question['attempt_question_id'] as int}';
+                        final hasAnswer = _answers.containsKey(answerKey) && _answers[answerKey] != null;
+                        
+                        return GestureDetector(
+                          onTap: () => _scrollToQuestion(index),
+                          child: Container(
+                            width: 28,
+                            height: 28,
+                            margin: const EdgeInsets.symmetric(horizontal: 2),
+                            decoration: BoxDecoration(
                               color: isCurrent
                                   ? AppColors.mainBlue
                                   : hasAnswer
-                                      ? Colors.green.shade600
-                                      : Colors.grey.shade400,
-                              width: isCurrent ? 2 : 1,
+                                      ? Colors.green.shade400
+                                      : Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: isCurrent
+                                    ? AppColors.mainBlue
+                                    : hasAnswer
+                                        ? Colors.green.shade600
+                                        : Colors.grey.shade400,
+                                width: isCurrent ? 2 : 1,
+                              ),
                             ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '${index + 1}',
-                              style: TextStyle(
-                                color: isCurrent ? Colors.white : Colors.black87,
-                                fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
-                                fontSize: 11,
+                            child: Center(
+                              child: Text(
+                                '${index + 1}',
+                                style: TextStyle(
+                                  color: isCurrent ? Colors.white : Colors.black87,
+                                  fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+                                  fontSize: 11,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
             ],
@@ -1433,33 +1443,21 @@ class _TestPageState extends State<TestPage> {
       );
     }
 
-    // Цвета для пар (каждая пара получает свой цвет)
-    final matchColors = [
-      AppColors.mainBlue,
-      Colors.green,
-      Colors.orange,
-      Colors.purple,
-      Colors.teal,
-      Colors.pink,
-      Colors.indigo,
-      Colors.amber,
-    ];
+    final validOptions = options.where((option) {
+      final optionMap = option as Map<String, dynamic>;
+      final optionId = optionMap['id'] as String? ?? '';
+      return optionId.isNotEmpty;
+    }).toList();
 
-    // Функция для получения цвета пары по rowId
-    Color? getMatchColorForRow(String rowId) {
-      if (!currentMatches.containsKey(rowId)) return null;
-      // Находим индекс row в списке для определения цвета
-      final rowIndex = rows.indexWhere((r) => (r as Map<String, dynamic>)['id'] == rowId);
-      if (rowIndex == -1) return null;
-      return matchColors[rowIndex % matchColors.length];
-    }
+    final dropdownItems = <String?>[null];
+    final optionLabels = <String, String>{};
     
-    // Функция для получения цвета пары по optionId
-    Color? getMatchColorForOption(String optionId) {
-      final matchedRowId = currentMatches.entries
-          .firstWhere((e) => e.value == optionId, orElse: () => const MapEntry('', '')).key;
-      if (matchedRowId.isEmpty) return null;
-      return getMatchColorForRow(matchedRowId);
+    for (final option in validOptions) {
+      final optionMap = option as Map<String, dynamic>;
+      final optionId = optionMap['id'] as String;
+      final labelHtml = (optionMap['label_html'] as String? ?? '').trim();
+      dropdownItems.add(optionId);
+      optionLabels[optionId] = labelHtml;
     }
 
     return Column(
@@ -1473,158 +1471,148 @@ class _TestPageState extends State<TestPage> {
           ),
         ),
         const SizedBox(height: 10),
-        // Две колонки: слева rows, справа options
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Левая колонка - rows
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Слева:',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
+        ...rows.map((row) {
+          final rowMap = row as Map<String, dynamic>;
+          final rowId = rowMap['id'] as String;
+          final rowPrompt = (rowMap['prompt_html'] as String? ?? '').trim();
+          final selectedOptionId = currentMatches[rowId];
+
+          return Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Colors.grey.shade300,
+                        width: 1,
+                      ),
+                    ),
+                    child: _buildHtmlWithImages(
+                      rowPrompt,
+                      fontSize: 13,
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  ...rows.map((row) {
-                    final rowMap = row as Map<String, dynamic>;
-                    final rowId = rowMap['id'] as String;
-                    final rowPrompt = (rowMap['prompt_html'] as String? ?? '').trim();
-                    final isSelected = _selectedRowId == rowId;
-                    final matchColor = getMatchColorForRow(rowId);
-
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            // Если уже выбран этот же элемент, снимаем выбор
-                            _selectedRowId = _selectedRowId == rowId ? null : rowId;
-                          });
-                        },
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? AppColors.mainBlue.withOpacity(0.2)
-                                : matchColor != null
-                                    ? matchColor.withOpacity(0.15)
-                                    : Colors.grey.shade100,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(
-                              color: isSelected
-                                  ? AppColors.mainBlue
-                                  : matchColor != null
-                                      ? matchColor
-                                      : Colors.grey.shade300,
-                              width: isSelected ? 1.5 : 1,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: selectedOptionId != null
+                            ? AppColors.mainBlue
+                            : Colors.grey.shade300,
+                        width: selectedOptionId != null ? 1.5 : 1,
+                      ),
+                    ),
+                    child: DropdownButtonFormField<String>(
+                      value: selectedOptionId,
+                      isExpanded: true,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                      selectedItemBuilder: (BuildContext context) {
+                        return dropdownItems.map((optionId) {
+                          if (optionId == null) {
+                            return Text(
+                              'Таңдаңыз',
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 13,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            );
+                          }
+                          final labelHtml = optionLabels[optionId] ?? '';
+                          final textOnly = labelHtml
+                              .replaceAll(RegExp(r'<[^>]*>'), '')
+                              .replaceAll('&nbsp;', ' ')
+                              .trim();
+                          return Text(
+                            textOnly.isEmpty ? optionId : textOnly,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.black87,
                             ),
-                          ),
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        }).toList();
+                      },
+                      items: dropdownItems.map((optionId) {
+                        if (optionId == null) {
+                          return DropdownMenuItem<String>(
+                            value: null,
+                            child: Text(
+                              'Таңдаңыз',
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 13,
+                              ),
+                            ),
+                          );
+                        }
+                        final labelHtml = optionLabels[optionId] ?? '';
+                        return DropdownMenuItem<String>(
+                          value: optionId,
                           child: _buildHtmlWithImages(
-                            rowPrompt,
+                            labelHtml,
                             fontSize: 13,
                           ),
-                        ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newOptionId) {
+                        setState(() {
+                          final newMatches = Map<String, String>.from(currentMatches);
+                          if (newOptionId == null) {
+                            newMatches.remove(rowId);
+                          } else {
+                            newMatches[rowId] = newOptionId;
+                          }
+                          _answers[answerKey] = newMatches;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        color: AppColors.mainBlue,
+                        size: 20,
                       ),
-                    );
-                  }).toList(),
-                ],
-              ),
-            ),
-            const SizedBox(width: 16),
-            // Правая колонка - options
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Справа:',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.black87,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  ...options.where((option) {
-                    final optionMap = option as Map<String, dynamic>;
-                    final optionId = optionMap['id'] as String? ?? '';
-                    return optionId.isNotEmpty;
-                  }).map((option) {
-                    final optionMap = option as Map<String, dynamic>;
-                    final optionId = optionMap['id'] as String? ?? '';
-                    final optionLabel = (optionMap['label_html'] as String? ?? '').trim();
-                    
-                    // Находим, с каким row сопоставлен этот option
-                    final matchedRowId = currentMatches.entries
-                        .firstWhere((e) => e.value == optionId, orElse: () => const MapEntry('', '')).key;
-                    final matchColor = getMatchColorForOption(optionId);
-                    final isMatched = matchedRowId.isNotEmpty;
-
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            if (_selectedRowId != null) {
-                              // Сопоставляем выбранный row с этим option
-                              final newMatches = Map<String, String>.from(currentMatches);
-                              // Удаляем предыдущее сопоставление для этого row
-                              newMatches.remove(_selectedRowId);
-                              // Удаляем предыдущее сопоставление для этого option
-                              newMatches.removeWhere((key, value) => value == optionId);
-                              // Создаем новое сопоставление
-                              newMatches[_selectedRowId!] = optionId;
-                              _answers[answerKey] = newMatches;
-                              _selectedRowId = null; // Сбрасываем выбор
-                            }
-                          });
-                        },
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: matchColor != null
-                                ? matchColor.withOpacity(0.15)
-                                : Colors.grey.shade100,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(
-                              color: matchColor != null
-                                  ? matchColor
-                                  : Colors.grey.shade300,
-                              width: isMatched ? 1.5 : 1,
-                            ),
-                          ),
-                          child: _buildHtmlWithImages(
-                            optionLabel,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        }).toList(),
         const SizedBox(height: 10),
-        // Кнопка "Заново выбрать"
         SizedBox(
           width: double.infinity,
           child: ElevatedButton.icon(
             onPressed: () {
               setState(() {
                 _answers[answerKey] = <String, String>{};
-                _selectedRowId = null;
               });
             },
             icon: const Icon(Icons.refresh, size: 16),
-            label: const Text('Заново выбрать', style: TextStyle(fontSize: 12)),
+            label: const Text('Қайта таңдау', style: TextStyle(fontSize: 12)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.grey.shade300,
               foregroundColor: Colors.black87,
@@ -1669,7 +1657,6 @@ class _TestPageState extends State<TestPage> {
     }
   }
 
-  // Метод для отображения HTML с изображениями
   Widget _buildHtmlWithImages(String htmlContent, {double? fontSize, double? lineHeight}) {
     final styleMap = <String, Style>{};
     if (lineHeight != null) {
@@ -1709,7 +1696,6 @@ class _TestPageState extends State<TestPage> {
     }
   }
 
-  // Извлечение изображений из HTML
   List<Widget> _extractAndShowImages(BuildContext context, String htmlContent) {
     final List<Widget> imageWidgets = [];
     final RegExp imgRegex = RegExp(r'<img[^>]*>', caseSensitive: false);
@@ -1718,10 +1704,8 @@ class _TestPageState extends State<TestPage> {
     for (final match in matches) {
       final imgTag = match.group(0)!;
 
-      // Пробуем разные варианты извлечения src
       String? src;
       
-      // Вариант 1: src="..."
       var srcRegex = RegExp(r'src="([^"]*)"', caseSensitive: false);
       var srcMatch = srcRegex.firstMatch(imgTag);
       src = srcMatch?.group(1);

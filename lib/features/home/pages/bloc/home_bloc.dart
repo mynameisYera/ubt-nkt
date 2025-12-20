@@ -7,6 +7,7 @@ import 'package:ubt_pbb/config/endpoints/endpoints.dart';
 import 'package:ubt_pbb/config/logger/l.dart';
 import 'package:ubt_pbb/config/storage/flutter_secure_storage_func.dart';
 import 'package:ubt_pbb/features/home/models/exam_model.dart';
+import 'package:ubt_pbb/features/home/models/solution_model.dart';
 import 'package:ubt_pbb/features/home/models/test_model.dart';
 import 'package:ubt_pbb/features/home/models/nkt_exam_model.dart';
 
@@ -30,7 +31,29 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       startExam: (value) => _onExamStart(value, emit),
       setExamAttempt: (value) => _onSetExamAttempt(value, emit),
       continueExam: (value) => _onContinueExam(value, emit),
+      getSolutionQuestion: (value) => _onGetSolutionQuestion(value, emit),
     );
+  }
+
+  Future<void> _onGetSolutionQuestion(_GetSolutionQuestion event, Emitter<HomeState> emit) async {
+    emit(const HomeState.loading());
+
+    try {
+      final response = await DioSender.get(
+        Endpoints.examSolution(event.attemptId, event.attemptQuestionId),
+      );
+      final responseData = response.data;
+      if (responseData == null) {
+        throw Exception('Response data is null');
+      }
+      final solutionQuestion = SolutionQuestion.fromJson(responseData);
+      emit(HomeState.loaded(examModel: HomeViewModel(solutionQuestion: solutionQuestion)));
+    } on ApiException catch (e) {
+      emit(HomeState.loadingFailure(message: e.message));
+    } catch (e, stackTrace) {
+      L.error('GET_SOLUTION_QUESTION_ERROR', 'Error: $e\nStackTrace: $stackTrace');
+      emit(HomeState.loadingFailure(message: "Ошибка: ${e.toString()}"));
+    }
   }
 
   Future<void> _onSetExamAttempt(_SetExamAttempt event, Emitter<HomeState> emit) async {
@@ -134,6 +157,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       ) : await DioSender.get(
         Endpoints.getPairs,
       );
+      // final healthResponse = await DioSender.get(
+      //   Endpoints.health,
+      // );
+      // if (healthResponse.statusCode != 200) {
+      //   throw ApiException('Health check failed: ${healthResponse.statusCode}');
+      // }
+      // L.log('HEALTH_CHECK', 'Health check passed: ${healthResponse}');
 
       final responseData = response.data as Map<String, dynamic>;
       
@@ -157,6 +187,4 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(HomeState.loadingFailure(message: "Ошибка: ${e.toString()}"));
     }
   }
-
-
 }

@@ -55,14 +55,15 @@ extension HomeEventPatterns on HomeEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _GetPairs value)?  getPairs,TResult Function( _StartExam value)?  startExam,TResult Function( _SetExamAttempt value)?  setExamAttempt,TResult Function( _ContinueExam value)?  continueExam,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _GetPairs value)?  getPairs,TResult Function( _StartExam value)?  startExam,TResult Function( _SetExamAttempt value)?  setExamAttempt,TResult Function( _ContinueExam value)?  continueExam,TResult Function( _GetSolutionQuestion value)?  getSolutionQuestion,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _GetPairs() when getPairs != null:
 return getPairs(_that);case _StartExam() when startExam != null:
 return startExam(_that);case _SetExamAttempt() when setExamAttempt != null:
 return setExamAttempt(_that);case _ContinueExam() when continueExam != null:
-return continueExam(_that);case _:
+return continueExam(_that);case _GetSolutionQuestion() when getSolutionQuestion != null:
+return getSolutionQuestion(_that);case _:
   return orElse();
 
 }
@@ -80,14 +81,15 @@ return continueExam(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _GetPairs value)  getPairs,required TResult Function( _StartExam value)  startExam,required TResult Function( _SetExamAttempt value)  setExamAttempt,required TResult Function( _ContinueExam value)  continueExam,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _GetPairs value)  getPairs,required TResult Function( _StartExam value)  startExam,required TResult Function( _SetExamAttempt value)  setExamAttempt,required TResult Function( _ContinueExam value)  continueExam,required TResult Function( _GetSolutionQuestion value)  getSolutionQuestion,}){
 final _that = this;
 switch (_that) {
 case _GetPairs():
 return getPairs(_that);case _StartExam():
 return startExam(_that);case _SetExamAttempt():
 return setExamAttempt(_that);case _ContinueExam():
-return continueExam(_that);case _:
+return continueExam(_that);case _GetSolutionQuestion():
+return getSolutionQuestion(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -104,14 +106,15 @@ return continueExam(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _GetPairs value)?  getPairs,TResult? Function( _StartExam value)?  startExam,TResult? Function( _SetExamAttempt value)?  setExamAttempt,TResult? Function( _ContinueExam value)?  continueExam,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _GetPairs value)?  getPairs,TResult? Function( _StartExam value)?  startExam,TResult? Function( _SetExamAttempt value)?  setExamAttempt,TResult? Function( _ContinueExam value)?  continueExam,TResult? Function( _GetSolutionQuestion value)?  getSolutionQuestion,}){
 final _that = this;
 switch (_that) {
 case _GetPairs() when getPairs != null:
 return getPairs(_that);case _StartExam() when startExam != null:
 return startExam(_that);case _SetExamAttempt() when setExamAttempt != null:
 return setExamAttempt(_that);case _ContinueExam() when continueExam != null:
-return continueExam(_that);case _:
+return continueExam(_that);case _GetSolutionQuestion() when getSolutionQuestion != null:
+return getSolutionQuestion(_that);case _:
   return null;
 
 }
@@ -128,13 +131,14 @@ return continueExam(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  getPairs,TResult Function( int id)?  startExam,TResult Function( ExamAttempt examAttempt)?  setExamAttempt,TResult Function( int attemptId)?  continueExam,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  getPairs,TResult Function( int id)?  startExam,TResult Function( ExamAttempt examAttempt)?  setExamAttempt,TResult Function( int attemptId)?  continueExam,TResult Function( int attemptId,  int attemptQuestionId)?  getSolutionQuestion,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GetPairs() when getPairs != null:
 return getPairs();case _StartExam() when startExam != null:
 return startExam(_that.id);case _SetExamAttempt() when setExamAttempt != null:
 return setExamAttempt(_that.examAttempt);case _ContinueExam() when continueExam != null:
-return continueExam(_that.attemptId);case _:
+return continueExam(_that.attemptId);case _GetSolutionQuestion() when getSolutionQuestion != null:
+return getSolutionQuestion(_that.attemptId,_that.attemptQuestionId);case _:
   return orElse();
 
 }
@@ -152,13 +156,14 @@ return continueExam(_that.attemptId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  getPairs,required TResult Function( int id)  startExam,required TResult Function( ExamAttempt examAttempt)  setExamAttempt,required TResult Function( int attemptId)  continueExam,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  getPairs,required TResult Function( int id)  startExam,required TResult Function( ExamAttempt examAttempt)  setExamAttempt,required TResult Function( int attemptId)  continueExam,required TResult Function( int attemptId,  int attemptQuestionId)  getSolutionQuestion,}) {final _that = this;
 switch (_that) {
 case _GetPairs():
 return getPairs();case _StartExam():
 return startExam(_that.id);case _SetExamAttempt():
 return setExamAttempt(_that.examAttempt);case _ContinueExam():
-return continueExam(_that.attemptId);case _:
+return continueExam(_that.attemptId);case _GetSolutionQuestion():
+return getSolutionQuestion(_that.attemptId,_that.attemptQuestionId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +180,14 @@ return continueExam(_that.attemptId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  getPairs,TResult? Function( int id)?  startExam,TResult? Function( ExamAttempt examAttempt)?  setExamAttempt,TResult? Function( int attemptId)?  continueExam,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  getPairs,TResult? Function( int id)?  startExam,TResult? Function( ExamAttempt examAttempt)?  setExamAttempt,TResult? Function( int attemptId)?  continueExam,TResult? Function( int attemptId,  int attemptQuestionId)?  getSolutionQuestion,}) {final _that = this;
 switch (_that) {
 case _GetPairs() when getPairs != null:
 return getPairs();case _StartExam() when startExam != null:
 return startExam(_that.id);case _SetExamAttempt() when setExamAttempt != null:
 return setExamAttempt(_that.examAttempt);case _ContinueExam() when continueExam != null:
-return continueExam(_that.attemptId);case _:
+return continueExam(_that.attemptId);case _GetSolutionQuestion() when getSolutionQuestion != null:
+return getSolutionQuestion(_that.attemptId,_that.attemptQuestionId);case _:
   return null;
 
 }
@@ -421,6 +427,74 @@ class __$ContinueExamCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? attemptId = null,}) {
   return _then(_ContinueExam(
 attemptId: null == attemptId ? _self.attemptId : attemptId // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _GetSolutionQuestion implements HomeEvent {
+  const _GetSolutionQuestion({required this.attemptId, required this.attemptQuestionId});
+  
+
+ final  int attemptId;
+ final  int attemptQuestionId;
+
+/// Create a copy of HomeEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$GetSolutionQuestionCopyWith<_GetSolutionQuestion> get copyWith => __$GetSolutionQuestionCopyWithImpl<_GetSolutionQuestion>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GetSolutionQuestion&&(identical(other.attemptId, attemptId) || other.attemptId == attemptId)&&(identical(other.attemptQuestionId, attemptQuestionId) || other.attemptQuestionId == attemptQuestionId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,attemptId,attemptQuestionId);
+
+@override
+String toString() {
+  return 'HomeEvent.getSolutionQuestion(attemptId: $attemptId, attemptQuestionId: $attemptQuestionId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$GetSolutionQuestionCopyWith<$Res> implements $HomeEventCopyWith<$Res> {
+  factory _$GetSolutionQuestionCopyWith(_GetSolutionQuestion value, $Res Function(_GetSolutionQuestion) _then) = __$GetSolutionQuestionCopyWithImpl;
+@useResult
+$Res call({
+ int attemptId, int attemptQuestionId
+});
+
+
+
+
+}
+/// @nodoc
+class __$GetSolutionQuestionCopyWithImpl<$Res>
+    implements _$GetSolutionQuestionCopyWith<$Res> {
+  __$GetSolutionQuestionCopyWithImpl(this._self, this._then);
+
+  final _GetSolutionQuestion _self;
+  final $Res Function(_GetSolutionQuestion) _then;
+
+/// Create a copy of HomeEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? attemptId = null,Object? attemptQuestionId = null,}) {
+  return _then(_GetSolutionQuestion(
+attemptId: null == attemptId ? _self.attemptId : attemptId // ignore: cast_nullable_to_non_nullable
+as int,attemptQuestionId: null == attemptQuestionId ? _self.attemptQuestionId : attemptQuestionId // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }
@@ -814,7 +888,7 @@ $HomeViewModelCopyWith<$Res> get examModel {
 /// @nodoc
 mixin _$HomeViewModel {
 
- ExamModel? get examModel; ExamAttempt? get testModel; NktExamModel? get nktExamModel;
+ ExamModel? get examModel; ExamAttempt? get testModel; NktExamModel? get nktExamModel; SolutionQuestion? get solutionQuestion;
 /// Create a copy of HomeViewModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -825,16 +899,16 @@ $HomeViewModelCopyWith<HomeViewModel> get copyWith => _$HomeViewModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeViewModel&&(identical(other.examModel, examModel) || other.examModel == examModel)&&(identical(other.testModel, testModel) || other.testModel == testModel)&&(identical(other.nktExamModel, nktExamModel) || other.nktExamModel == nktExamModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeViewModel&&(identical(other.examModel, examModel) || other.examModel == examModel)&&(identical(other.testModel, testModel) || other.testModel == testModel)&&(identical(other.nktExamModel, nktExamModel) || other.nktExamModel == nktExamModel)&&(identical(other.solutionQuestion, solutionQuestion) || other.solutionQuestion == solutionQuestion));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,examModel,testModel,nktExamModel);
+int get hashCode => Object.hash(runtimeType,examModel,testModel,nktExamModel,solutionQuestion);
 
 @override
 String toString() {
-  return 'HomeViewModel(examModel: $examModel, testModel: $testModel, nktExamModel: $nktExamModel)';
+  return 'HomeViewModel(examModel: $examModel, testModel: $testModel, nktExamModel: $nktExamModel, solutionQuestion: $solutionQuestion)';
 }
 
 
@@ -845,11 +919,11 @@ abstract mixin class $HomeViewModelCopyWith<$Res>  {
   factory $HomeViewModelCopyWith(HomeViewModel value, $Res Function(HomeViewModel) _then) = _$HomeViewModelCopyWithImpl;
 @useResult
 $Res call({
- ExamModel? examModel, ExamAttempt? testModel, NktExamModel? nktExamModel
+ ExamModel? examModel, ExamAttempt? testModel, NktExamModel? nktExamModel, SolutionQuestion? solutionQuestion
 });
 
 
-$ExamModelCopyWith<$Res>? get examModel;$ExamAttemptCopyWith<$Res>? get testModel;$NktExamModelCopyWith<$Res>? get nktExamModel;
+$ExamModelCopyWith<$Res>? get examModel;$ExamAttemptCopyWith<$Res>? get testModel;$NktExamModelCopyWith<$Res>? get nktExamModel;$SolutionQuestionCopyWith<$Res>? get solutionQuestion;
 
 }
 /// @nodoc
@@ -862,12 +936,13 @@ class _$HomeViewModelCopyWithImpl<$Res>
 
 /// Create a copy of HomeViewModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? examModel = freezed,Object? testModel = freezed,Object? nktExamModel = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? examModel = freezed,Object? testModel = freezed,Object? nktExamModel = freezed,Object? solutionQuestion = freezed,}) {
   return _then(_self.copyWith(
 examModel: freezed == examModel ? _self.examModel : examModel // ignore: cast_nullable_to_non_nullable
 as ExamModel?,testModel: freezed == testModel ? _self.testModel : testModel // ignore: cast_nullable_to_non_nullable
 as ExamAttempt?,nktExamModel: freezed == nktExamModel ? _self.nktExamModel : nktExamModel // ignore: cast_nullable_to_non_nullable
-as NktExamModel?,
+as NktExamModel?,solutionQuestion: freezed == solutionQuestion ? _self.solutionQuestion : solutionQuestion // ignore: cast_nullable_to_non_nullable
+as SolutionQuestion?,
   ));
 }
 /// Create a copy of HomeViewModel
@@ -905,6 +980,18 @@ $NktExamModelCopyWith<$Res>? get nktExamModel {
 
   return $NktExamModelCopyWith<$Res>(_self.nktExamModel!, (value) {
     return _then(_self.copyWith(nktExamModel: value));
+  });
+}/// Create a copy of HomeViewModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SolutionQuestionCopyWith<$Res>? get solutionQuestion {
+    if (_self.solutionQuestion == null) {
+    return null;
+  }
+
+  return $SolutionQuestionCopyWith<$Res>(_self.solutionQuestion!, (value) {
+    return _then(_self.copyWith(solutionQuestion: value));
   });
 }
 }
@@ -988,10 +1075,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ExamModel? examModel,  ExamAttempt? testModel,  NktExamModel? nktExamModel)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ExamModel? examModel,  ExamAttempt? testModel,  NktExamModel? nktExamModel,  SolutionQuestion? solutionQuestion)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeViewModel() when $default != null:
-return $default(_that.examModel,_that.testModel,_that.nktExamModel);case _:
+return $default(_that.examModel,_that.testModel,_that.nktExamModel,_that.solutionQuestion);case _:
   return orElse();
 
 }
@@ -1009,10 +1096,10 @@ return $default(_that.examModel,_that.testModel,_that.nktExamModel);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ExamModel? examModel,  ExamAttempt? testModel,  NktExamModel? nktExamModel)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ExamModel? examModel,  ExamAttempt? testModel,  NktExamModel? nktExamModel,  SolutionQuestion? solutionQuestion)  $default,) {final _that = this;
 switch (_that) {
 case _HomeViewModel():
-return $default(_that.examModel,_that.testModel,_that.nktExamModel);case _:
+return $default(_that.examModel,_that.testModel,_that.nktExamModel,_that.solutionQuestion);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1029,10 +1116,10 @@ return $default(_that.examModel,_that.testModel,_that.nktExamModel);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ExamModel? examModel,  ExamAttempt? testModel,  NktExamModel? nktExamModel)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ExamModel? examModel,  ExamAttempt? testModel,  NktExamModel? nktExamModel,  SolutionQuestion? solutionQuestion)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeViewModel() when $default != null:
-return $default(_that.examModel,_that.testModel,_that.nktExamModel);case _:
+return $default(_that.examModel,_that.testModel,_that.nktExamModel,_that.solutionQuestion);case _:
   return null;
 
 }
@@ -1044,12 +1131,13 @@ return $default(_that.examModel,_that.testModel,_that.nktExamModel);case _:
 
 
 class _HomeViewModel implements HomeViewModel {
-   _HomeViewModel({this.examModel, this.testModel, this.nktExamModel});
+   _HomeViewModel({this.examModel, this.testModel, this.nktExamModel, this.solutionQuestion});
   
 
 @override final  ExamModel? examModel;
 @override final  ExamAttempt? testModel;
 @override final  NktExamModel? nktExamModel;
+@override final  SolutionQuestion? solutionQuestion;
 
 /// Create a copy of HomeViewModel
 /// with the given fields replaced by the non-null parameter values.
@@ -1061,16 +1149,16 @@ _$HomeViewModelCopyWith<_HomeViewModel> get copyWith => __$HomeViewModelCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeViewModel&&(identical(other.examModel, examModel) || other.examModel == examModel)&&(identical(other.testModel, testModel) || other.testModel == testModel)&&(identical(other.nktExamModel, nktExamModel) || other.nktExamModel == nktExamModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeViewModel&&(identical(other.examModel, examModel) || other.examModel == examModel)&&(identical(other.testModel, testModel) || other.testModel == testModel)&&(identical(other.nktExamModel, nktExamModel) || other.nktExamModel == nktExamModel)&&(identical(other.solutionQuestion, solutionQuestion) || other.solutionQuestion == solutionQuestion));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,examModel,testModel,nktExamModel);
+int get hashCode => Object.hash(runtimeType,examModel,testModel,nktExamModel,solutionQuestion);
 
 @override
 String toString() {
-  return 'HomeViewModel(examModel: $examModel, testModel: $testModel, nktExamModel: $nktExamModel)';
+  return 'HomeViewModel(examModel: $examModel, testModel: $testModel, nktExamModel: $nktExamModel, solutionQuestion: $solutionQuestion)';
 }
 
 
@@ -1081,11 +1169,11 @@ abstract mixin class _$HomeViewModelCopyWith<$Res> implements $HomeViewModelCopy
   factory _$HomeViewModelCopyWith(_HomeViewModel value, $Res Function(_HomeViewModel) _then) = __$HomeViewModelCopyWithImpl;
 @override @useResult
 $Res call({
- ExamModel? examModel, ExamAttempt? testModel, NktExamModel? nktExamModel
+ ExamModel? examModel, ExamAttempt? testModel, NktExamModel? nktExamModel, SolutionQuestion? solutionQuestion
 });
 
 
-@override $ExamModelCopyWith<$Res>? get examModel;@override $ExamAttemptCopyWith<$Res>? get testModel;@override $NktExamModelCopyWith<$Res>? get nktExamModel;
+@override $ExamModelCopyWith<$Res>? get examModel;@override $ExamAttemptCopyWith<$Res>? get testModel;@override $NktExamModelCopyWith<$Res>? get nktExamModel;@override $SolutionQuestionCopyWith<$Res>? get solutionQuestion;
 
 }
 /// @nodoc
@@ -1098,12 +1186,13 @@ class __$HomeViewModelCopyWithImpl<$Res>
 
 /// Create a copy of HomeViewModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? examModel = freezed,Object? testModel = freezed,Object? nktExamModel = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? examModel = freezed,Object? testModel = freezed,Object? nktExamModel = freezed,Object? solutionQuestion = freezed,}) {
   return _then(_HomeViewModel(
 examModel: freezed == examModel ? _self.examModel : examModel // ignore: cast_nullable_to_non_nullable
 as ExamModel?,testModel: freezed == testModel ? _self.testModel : testModel // ignore: cast_nullable_to_non_nullable
 as ExamAttempt?,nktExamModel: freezed == nktExamModel ? _self.nktExamModel : nktExamModel // ignore: cast_nullable_to_non_nullable
-as NktExamModel?,
+as NktExamModel?,solutionQuestion: freezed == solutionQuestion ? _self.solutionQuestion : solutionQuestion // ignore: cast_nullable_to_non_nullable
+as SolutionQuestion?,
   ));
 }
 
@@ -1142,6 +1231,18 @@ $NktExamModelCopyWith<$Res>? get nktExamModel {
 
   return $NktExamModelCopyWith<$Res>(_self.nktExamModel!, (value) {
     return _then(_self.copyWith(nktExamModel: value));
+  });
+}/// Create a copy of HomeViewModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SolutionQuestionCopyWith<$Res>? get solutionQuestion {
+    if (_self.solutionQuestion == null) {
+    return null;
+  }
+
+  return $SolutionQuestionCopyWith<$Res>(_self.solutionQuestion!, (value) {
+    return _then(_self.copyWith(solutionQuestion: value));
   });
 }
 }

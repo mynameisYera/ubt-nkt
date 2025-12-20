@@ -3,9 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:ubt_pbb/config/constants/app_colors.dart';
 import 'package:ubt_pbb/features/auth/pages/login_page.dart';
 import 'package:ubt_pbb/features/auth/pages/register_page.dart';
+import 'package:ubt_pbb/features/home/models/solution_model.dart';
 import 'package:ubt_pbb/features/home/pages/history_page.dart';
 import 'package:ubt_pbb/features/home/pages/home_page.dart';
 import 'package:ubt_pbb/config/storage/flutter_secure_storage_func.dart';
+import 'package:ubt_pbb/features/home/pages/solution_page.dart';
 import 'package:ubt_pbb/features/home/pages/test_page.dart';
 import 'package:ubt_pbb/features/home/pages/result_page.dart';
 import 'package:ubt_pbb/features/home/models/test_model.dart';
@@ -82,6 +84,13 @@ final GoRouter appRouter = GoRouter(
         final attemptId = state.extra as int;
         return NoTransitionPage(child: ResultPage(attemptId: attemptId));
       },
-    )
+    ),
+    GoRoute(
+      path: "/solution",
+      pageBuilder: (context, state) {
+        final solutionQuestion = state.extra as SolutionQuestion;
+        return NoTransitionPage(child: SolutionPage(solutionQuestion: solutionQuestion));
+      },
+    ),
   ],
 );

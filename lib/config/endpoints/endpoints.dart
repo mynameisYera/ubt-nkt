@@ -44,4 +44,10 @@ class Endpoints {
 
   // continue exam
   static String continueExam(int attemptId) => 'exams/attempts/${attemptId}';
+
+  // exam solution 
+  static String examSolution(int attemptId, int attemptQuestionId) => 'exams/attempts/$attemptId/questions/$attemptQuestionId/solution';
+
+  // health
+  static const String health = 'health';
 }

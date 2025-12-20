@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubt_pbb/config/constants/app_colors.dart';
 import 'package:ubt_pbb/config/endpoints/dio_sender.dart';
 import 'package:ubt_pbb/config/endpoints/endpoints.dart';
+import 'package:ubt_pbb/config/getit/get_injection.dart';
 import 'package:ubt_pbb/config/route/go_router_help.dart';
 import 'package:ubt_pbb/config/widgets/app_button.dart';
 import 'package:ubt_pbb/features/home/models/result_model.dart';
+import 'package:ubt_pbb/features/home/pages/bloc/home_bloc.dart';
 
 class ResultPage extends StatefulWidget {
   final int attemptId;
@@ -22,12 +25,20 @@ class _ResultPageState extends State<ResultPage> {
   ResultModel? _resultModel;
   bool _isLoading = true;
   String? _errorMessage;
-  final Map<int, bool> _expandedSubjects = {}; // Для отслеживания раскрытых предметов
+  final Map<int, bool> _expandedSubjects = {};
+  late HomeBloc _homeBloc;
 
   @override
   void initState() {
     super.initState();
+    _homeBloc = sl<HomeBloc>();
     _loadResults();
+  }
+
+  @override
+  void dispose() {
+    _homeBloc.close();
+    super.dispose();
   }
 
   Future<void> _loadResults() async {
@@ -64,21 +75,41 @@ class _ResultPageState extends State<ResultPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF4F6FB),
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: AppColors.mainBlue,
-        foregroundColor: Colors.white,
-        title: const Text(
-          'Тест нәтижелері',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
+    return BlocProvider.value(
+      value: _homeBloc,
+      child: BlocListener<HomeBloc, HomeState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            loaded: (examModel) {
+              if (examModel.solutionQuestion != null) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  appRouter.push('/solution', extra: examModel.solutionQuestion);
+                });
+              }
+            },
+            loadingFailure: (message) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(message)),
+              );
+            },
+            orElse: () {},
+          );
+        },
+        child: Scaffold(
+          backgroundColor: const Color(0xFFF4F6FB),
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: AppColors.mainBlue,
+            foregroundColor: Colors.white,
+            title: const Text(
+              'Тест нәтижелері',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            centerTitle: false,
           ),
-        ),
-        centerTitle: false,
-      ),
-      body: _isLoading
+          body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(
                 backgroundColor: AppColors.mainBlue,
@@ -330,7 +361,6 @@ class _ResultPageState extends State<ResultPage> {
                                       ],
                                     ),
                                   ),
-                                  // Раскрывающийся список вопросов
                                   if (isExpanded) ...[
                                     const Divider(height: 24),
                                     Padding(
@@ -360,7 +390,11 @@ class _ResultPageState extends State<ResultPage> {
                                                     : isAnswered
                                                         ? 'Қате жауап'
                                                         : 'Жауап берілмеді',
-                                                child: Container(
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    sl<HomeBloc>().add(HomeEvent.getSolutionQuestion(attemptId: widget.attemptId, attemptQuestionId: question.attemptQuestionId));
+                                                  },
+                                                  child:   Container(
                                                   width: 40,
                                                   height: 40,
                                                   decoration: BoxDecoration(
@@ -385,7 +419,7 @@ class _ResultPageState extends State<ResultPage> {
                                                       ),
                                                     ),
                                                   ),
-                                                ),
+                                                )),
                                               );
                                             }).toList(),
                                           ),
@@ -414,6 +448,8 @@ class _ResultPageState extends State<ResultPage> {
                         ],
                       ),
                     ),
+        ),
+      ),
     );
   }
 }
