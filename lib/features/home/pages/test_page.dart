@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ubt_pbb/config/constants/app_colors.dart';
+import 'package:ubt_pbb/config/widgets/cors_aware_image.dart';
 import 'package:ubt_pbb/config/getit/get_injection.dart';
 import 'package:ubt_pbb/config/widgets/app_button.dart';
 import 'package:ubt_pbb/config/endpoints/dio_sender.dart';
@@ -146,39 +146,113 @@ class _TestPageState extends State<TestPage> {
 
   Future<void> _autoFinishTest() async {
     if (_isTimeExpired && mounted) {
-      // Показываем предупреждение о том, что время истекло
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Уақыт аяқталды! Тест автоматты түрде аяқталады.'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-          ),
+      try {
+        // Отправляем ответы перед завершением
+        await _sendAnswersToBackend();
+        
+        if (!mounted) return;
+        
+        // Автоматически завершаем тест через бэкенд
+        final attemptId = await FlutterSecureStorageFunc.getAttemptId();
+        if (attemptId == null) {
+          debugPrint('⚠️ AttemptId is null, cannot finish test');
+          if (mounted) {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          }
+          return;
+        }
+
+        // Шаг 1: Запрос на завершение теста
+        debugPrint('📤 Requesting finish exam...');
+        final finishRequestResponse = await DioSender.post(
+          Endpoints.finishExamRequest(attemptId),
+          {},
         );
-      }
-      
-      // Небольшая задержка перед завершением
-      await Future.delayed(const Duration(seconds: 1));
-      
-      if (!mounted) return;
-      
-      // Отправляем ответы перед завершением
-      await _sendAnswersToBackend();
-      
-      if (!mounted) return;
-      
-      // Показываем диалог завершения
-      final result = await showDialog<bool>(
-        context: context,
-        barrierDismissible: false, // Нельзя закрыть диалог
-        builder: (context) => FinishDialogWidget(
-          onBeforeFinish: _sendAnswersToBackend,
-        ),
-      );
-      
-      // Если тест успешно завершен, возвращаемся на главную страницу
-      if (result == true && mounted) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+
+        if (finishRequestResponse.statusCode == 200) {
+          final finishData = finishRequestResponse.data as Map<String, dynamic>;
+          final challenge = finishData['challenge'] as Map<String, dynamic>?;
+          
+          if (challenge != null) {
+            // Вычисляем решение challenge автоматически
+            final left = challenge['left'] as int? ?? 0;
+            final right = challenge['right'] as int? ?? 0;
+            final solution = left + right;
+            
+            debugPrint('✅ Challenge solved: $left + $right = $solution');
+            
+            // Шаг 2: Подтверждение завершения с решением
+            final finishConfirmResponse = await DioSender.post(
+              Endpoints.finishExamConfirm(attemptId),
+              {'solution': solution},
+            );
+
+            if (finishConfirmResponse.statusCode == 200) {
+              final confirmData = finishConfirmResponse.data as Map<String, dynamic>;
+              if (confirmData['ok'] == true) {
+                debugPrint('✅ Test finished successfully');
+                
+                // Показываем сообщение на казахском языке
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Сізде уақыт бітті, жауабын тесттер тарихынан көре аласыз'),
+                      backgroundColor: Colors.red,
+                      duration: Duration(seconds: 4),
+                    ),
+                  );
+                  
+                  // Небольшая задержка перед переходом
+                  await Future.delayed(const Duration(seconds: 1));
+                  
+                  if (mounted) {
+                    // Возвращаемся на главную страницу
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                  }
+                }
+                return;
+              }
+            }
+          }
+        }
+        
+        // Если автоматическое завершение не удалось, показываем сообщение и переходим на главную
+        debugPrint('⚠️ Auto finish failed, navigating to home');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Сізде уақыт бітті, жауабын тесттер тарихынан көре аласыз'),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 4),
+            ),
+          );
+          
+          await Future.delayed(const Duration(seconds: 1));
+          
+          if (mounted) {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          }
+        }
+      } catch (e, stackTrace) {
+        debugPrint('❌ Error auto finishing test: $e');
+        debugPrint('   StackTrace: $stackTrace');
+        
+        // В случае ошибки все равно переходим на главную страницу
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Сізде уақыт бітті, жауабын тесттер тарихынан көре аласыз'),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 4),
+            ),
+          );
+          
+          await Future.delayed(const Duration(seconds: 1));
+          
+          if (mounted) {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          }
+        }
       }
     }
   }
@@ -1775,7 +1849,7 @@ class _TestPageState extends State<TestPage> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: CachedNetworkImage(
+                    child: CorsAwareImage(
                       imageUrl: imageUrl,
                       width: width ?? 300,
                       height: height ?? 200,
@@ -1807,20 +1881,14 @@ class _TestPageState extends State<TestPage> {
                           ),
                         );
                       },
-                      progressIndicatorBuilder: (context, url, loadingProgress) {
-                        return Container(
-                          height: height ?? 200,
-                          width: width ?? 300,
-                          color: Colors.grey.shade100,
-                          child: Center(
-                            child: loadingProgress.progress != null
-                                ? CircularProgressIndicator(
-                                    value: loadingProgress.progress,
-                                  )
-                                : const CircularProgressIndicator(),
-                          ),
-                        );
-                      },
+                      placeholder: Container(
+                        height: height ?? 200,
+                        width: width ?? 300,
+                        color: Colors.grey.shade100,
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
                     ),
                   ),
                   Positioned(
@@ -1952,12 +2020,12 @@ class _FullScreenImageViewer extends StatelessWidget {
           boundaryMargin: const EdgeInsets.all(20),
           minScale: 0.5,
           maxScale: 4.0,
-          child: CachedNetworkImage(
+          child: CorsAwareImage(
             imageUrl: imageUrl,
             fit: BoxFit.contain,
             width: double.infinity,
             height: double.infinity,
-            progressIndicatorBuilder: (context, url, loadingProgress) => const Center(
+            placeholder: const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),

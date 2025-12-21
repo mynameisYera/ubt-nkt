@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ubt_pbb/config/constants/app_colors.dart';
+import 'package:ubt_pbb/config/widgets/cors_aware_image.dart';
 import 'package:ubt_pbb/features/home/models/solution_model.dart';
 
 class SolutionPage extends StatefulWidget {
@@ -452,10 +452,10 @@ class _SolutionPageState extends State<SolutionPage> {
                 maxWidth: width ?? double.infinity,
                 maxHeight: height ?? 300,
               ),
-              child: CachedNetworkImage(
+              child: CorsAwareImage(
                 imageUrl: imageUrl,
                 fit: BoxFit.contain,
-                placeholder: (context, url) => const Center(
+                placeholder: const Center(
                   child: CircularProgressIndicator(),
                 ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -548,10 +548,10 @@ class _FullScreenImageViewer extends StatelessWidget {
         child: InteractiveViewer(
           minScale: 0.5,
           maxScale: 4.0,
-          child: CachedNetworkImage(
+          child: CorsAwareImage(
             imageUrl: imageUrl,
             fit: BoxFit.contain,
-            placeholder: (context, url) => const Center(
+            placeholder: const Center(
               child: CircularProgressIndicator(color: Colors.white),
             ),
             errorWidget: (context, url, error) => const Center(
