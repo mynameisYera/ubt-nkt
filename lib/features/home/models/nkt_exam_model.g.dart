@@ -19,7 +19,7 @@ _NktExamModel _$NktExamModelFromJson(Map<String, dynamic> json) =>
       timeLimitMinutes: NktTimeLimit.fromJson(
         json['time_limit_minutes'] as Map<String, dynamic>,
       ),
-      quota: NktQuota.fromJson(json['quota'] as Map<String, dynamic>),
+      quota: (json['quota'] as num).toInt(),
     );
 
 Map<String, dynamic> _$NktExamModelToJson(_NktExamModel instance) =>
@@ -66,10 +66,3 @@ Map<String, dynamic> _$NktTimeLimitToJson(_NktTimeLimit instance) =>
       'extended': instance.extended,
       'extended_subject_codes': instance.extendedSubjectCodes,
     };
-
-_NktQuota _$NktQuotaFromJson(Map<String, dynamic> json) =>
-    _NktQuota(nktRemaining: (json['nkt_remaining'] as num).toInt());
-
-Map<String, dynamic> _$NktQuotaToJson(_NktQuota instance) => <String, dynamic>{
-  'nkt_remaining': instance.nktRemaining,
-};

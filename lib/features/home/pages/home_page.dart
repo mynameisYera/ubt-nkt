@@ -240,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                                     style: theme.textTheme.bodyMedium,
                                   ),
                                   Text(
-                                    'Қалған квота: ${nktModel.quota.nktRemaining}',
+                                    'Қалған квота: ${nktModel.quota}',
                                     style: theme.textTheme.bodyMedium,
                                   ),
                                 ],
@@ -248,7 +248,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           );
 
-                          Widget startButton = AppButton(
+                         Widget startButton = AppButton(
                             onPressed: () {
                               if (_selectedNktSubjectId != null) {
                                 _homeBloc.add(HomeEvent.startExam(
@@ -256,9 +256,9 @@ class _HomePageState extends State<HomePage> {
                               }
                             },
                             isLoading: false,
-                            isDisabled: _selectedNktSubjectId == null,
+                            isDisabled: nktModel.quota <= 0 || _selectedNktSubjectId == null,
                             icon: Icons.arrow_forward,
-                            text: 'Бастау',
+                            text: 'Бастау ${nktModel.quota}',
                           );
 
                           if (isDesktop) {
@@ -405,9 +405,9 @@ class _HomePageState extends State<HomePage> {
                                       .id);
                             },
                             isLoading: false,
-                            isDisabled: _selectedPair == null,
+                            isDisabled: examModel.examModel!.quota <= 0 || _selectedPair == null,
                             icon: Icons.arrow_forward,
-                            text: 'Бастау',
+                            text: 'Бастау ${examModel.examModel!.quota}',
                           );
 
                           if (isDesktop) {
@@ -451,10 +451,22 @@ class _HomePageState extends State<HomePage> {
                             );
                           }
                         }
-
-                        // Fallback if no model is available
-                        return const Center(
-                            child: Text('Деректер жоқ / No data available'));
+                        return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text('Деректер жоқ, қайталап көріңіз'),
+                                const SizedBox(height: 16),
+                                AppButton(
+                                  onPressed: () {
+                                    _homeBloc.add(const HomeEvent.getPairs());
+                                  },
+                                  text: 'Қайталау',
+                                ),
+                              ],
+                            )
+                          );
                       },
                     ),
                   );

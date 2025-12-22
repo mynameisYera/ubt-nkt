@@ -22,7 +22,7 @@ _ExamModel _$ExamModelFromJson(Map<String, dynamic> json) => _ExamModel(
       .map((e) => e as String)
       .toList(),
   tools: (json['tools'] as List<dynamic>).map((e) => e as String).toList(),
-  quota: Quota.fromJson(json['quota'] as Map<String, dynamic>),
+  quota: (json['quota'] as num).toInt(),
 );
 
 Map<String, dynamic> _$ExamModelToJson(_ExamModel instance) =>
@@ -99,10 +99,3 @@ _QuestionType _$QuestionTypeFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$QuestionTypeToJson(_QuestionType instance) =>
     <String, dynamic>{'label': instance.label, 'scoring': instance.scoring};
-
-_Quota _$QuotaFromJson(Map<String, dynamic> json) =>
-    _Quota(ent_remaining: (json['ent_remaining'] as num).toInt());
-
-Map<String, dynamic> _$QuotaToJson(_Quota instance) => <String, dynamic>{
-  'ent_remaining': instance.ent_remaining,
-};

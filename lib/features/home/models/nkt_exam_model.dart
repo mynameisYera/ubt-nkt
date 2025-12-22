@@ -12,7 +12,7 @@ abstract class NktExamModel with _$NktExamModel {
     @JsonKey(name: 'ordering_rules') required List<String> orderingRules,
     required List<String> tools,
     @JsonKey(name: 'time_limit_minutes') required NktTimeLimit timeLimitMinutes,
-    required NktQuota quota,
+    required int quota,
   }) = _NktExamModel;
 
   factory NktExamModel.fromJson(Map<String, dynamic> json) =>
@@ -45,14 +45,4 @@ abstract class NktTimeLimit with _$NktTimeLimit {
 
   factory NktTimeLimit.fromJson(Map<String, dynamic> json) =>
       _$NktTimeLimitFromJson(json);
-}
-
-@freezed
-abstract class NktQuota with _$NktQuota {
-  const factory NktQuota({
-    @JsonKey(name: 'nkt_remaining') required int nktRemaining,
-  }) = _NktQuota;
-
-  factory NktQuota.fromJson(Map<String, dynamic> json) =>
-      _$NktQuotaFromJson(json);
 }

@@ -12,7 +12,7 @@ abstract class ExamModel with _$ExamModel {
     required List<QuestionType> question_types,
     required List<String> ordering_rules,
     required List<String> tools,
-    required Quota quota,
+    required int quota,
   }) = _ExamModel;
 
   factory ExamModel.fromJson(Map<String, dynamic> json) =>
@@ -70,14 +70,4 @@ abstract class QuestionType with _$QuestionType {
 
   factory QuestionType.fromJson(Map<String, dynamic> json) =>
       _$QuestionTypeFromJson(json);
-}
-
-@freezed
-abstract class Quota with _$Quota {
-  const factory Quota({
-    required int ent_remaining,
-  }) = _Quota;
-
-  factory Quota.fromJson(Map<String, dynamic> json) =>
-      _$QuotaFromJson(json);
 }

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ExamModel {
 
- String get exam_type; int get time_limit_minutes; List<BlockSubject> get block1_subjects; List<Pair> get pairs; List<QuestionType> get question_types; List<String> get ordering_rules; List<String> get tools; Quota get quota;
+ String get exam_type; int get time_limit_minutes; List<BlockSubject> get block1_subjects; List<Pair> get pairs; List<QuestionType> get question_types; List<String> get ordering_rules; List<String> get tools; int get quota;
 /// Create a copy of ExamModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,11 +48,11 @@ abstract mixin class $ExamModelCopyWith<$Res>  {
   factory $ExamModelCopyWith(ExamModel value, $Res Function(ExamModel) _then) = _$ExamModelCopyWithImpl;
 @useResult
 $Res call({
- String exam_type, int time_limit_minutes, List<BlockSubject> block1_subjects, List<Pair> pairs, List<QuestionType> question_types, List<String> ordering_rules, List<String> tools, Quota quota
+ String exam_type, int time_limit_minutes, List<BlockSubject> block1_subjects, List<Pair> pairs, List<QuestionType> question_types, List<String> ordering_rules, List<String> tools, int quota
 });
 
 
-$QuotaCopyWith<$Res> get quota;
+
 
 }
 /// @nodoc
@@ -75,19 +75,10 @@ as List<Pair>,question_types: null == question_types ? _self.question_types : qu
 as List<QuestionType>,ordering_rules: null == ordering_rules ? _self.ordering_rules : ordering_rules // ignore: cast_nullable_to_non_nullable
 as List<String>,tools: null == tools ? _self.tools : tools // ignore: cast_nullable_to_non_nullable
 as List<String>,quota: null == quota ? _self.quota : quota // ignore: cast_nullable_to_non_nullable
-as Quota,
+as int,
   ));
 }
-/// Create a copy of ExamModel
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$QuotaCopyWith<$Res> get quota {
-  
-  return $QuotaCopyWith<$Res>(_self.quota, (value) {
-    return _then(_self.copyWith(quota: value));
-  });
-}
+
 }
 
 
@@ -169,7 +160,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String exam_type,  int time_limit_minutes,  List<BlockSubject> block1_subjects,  List<Pair> pairs,  List<QuestionType> question_types,  List<String> ordering_rules,  List<String> tools,  Quota quota)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String exam_type,  int time_limit_minutes,  List<BlockSubject> block1_subjects,  List<Pair> pairs,  List<QuestionType> question_types,  List<String> ordering_rules,  List<String> tools,  int quota)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ExamModel() when $default != null:
 return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_that.pairs,_that.question_types,_that.ordering_rules,_that.tools,_that.quota);case _:
@@ -190,7 +181,7 @@ return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String exam_type,  int time_limit_minutes,  List<BlockSubject> block1_subjects,  List<Pair> pairs,  List<QuestionType> question_types,  List<String> ordering_rules,  List<String> tools,  Quota quota)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String exam_type,  int time_limit_minutes,  List<BlockSubject> block1_subjects,  List<Pair> pairs,  List<QuestionType> question_types,  List<String> ordering_rules,  List<String> tools,  int quota)  $default,) {final _that = this;
 switch (_that) {
 case _ExamModel():
 return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_that.pairs,_that.question_types,_that.ordering_rules,_that.tools,_that.quota);case _:
@@ -210,7 +201,7 @@ return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String exam_type,  int time_limit_minutes,  List<BlockSubject> block1_subjects,  List<Pair> pairs,  List<QuestionType> question_types,  List<String> ordering_rules,  List<String> tools,  Quota quota)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String exam_type,  int time_limit_minutes,  List<BlockSubject> block1_subjects,  List<Pair> pairs,  List<QuestionType> question_types,  List<String> ordering_rules,  List<String> tools,  int quota)?  $default,) {final _that = this;
 switch (_that) {
 case _ExamModel() when $default != null:
 return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_that.pairs,_that.question_types,_that.ordering_rules,_that.tools,_that.quota);case _:
@@ -265,7 +256,7 @@ class _ExamModel implements ExamModel {
   return EqualUnmodifiableListView(_tools);
 }
 
-@override final  Quota quota;
+@override final  int quota;
 
 /// Create a copy of ExamModel
 /// with the given fields replaced by the non-null parameter values.
@@ -300,11 +291,11 @@ abstract mixin class _$ExamModelCopyWith<$Res> implements $ExamModelCopyWith<$Re
   factory _$ExamModelCopyWith(_ExamModel value, $Res Function(_ExamModel) _then) = __$ExamModelCopyWithImpl;
 @override @useResult
 $Res call({
- String exam_type, int time_limit_minutes, List<BlockSubject> block1_subjects, List<Pair> pairs, List<QuestionType> question_types, List<String> ordering_rules, List<String> tools, Quota quota
+ String exam_type, int time_limit_minutes, List<BlockSubject> block1_subjects, List<Pair> pairs, List<QuestionType> question_types, List<String> ordering_rules, List<String> tools, int quota
 });
 
 
-@override $QuotaCopyWith<$Res> get quota;
+
 
 }
 /// @nodoc
@@ -327,20 +318,11 @@ as List<Pair>,question_types: null == question_types ? _self._question_types : q
 as List<QuestionType>,ordering_rules: null == ordering_rules ? _self._ordering_rules : ordering_rules // ignore: cast_nullable_to_non_nullable
 as List<String>,tools: null == tools ? _self._tools : tools // ignore: cast_nullable_to_non_nullable
 as List<String>,quota: null == quota ? _self.quota : quota // ignore: cast_nullable_to_non_nullable
-as Quota,
+as int,
   ));
 }
 
-/// Create a copy of ExamModel
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$QuotaCopyWith<$Res> get quota {
-  
-  return $QuotaCopyWith<$Res>(_self.quota, (value) {
-    return _then(_self.copyWith(quota: value));
-  });
-}
+
 }
 
 
@@ -1464,269 +1446,6 @@ class __$QuestionTypeCopyWithImpl<$Res>
 label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,scoring: null == scoring ? _self.scoring : scoring // ignore: cast_nullable_to_non_nullable
 as String,
-  ));
-}
-
-
-}
-
-
-/// @nodoc
-mixin _$Quota {
-
- int get ent_remaining;
-/// Create a copy of Quota
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$QuotaCopyWith<Quota> get copyWith => _$QuotaCopyWithImpl<Quota>(this as Quota, _$identity);
-
-  /// Serializes this Quota to a JSON map.
-  Map<String, dynamic> toJson();
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Quota&&(identical(other.ent_remaining, ent_remaining) || other.ent_remaining == ent_remaining));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,ent_remaining);
-
-@override
-String toString() {
-  return 'Quota(ent_remaining: $ent_remaining)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $QuotaCopyWith<$Res>  {
-  factory $QuotaCopyWith(Quota value, $Res Function(Quota) _then) = _$QuotaCopyWithImpl;
-@useResult
-$Res call({
- int ent_remaining
-});
-
-
-
-
-}
-/// @nodoc
-class _$QuotaCopyWithImpl<$Res>
-    implements $QuotaCopyWith<$Res> {
-  _$QuotaCopyWithImpl(this._self, this._then);
-
-  final Quota _self;
-  final $Res Function(Quota) _then;
-
-/// Create a copy of Quota
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? ent_remaining = null,}) {
-  return _then(_self.copyWith(
-ent_remaining: null == ent_remaining ? _self.ent_remaining : ent_remaining // ignore: cast_nullable_to_non_nullable
-as int,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [Quota].
-extension QuotaPatterns on Quota {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _Quota value)?  $default,{required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _Quota() when $default != null:
-return $default(_that);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _Quota value)  $default,){
-final _that = this;
-switch (_that) {
-case _Quota():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _Quota value)?  $default,){
-final _that = this;
-switch (_that) {
-case _Quota() when $default != null:
-return $default(_that);case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int ent_remaining)?  $default,{required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _Quota() when $default != null:
-return $default(_that.ent_remaining);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int ent_remaining)  $default,) {final _that = this;
-switch (_that) {
-case _Quota():
-return $default(_that.ent_remaining);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int ent_remaining)?  $default,) {final _that = this;
-switch (_that) {
-case _Quota() when $default != null:
-return $default(_that.ent_remaining);case _:
-  return null;
-
-}
-}
-
-}
-
-/// @nodoc
-@JsonSerializable()
-
-class _Quota implements Quota {
-  const _Quota({required this.ent_remaining});
-  factory _Quota.fromJson(Map<String, dynamic> json) => _$QuotaFromJson(json);
-
-@override final  int ent_remaining;
-
-/// Create a copy of Quota
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$QuotaCopyWith<_Quota> get copyWith => __$QuotaCopyWithImpl<_Quota>(this, _$identity);
-
-@override
-Map<String, dynamic> toJson() {
-  return _$QuotaToJson(this, );
-}
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Quota&&(identical(other.ent_remaining, ent_remaining) || other.ent_remaining == ent_remaining));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,ent_remaining);
-
-@override
-String toString() {
-  return 'Quota(ent_remaining: $ent_remaining)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$QuotaCopyWith<$Res> implements $QuotaCopyWith<$Res> {
-  factory _$QuotaCopyWith(_Quota value, $Res Function(_Quota) _then) = __$QuotaCopyWithImpl;
-@override @useResult
-$Res call({
- int ent_remaining
-});
-
-
-
-
-}
-/// @nodoc
-class __$QuotaCopyWithImpl<$Res>
-    implements _$QuotaCopyWith<$Res> {
-  __$QuotaCopyWithImpl(this._self, this._then);
-
-  final _Quota _self;
-  final $Res Function(_Quota) _then;
-
-/// Create a copy of Quota
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? ent_remaining = null,}) {
-  return _then(_Quota(
-ent_remaining: null == ent_remaining ? _self.ent_remaining : ent_remaining // ignore: cast_nullable_to_non_nullable
-as int,
   ));
 }
 

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NktExamModel {
 
-@JsonKey(name: 'exam_type') String get examType; List<NktSubject> get subjects;@JsonKey(name: 'ordering_rules') List<String> get orderingRules; List<String> get tools;@JsonKey(name: 'time_limit_minutes') NktTimeLimit get timeLimitMinutes; NktQuota get quota;
+@JsonKey(name: 'exam_type') String get examType; List<NktSubject> get subjects;@JsonKey(name: 'ordering_rules') List<String> get orderingRules; List<String> get tools;@JsonKey(name: 'time_limit_minutes') NktTimeLimit get timeLimitMinutes; int get quota;
 /// Create a copy of NktExamModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,11 +48,11 @@ abstract mixin class $NktExamModelCopyWith<$Res>  {
   factory $NktExamModelCopyWith(NktExamModel value, $Res Function(NktExamModel) _then) = _$NktExamModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'exam_type') String examType, List<NktSubject> subjects,@JsonKey(name: 'ordering_rules') List<String> orderingRules, List<String> tools,@JsonKey(name: 'time_limit_minutes') NktTimeLimit timeLimitMinutes, NktQuota quota
+@JsonKey(name: 'exam_type') String examType, List<NktSubject> subjects,@JsonKey(name: 'ordering_rules') List<String> orderingRules, List<String> tools,@JsonKey(name: 'time_limit_minutes') NktTimeLimit timeLimitMinutes, int quota
 });
 
 
-$NktTimeLimitCopyWith<$Res> get timeLimitMinutes;$NktQuotaCopyWith<$Res> get quota;
+$NktTimeLimitCopyWith<$Res> get timeLimitMinutes;
 
 }
 /// @nodoc
@@ -73,7 +73,7 @@ as List<NktSubject>,orderingRules: null == orderingRules ? _self.orderingRules :
 as List<String>,tools: null == tools ? _self.tools : tools // ignore: cast_nullable_to_non_nullable
 as List<String>,timeLimitMinutes: null == timeLimitMinutes ? _self.timeLimitMinutes : timeLimitMinutes // ignore: cast_nullable_to_non_nullable
 as NktTimeLimit,quota: null == quota ? _self.quota : quota // ignore: cast_nullable_to_non_nullable
-as NktQuota,
+as int,
   ));
 }
 /// Create a copy of NktExamModel
@@ -84,15 +84,6 @@ $NktTimeLimitCopyWith<$Res> get timeLimitMinutes {
   
   return $NktTimeLimitCopyWith<$Res>(_self.timeLimitMinutes, (value) {
     return _then(_self.copyWith(timeLimitMinutes: value));
-  });
-}/// Create a copy of NktExamModel
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$NktQuotaCopyWith<$Res> get quota {
-  
-  return $NktQuotaCopyWith<$Res>(_self.quota, (value) {
-    return _then(_self.copyWith(quota: value));
   });
 }
 }
@@ -176,7 +167,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'exam_type')  String examType,  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules')  List<String> orderingRules,  List<String> tools, @JsonKey(name: 'time_limit_minutes')  NktTimeLimit timeLimitMinutes,  NktQuota quota)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'exam_type')  String examType,  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules')  List<String> orderingRules,  List<String> tools, @JsonKey(name: 'time_limit_minutes')  NktTimeLimit timeLimitMinutes,  int quota)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NktExamModel() when $default != null:
 return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_that.timeLimitMinutes,_that.quota);case _:
@@ -197,7 +188,7 @@ return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'exam_type')  String examType,  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules')  List<String> orderingRules,  List<String> tools, @JsonKey(name: 'time_limit_minutes')  NktTimeLimit timeLimitMinutes,  NktQuota quota)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'exam_type')  String examType,  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules')  List<String> orderingRules,  List<String> tools, @JsonKey(name: 'time_limit_minutes')  NktTimeLimit timeLimitMinutes,  int quota)  $default,) {final _that = this;
 switch (_that) {
 case _NktExamModel():
 return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_that.timeLimitMinutes,_that.quota);case _:
@@ -217,7 +208,7 @@ return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'exam_type')  String examType,  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules')  List<String> orderingRules,  List<String> tools, @JsonKey(name: 'time_limit_minutes')  NktTimeLimit timeLimitMinutes,  NktQuota quota)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'exam_type')  String examType,  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules')  List<String> orderingRules,  List<String> tools, @JsonKey(name: 'time_limit_minutes')  NktTimeLimit timeLimitMinutes,  int quota)?  $default,) {final _that = this;
 switch (_that) {
 case _NktExamModel() when $default != null:
 return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_that.timeLimitMinutes,_that.quota);case _:
@@ -258,7 +249,7 @@ class _NktExamModel implements NktExamModel {
 }
 
 @override@JsonKey(name: 'time_limit_minutes') final  NktTimeLimit timeLimitMinutes;
-@override final  NktQuota quota;
+@override final  int quota;
 
 /// Create a copy of NktExamModel
 /// with the given fields replaced by the non-null parameter values.
@@ -293,11 +284,11 @@ abstract mixin class _$NktExamModelCopyWith<$Res> implements $NktExamModelCopyWi
   factory _$NktExamModelCopyWith(_NktExamModel value, $Res Function(_NktExamModel) _then) = __$NktExamModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'exam_type') String examType, List<NktSubject> subjects,@JsonKey(name: 'ordering_rules') List<String> orderingRules, List<String> tools,@JsonKey(name: 'time_limit_minutes') NktTimeLimit timeLimitMinutes, NktQuota quota
+@JsonKey(name: 'exam_type') String examType, List<NktSubject> subjects,@JsonKey(name: 'ordering_rules') List<String> orderingRules, List<String> tools,@JsonKey(name: 'time_limit_minutes') NktTimeLimit timeLimitMinutes, int quota
 });
 
 
-@override $NktTimeLimitCopyWith<$Res> get timeLimitMinutes;@override $NktQuotaCopyWith<$Res> get quota;
+@override $NktTimeLimitCopyWith<$Res> get timeLimitMinutes;
 
 }
 /// @nodoc
@@ -318,7 +309,7 @@ as List<NktSubject>,orderingRules: null == orderingRules ? _self._orderingRules 
 as List<String>,tools: null == tools ? _self._tools : tools // ignore: cast_nullable_to_non_nullable
 as List<String>,timeLimitMinutes: null == timeLimitMinutes ? _self.timeLimitMinutes : timeLimitMinutes // ignore: cast_nullable_to_non_nullable
 as NktTimeLimit,quota: null == quota ? _self.quota : quota // ignore: cast_nullable_to_non_nullable
-as NktQuota,
+as int,
   ));
 }
 
@@ -330,15 +321,6 @@ $NktTimeLimitCopyWith<$Res> get timeLimitMinutes {
   
   return $NktTimeLimitCopyWith<$Res>(_self.timeLimitMinutes, (value) {
     return _then(_self.copyWith(timeLimitMinutes: value));
-  });
-}/// Create a copy of NktExamModel
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$NktQuotaCopyWith<$Res> get quota {
-  
-  return $NktQuotaCopyWith<$Res>(_self.quota, (value) {
-    return _then(_self.copyWith(quota: value));
   });
 }
 }
@@ -890,269 +872,6 @@ default_: null == default_ ? _self.default_ : default_ // ignore: cast_nullable_
 as int,extended: null == extended ? _self.extended : extended // ignore: cast_nullable_to_non_nullable
 as int,extendedSubjectCodes: null == extendedSubjectCodes ? _self._extendedSubjectCodes : extendedSubjectCodes // ignore: cast_nullable_to_non_nullable
 as List<String>,
-  ));
-}
-
-
-}
-
-
-/// @nodoc
-mixin _$NktQuota {
-
-@JsonKey(name: 'nkt_remaining') int get nktRemaining;
-/// Create a copy of NktQuota
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$NktQuotaCopyWith<NktQuota> get copyWith => _$NktQuotaCopyWithImpl<NktQuota>(this as NktQuota, _$identity);
-
-  /// Serializes this NktQuota to a JSON map.
-  Map<String, dynamic> toJson();
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NktQuota&&(identical(other.nktRemaining, nktRemaining) || other.nktRemaining == nktRemaining));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,nktRemaining);
-
-@override
-String toString() {
-  return 'NktQuota(nktRemaining: $nktRemaining)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $NktQuotaCopyWith<$Res>  {
-  factory $NktQuotaCopyWith(NktQuota value, $Res Function(NktQuota) _then) = _$NktQuotaCopyWithImpl;
-@useResult
-$Res call({
-@JsonKey(name: 'nkt_remaining') int nktRemaining
-});
-
-
-
-
-}
-/// @nodoc
-class _$NktQuotaCopyWithImpl<$Res>
-    implements $NktQuotaCopyWith<$Res> {
-  _$NktQuotaCopyWithImpl(this._self, this._then);
-
-  final NktQuota _self;
-  final $Res Function(NktQuota) _then;
-
-/// Create a copy of NktQuota
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? nktRemaining = null,}) {
-  return _then(_self.copyWith(
-nktRemaining: null == nktRemaining ? _self.nktRemaining : nktRemaining // ignore: cast_nullable_to_non_nullable
-as int,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [NktQuota].
-extension NktQuotaPatterns on NktQuota {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _NktQuota value)?  $default,{required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _NktQuota() when $default != null:
-return $default(_that);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _NktQuota value)  $default,){
-final _that = this;
-switch (_that) {
-case _NktQuota():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _NktQuota value)?  $default,){
-final _that = this;
-switch (_that) {
-case _NktQuota() when $default != null:
-return $default(_that);case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'nkt_remaining')  int nktRemaining)?  $default,{required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _NktQuota() when $default != null:
-return $default(_that.nktRemaining);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'nkt_remaining')  int nktRemaining)  $default,) {final _that = this;
-switch (_that) {
-case _NktQuota():
-return $default(_that.nktRemaining);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'nkt_remaining')  int nktRemaining)?  $default,) {final _that = this;
-switch (_that) {
-case _NktQuota() when $default != null:
-return $default(_that.nktRemaining);case _:
-  return null;
-
-}
-}
-
-}
-
-/// @nodoc
-@JsonSerializable()
-
-class _NktQuota implements NktQuota {
-  const _NktQuota({@JsonKey(name: 'nkt_remaining') required this.nktRemaining});
-  factory _NktQuota.fromJson(Map<String, dynamic> json) => _$NktQuotaFromJson(json);
-
-@override@JsonKey(name: 'nkt_remaining') final  int nktRemaining;
-
-/// Create a copy of NktQuota
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$NktQuotaCopyWith<_NktQuota> get copyWith => __$NktQuotaCopyWithImpl<_NktQuota>(this, _$identity);
-
-@override
-Map<String, dynamic> toJson() {
-  return _$NktQuotaToJson(this, );
-}
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NktQuota&&(identical(other.nktRemaining, nktRemaining) || other.nktRemaining == nktRemaining));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,nktRemaining);
-
-@override
-String toString() {
-  return 'NktQuota(nktRemaining: $nktRemaining)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$NktQuotaCopyWith<$Res> implements $NktQuotaCopyWith<$Res> {
-  factory _$NktQuotaCopyWith(_NktQuota value, $Res Function(_NktQuota) _then) = __$NktQuotaCopyWithImpl;
-@override @useResult
-$Res call({
-@JsonKey(name: 'nkt_remaining') int nktRemaining
-});
-
-
-
-
-}
-/// @nodoc
-class __$NktQuotaCopyWithImpl<$Res>
-    implements _$NktQuotaCopyWith<$Res> {
-  __$NktQuotaCopyWithImpl(this._self, this._then);
-
-  final _NktQuota _self;
-  final $Res Function(_NktQuota) _then;
-
-/// Create a copy of NktQuota
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? nktRemaining = null,}) {
-  return _then(_NktQuota(
-nktRemaining: null == nktRemaining ? _self.nktRemaining : nktRemaining // ignore: cast_nullable_to_non_nullable
-as int,
   ));
 }
 
