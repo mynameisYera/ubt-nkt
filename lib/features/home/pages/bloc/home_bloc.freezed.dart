@@ -546,13 +546,14 @@ extension HomeStatePatterns on HomeState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _LoadingFailure value)?  loadingFailure,TResult Function( _Loaded value)?  loaded,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _LoadingFailure value)?  loadingFailure,TResult Function( _QuotaExhausted value)?  quotaExhausted,TResult Function( _Loaded value)?  loaded,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _LoadingFailure() when loadingFailure != null:
-return loadingFailure(_that);case _Loaded() when loaded != null:
+return loadingFailure(_that);case _QuotaExhausted() when quotaExhausted != null:
+return quotaExhausted(_that);case _Loaded() when loaded != null:
 return loaded(_that);case _:
   return orElse();
 
@@ -571,13 +572,14 @@ return loaded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _LoadingFailure value)  loadingFailure,required TResult Function( _Loaded value)  loaded,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _LoadingFailure value)  loadingFailure,required TResult Function( _QuotaExhausted value)  quotaExhausted,required TResult Function( _Loaded value)  loaded,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case _Loading():
 return loading(_that);case _LoadingFailure():
-return loadingFailure(_that);case _Loaded():
+return loadingFailure(_that);case _QuotaExhausted():
+return quotaExhausted(_that);case _Loaded():
 return loaded(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -595,13 +597,14 @@ return loaded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _LoadingFailure value)?  loadingFailure,TResult? Function( _Loaded value)?  loaded,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _LoadingFailure value)?  loadingFailure,TResult? Function( _QuotaExhausted value)?  quotaExhausted,TResult? Function( _Loaded value)?  loaded,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _LoadingFailure() when loadingFailure != null:
-return loadingFailure(_that);case _Loaded() when loaded != null:
+return loadingFailure(_that);case _QuotaExhausted() when quotaExhausted != null:
+return quotaExhausted(_that);case _Loaded() when loaded != null:
 return loaded(_that);case _:
   return null;
 
@@ -619,12 +622,13 @@ return loaded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( String message)?  loadingFailure,TResult Function( HomeViewModel examModel)?  loaded,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( String message)?  loadingFailure,TResult Function()?  quotaExhausted,TResult Function( HomeViewModel examModel)?  loaded,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _LoadingFailure() when loadingFailure != null:
-return loadingFailure(_that.message);case _Loaded() when loaded != null:
+return loadingFailure(_that.message);case _QuotaExhausted() when quotaExhausted != null:
+return quotaExhausted();case _Loaded() when loaded != null:
 return loaded(_that.examModel);case _:
   return orElse();
 
@@ -643,12 +647,13 @@ return loaded(_that.examModel);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( String message)  loadingFailure,required TResult Function( HomeViewModel examModel)  loaded,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( String message)  loadingFailure,required TResult Function()  quotaExhausted,required TResult Function( HomeViewModel examModel)  loaded,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _LoadingFailure():
-return loadingFailure(_that.message);case _Loaded():
+return loadingFailure(_that.message);case _QuotaExhausted():
+return quotaExhausted();case _Loaded():
 return loaded(_that.examModel);case _:
   throw StateError('Unexpected subclass');
 
@@ -666,12 +671,13 @@ return loaded(_that.examModel);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( String message)?  loadingFailure,TResult? Function( HomeViewModel examModel)?  loaded,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( String message)?  loadingFailure,TResult? Function()?  quotaExhausted,TResult? Function( HomeViewModel examModel)?  loaded,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _LoadingFailure() when loadingFailure != null:
-return loadingFailure(_that.message);case _Loaded() when loaded != null:
+return loadingFailure(_that.message);case _QuotaExhausted() when quotaExhausted != null:
+return quotaExhausted();case _Loaded() when loaded != null:
 return loaded(_that.examModel);case _:
   return null;
 
@@ -809,6 +815,38 @@ as String,
 
 
 }
+
+/// @nodoc
+
+
+class _QuotaExhausted implements HomeState {
+  const _QuotaExhausted();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _QuotaExhausted);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'HomeState.quotaExhausted()';
+}
+
+
+}
+
+
+
 
 /// @nodoc
 

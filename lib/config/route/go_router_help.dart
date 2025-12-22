@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ubt_pbb/config/constants/app_colors.dart';
 import 'package:ubt_pbb/features/auth/pages/login_page.dart';
 import 'package:ubt_pbb/features/auth/pages/register_page.dart';
+import 'package:ubt_pbb/features/auth/pages/restore_page.dart';
 import 'package:ubt_pbb/features/home/models/solution_model.dart';
 import 'package:ubt_pbb/features/home/pages/history_page.dart';
 import 'package:ubt_pbb/features/home/pages/home_page.dart';
@@ -90,6 +91,12 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) {
         final solutionQuestion = state.extra as SolutionQuestion;
         return NoTransitionPage(child: SolutionPage(solutionQuestion: solutionQuestion));
+      },
+    ),
+    GoRoute(
+      path: "/restore",
+      pageBuilder: (context, state) {
+        return NoTransitionPage(child: RestorePage());
       },
     ),
   ],

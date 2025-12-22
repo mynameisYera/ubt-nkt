@@ -19,6 +19,10 @@ String mapError(String code) {
       return 'Кейінірек байқап көріңіз';
     case 'attempt_state_conflict':
       return 'У вас уже есть активный тест';
+    case 'user_not_found':
+      return 'Пользователь не найден';
+    case 'quota_exhausted':
+      return 'У вас нет квоты для прохождения теста';
     default:
       return 'Ошибка, попробуйте ещё раз';
   }

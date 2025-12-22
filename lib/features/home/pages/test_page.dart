@@ -467,7 +467,6 @@ class _TestPageState extends State<TestPage> {
             foregroundColor: Colors.white,
             elevation: 2,
             actions: [
-              // Таймер
               BlocBuilder<HomeBloc, HomeState>(
                 bloc: _homeBloc,
                 builder: (context, state) {
@@ -593,6 +592,7 @@ class _TestPageState extends State<TestPage> {
             bloc: _homeBloc,
             builder: (context, state) {
               return state.when(
+                quotaExhausted: () => const Center(child: Text('У вас нет квоты для прохождения теста')),
                 initial: () => const Center(child: Text('Загрузка...')),
                 loading: () => const Center(
                   child: CircularProgressIndicator.adaptive(

@@ -116,7 +116,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         }
       );
 
-      // Проверяем структуру ответа
       final responseData = response.data;
       if (responseData == null) {
         throw Exception('Response data is null');
@@ -140,7 +139,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       await FlutterSecureStorageFunc.saveAttemptId(testModel.id);
       emit(HomeState.loaded(examModel: HomeViewModel(testModel: testModel)));
     } on ApiException catch (e) {
-      emit(HomeState.loadingFailure(message: e.message));
+      if (e.message == 'quota_exhausted') {
+        emit(const HomeState.quotaExhausted());
+      } else {
+        emit(HomeState.loadingFailure(message: e.message));
+      }
     } catch (e, stackTrace) {
       L.error('EXAM_START_ERROR', 'Error: $e\nStackTrace: $stackTrace');
       emit(HomeState.loadingFailure(message: "Ошибка: ${e.toString()}"));

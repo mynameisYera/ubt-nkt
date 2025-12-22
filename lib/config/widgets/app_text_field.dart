@@ -12,6 +12,7 @@ class AppTextField extends StatelessWidget {
     this.suffixIcon,
     this.keyboardType,
     this.inputFormatters,
+    this.enabled = true,
   });
 
   final TextEditingController? controller;
@@ -22,6 +23,7 @@ class AppTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,7 @@ class AppTextField extends StatelessWidget {
         obscureText: obscureText,
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
+        enabled: enabled,
         cursorColor: theme.colorScheme.primary,
         style: theme.textTheme.bodyMedium?.copyWith(
           color: theme.colorScheme.onSurface,

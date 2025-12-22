@@ -86,20 +86,63 @@ class _HomePageState extends State<HomePage> {
               final isDesktop = constraints.maxWidth >= 900;
               final horizontalPadding = isDesktop ? 64.0 : 16.0;
 
+              return BlocBuilder<HomeBloc, HomeState>(
+                bloc: _homeBloc,
+                builder: (context, state) {
+                  // Для состояний ошибки показываем центрированный контент
+                  if (state.maybeWhen(
+                    loadingFailure: (_) => true,
+                    quotaExhausted: () => true,
+                    orElse: () => false,
+                  )) {
+                    return Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                        child: state.when(
+                          quotaExhausted: () => Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text('У вас нет квоты для прохождения теста'),
+                              const SizedBox(height: 16),
+                              AppButton(
+                                onPressed: () {
+                                  _homeBloc.add(const HomeEvent.getPairs());
+                                },
+                                text: 'Түсінікті',
+                              ),
+                            ],
+                          ),
+                          loadingFailure: (message) => Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(message),
+                              const SizedBox(height: 16),
+                              AppButton(
+                                onPressed: () {
+                                  _homeBloc.add(const HomeEvent.getPairs());
+                                },
+                                text: 'Түсінікті',
+                              ),
+                            ],
+                          ),
+                          initial: () => const SizedBox.shrink(),
+                          loading: () => const SizedBox.shrink(),
+                          loaded: (_) => const SizedBox.shrink(),
+                        ),
+                      ),
+                    );
+                  }
+
               return SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
                     horizontal: horizontalPadding, vertical: 24),
-                child: BlocBuilder<HomeBloc, HomeState>(
-                  bloc: _homeBloc,
-                  builder: (context, state) {
-                    return state.when(
+                child: state.when(
+                      quotaExhausted: () => const SizedBox.shrink(),
                       initial: () => const Center(child: Text('Жүктелуде...')),
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
-                      loadingFailure: (message) =>
-                          Center(child: Text(message)),
+                      loadingFailure: (_) => const SizedBox.shrink(),
                       loaded: (examModel) {
-                        // Handle NKT Exam Model (for teacher)
                         if (examModel.nktExamModel != null) {
                           final nktModel = examModel.nktExamModel!;
                           final activeSubjects = nktModel.subjects
@@ -413,9 +456,9 @@ class _HomePageState extends State<HomePage> {
                         return const Center(
                             child: Text('Деректер жоқ / No data available'));
                       },
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               );
             },
           ),

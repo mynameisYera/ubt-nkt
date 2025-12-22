@@ -32,6 +32,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       register: (z) => _register(z, emit),
       getSchools: (value) => _getSchools(value, emit),
       getHistory: (value) => _getHistory(value, emit),
+      restorePasswordOtp: (value) => _restorePasswordOtp(value, emit),
+      restorePassword: (value) => _restorePassword(value, emit),
     );
   }
 
@@ -218,5 +220,53 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  Future<void> _restorePasswordOtp(_RestorePasswordOtp event, Emitter<AuthState> emit) async {
+    emit(const AuthState.loading());
 
+    try {
+      final response = await DioSender.post(
+        Endpoints.resetPasswordOtp,
+        {
+          "phone": event.phone,
+        } 
+      );
+      if(response.statusCode == 200){
+        emit(const AuthState.resetPasswordOtpSended());
+      }else{
+        emit(AuthState.resetPasswordOtpFailure(message: response.data['message']));
+        emit(AuthState.initial());
+      }
+    } on ApiException catch (e) {
+      emit(AuthState.resetPasswordOtpFailure(message: e.message));
+      emit(AuthState.initial());
+    } catch (_) {
+      emit(AuthState.resetPasswordOtpFailure(message: "Повторите заново..."));
+      emit(AuthState.initial());
+    }
+  } 
+
+  Future<void> _restorePassword(_RestorePassword event, Emitter<AuthState> emit) async {
+    emit(const AuthState.loading());
+
+    try {
+      final response = await DioSender.post(
+        Endpoints.resetPassword,
+        {
+          "phone": event.phone,
+          "code": event.code,
+          "password": event.password,
+        }
+      );
+      if(response.statusCode == 200){
+        emit(const AuthState.loaded());
+      }else{
+        emit(AuthState.resetPasswordFailure(message: response.data['message']));
+      }
+
+    } on ApiException catch (e) {
+      emit(AuthState.resetPasswordFailure(message: e.message));
+    } catch (_) {
+      emit(AuthState.resetPasswordFailure(message: "Повторите заново..."));
+    }
+  }
 }

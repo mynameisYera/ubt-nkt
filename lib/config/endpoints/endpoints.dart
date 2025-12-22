@@ -50,4 +50,8 @@ class Endpoints {
 
   // health
   static const String health = 'health';
+
+  // reset password
+  static const String resetPasswordOtp = 'auth/request-password-reset-otp';
+  static const String resetPassword = 'auth/reset-password';
 }

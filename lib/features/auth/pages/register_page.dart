@@ -149,7 +149,7 @@ class _RegisterPageState extends State<RegisterPage> {
               loadingFailure: (message) => _showError(message),
               loaded: () {
                 setState(() => _isLoading = false);
-                appRouter.pushReplacement('/home');
+                appRouter.pushReplacement('/login');
               },
               otpSended: () {
                 setState(() => _isLoadingOtp = false);

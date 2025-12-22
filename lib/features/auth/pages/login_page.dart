@@ -163,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                     AppButton(
                       text: 'Кіру',
                       icon: Icons.login,
-                      isLoading: _isLoading,
+                      // isLoading: _isLoading,
                       isDisabled: !_isFormValid,
                       onPressed: _isLoading
                           ? null
@@ -180,6 +180,14 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               );
                             },
+                    ),
+                    const SizedBox(height: 16),   
+                    AppButton(
+                      text: 'Құпия сөзіңізді қалпына келтіру',
+                      icon: Icons.lock,
+                      onPressed: () {
+                        appRouter.push("/restore");
+                      },
                     ),
                     SizedBox(height: 10,),
                     Row(

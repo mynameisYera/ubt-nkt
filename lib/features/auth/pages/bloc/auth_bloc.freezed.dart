@@ -55,7 +55,7 @@ extension AuthEventPatterns on AuthEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Login value)?  login,TResult Function( _SendOtp value)?  sendOtp,TResult Function( _Register value)?  register,TResult Function( _GetSchools value)?  getSchools,TResult Function( _GetHistory value)?  getHistory,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Login value)?  login,TResult Function( _SendOtp value)?  sendOtp,TResult Function( _Register value)?  register,TResult Function( _GetSchools value)?  getSchools,TResult Function( _GetHistory value)?  getHistory,TResult Function( _RestorePasswordOtp value)?  restorePasswordOtp,TResult Function( _RestorePassword value)?  restorePassword,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Login() when login != null:
@@ -63,7 +63,9 @@ return login(_that);case _SendOtp() when sendOtp != null:
 return sendOtp(_that);case _Register() when register != null:
 return register(_that);case _GetSchools() when getSchools != null:
 return getSchools(_that);case _GetHistory() when getHistory != null:
-return getHistory(_that);case _:
+return getHistory(_that);case _RestorePasswordOtp() when restorePasswordOtp != null:
+return restorePasswordOtp(_that);case _RestorePassword() when restorePassword != null:
+return restorePassword(_that);case _:
   return orElse();
 
 }
@@ -81,7 +83,7 @@ return getHistory(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Login value)  login,required TResult Function( _SendOtp value)  sendOtp,required TResult Function( _Register value)  register,required TResult Function( _GetSchools value)  getSchools,required TResult Function( _GetHistory value)  getHistory,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Login value)  login,required TResult Function( _SendOtp value)  sendOtp,required TResult Function( _Register value)  register,required TResult Function( _GetSchools value)  getSchools,required TResult Function( _GetHistory value)  getHistory,required TResult Function( _RestorePasswordOtp value)  restorePasswordOtp,required TResult Function( _RestorePassword value)  restorePassword,}){
 final _that = this;
 switch (_that) {
 case _Login():
@@ -89,7 +91,9 @@ return login(_that);case _SendOtp():
 return sendOtp(_that);case _Register():
 return register(_that);case _GetSchools():
 return getSchools(_that);case _GetHistory():
-return getHistory(_that);case _:
+return getHistory(_that);case _RestorePasswordOtp():
+return restorePasswordOtp(_that);case _RestorePassword():
+return restorePassword(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -106,7 +110,7 @@ return getHistory(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Login value)?  login,TResult? Function( _SendOtp value)?  sendOtp,TResult? Function( _Register value)?  register,TResult? Function( _GetSchools value)?  getSchools,TResult? Function( _GetHistory value)?  getHistory,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Login value)?  login,TResult? Function( _SendOtp value)?  sendOtp,TResult? Function( _Register value)?  register,TResult? Function( _GetSchools value)?  getSchools,TResult? Function( _GetHistory value)?  getHistory,TResult? Function( _RestorePasswordOtp value)?  restorePasswordOtp,TResult? Function( _RestorePassword value)?  restorePassword,}){
 final _that = this;
 switch (_that) {
 case _Login() when login != null:
@@ -114,7 +118,9 @@ return login(_that);case _SendOtp() when sendOtp != null:
 return sendOtp(_that);case _Register() when register != null:
 return register(_that);case _GetSchools() when getSchools != null:
 return getSchools(_that);case _GetHistory() when getHistory != null:
-return getHistory(_that);case _:
+return getHistory(_that);case _RestorePasswordOtp() when restorePasswordOtp != null:
+return restorePasswordOtp(_that);case _RestorePassword() when restorePassword != null:
+return restorePassword(_that);case _:
   return null;
 
 }
@@ -131,14 +137,16 @@ return getHistory(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( LoginRequest loginRequest)?  login,TResult Function( String phone)?  sendOtp,TResult Function( String phone,  String code,  String firstName,  String lastName,  String password,  String role,  int schoolId,  String schoolOtherName)?  register,TResult Function()?  getSchools,TResult Function()?  getHistory,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( LoginRequest loginRequest)?  login,TResult Function( String phone)?  sendOtp,TResult Function( String phone,  String code,  String firstName,  String lastName,  String password,  String role,  int schoolId,  String schoolOtherName)?  register,TResult Function()?  getSchools,TResult Function()?  getHistory,TResult Function( String phone)?  restorePasswordOtp,TResult Function( String phone,  String code,  String password)?  restorePassword,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Login() when login != null:
 return login(_that.loginRequest);case _SendOtp() when sendOtp != null:
 return sendOtp(_that.phone);case _Register() when register != null:
 return register(_that.phone,_that.code,_that.firstName,_that.lastName,_that.password,_that.role,_that.schoolId,_that.schoolOtherName);case _GetSchools() when getSchools != null:
 return getSchools();case _GetHistory() when getHistory != null:
-return getHistory();case _:
+return getHistory();case _RestorePasswordOtp() when restorePasswordOtp != null:
+return restorePasswordOtp(_that.phone);case _RestorePassword() when restorePassword != null:
+return restorePassword(_that.phone,_that.code,_that.password);case _:
   return orElse();
 
 }
@@ -156,14 +164,16 @@ return getHistory();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( LoginRequest loginRequest)  login,required TResult Function( String phone)  sendOtp,required TResult Function( String phone,  String code,  String firstName,  String lastName,  String password,  String role,  int schoolId,  String schoolOtherName)  register,required TResult Function()  getSchools,required TResult Function()  getHistory,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( LoginRequest loginRequest)  login,required TResult Function( String phone)  sendOtp,required TResult Function( String phone,  String code,  String firstName,  String lastName,  String password,  String role,  int schoolId,  String schoolOtherName)  register,required TResult Function()  getSchools,required TResult Function()  getHistory,required TResult Function( String phone)  restorePasswordOtp,required TResult Function( String phone,  String code,  String password)  restorePassword,}) {final _that = this;
 switch (_that) {
 case _Login():
 return login(_that.loginRequest);case _SendOtp():
 return sendOtp(_that.phone);case _Register():
 return register(_that.phone,_that.code,_that.firstName,_that.lastName,_that.password,_that.role,_that.schoolId,_that.schoolOtherName);case _GetSchools():
 return getSchools();case _GetHistory():
-return getHistory();case _:
+return getHistory();case _RestorePasswordOtp():
+return restorePasswordOtp(_that.phone);case _RestorePassword():
+return restorePassword(_that.phone,_that.code,_that.password);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -180,14 +190,16 @@ return getHistory();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( LoginRequest loginRequest)?  login,TResult? Function( String phone)?  sendOtp,TResult? Function( String phone,  String code,  String firstName,  String lastName,  String password,  String role,  int schoolId,  String schoolOtherName)?  register,TResult? Function()?  getSchools,TResult? Function()?  getHistory,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( LoginRequest loginRequest)?  login,TResult? Function( String phone)?  sendOtp,TResult? Function( String phone,  String code,  String firstName,  String lastName,  String password,  String role,  int schoolId,  String schoolOtherName)?  register,TResult? Function()?  getSchools,TResult? Function()?  getHistory,TResult? Function( String phone)?  restorePasswordOtp,TResult? Function( String phone,  String code,  String password)?  restorePassword,}) {final _that = this;
 switch (_that) {
 case _Login() when login != null:
 return login(_that.loginRequest);case _SendOtp() when sendOtp != null:
 return sendOtp(_that.phone);case _Register() when register != null:
 return register(_that.phone,_that.code,_that.firstName,_that.lastName,_that.password,_that.role,_that.schoolId,_that.schoolOtherName);case _GetSchools() when getSchools != null:
 return getSchools();case _GetHistory() when getHistory != null:
-return getHistory();case _:
+return getHistory();case _RestorePasswordOtp() when restorePasswordOtp != null:
+return restorePasswordOtp(_that.phone);case _RestorePassword() when restorePassword != null:
+return restorePassword(_that.phone,_that.code,_that.password);case _:
   return null;
 
 }
@@ -481,6 +493,142 @@ String toString() {
 
 
 /// @nodoc
+
+
+class _RestorePasswordOtp implements AuthEvent {
+  const _RestorePasswordOtp({required this.phone});
+  
+
+ final  String phone;
+
+/// Create a copy of AuthEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$RestorePasswordOtpCopyWith<_RestorePasswordOtp> get copyWith => __$RestorePasswordOtpCopyWithImpl<_RestorePasswordOtp>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RestorePasswordOtp&&(identical(other.phone, phone) || other.phone == phone));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,phone);
+
+@override
+String toString() {
+  return 'AuthEvent.restorePasswordOtp(phone: $phone)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$RestorePasswordOtpCopyWith<$Res> implements $AuthEventCopyWith<$Res> {
+  factory _$RestorePasswordOtpCopyWith(_RestorePasswordOtp value, $Res Function(_RestorePasswordOtp) _then) = __$RestorePasswordOtpCopyWithImpl;
+@useResult
+$Res call({
+ String phone
+});
+
+
+
+
+}
+/// @nodoc
+class __$RestorePasswordOtpCopyWithImpl<$Res>
+    implements _$RestorePasswordOtpCopyWith<$Res> {
+  __$RestorePasswordOtpCopyWithImpl(this._self, this._then);
+
+  final _RestorePasswordOtp _self;
+  final $Res Function(_RestorePasswordOtp) _then;
+
+/// Create a copy of AuthEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? phone = null,}) {
+  return _then(_RestorePasswordOtp(
+phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _RestorePassword implements AuthEvent {
+  const _RestorePassword({required this.phone, required this.code, required this.password});
+  
+
+ final  String phone;
+ final  String code;
+ final  String password;
+
+/// Create a copy of AuthEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$RestorePasswordCopyWith<_RestorePassword> get copyWith => __$RestorePasswordCopyWithImpl<_RestorePassword>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RestorePassword&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.code, code) || other.code == code)&&(identical(other.password, password) || other.password == password));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,phone,code,password);
+
+@override
+String toString() {
+  return 'AuthEvent.restorePassword(phone: $phone, code: $code, password: $password)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$RestorePasswordCopyWith<$Res> implements $AuthEventCopyWith<$Res> {
+  factory _$RestorePasswordCopyWith(_RestorePassword value, $Res Function(_RestorePassword) _then) = __$RestorePasswordCopyWithImpl;
+@useResult
+$Res call({
+ String phone, String code, String password
+});
+
+
+
+
+}
+/// @nodoc
+class __$RestorePasswordCopyWithImpl<$Res>
+    implements _$RestorePasswordCopyWith<$Res> {
+  __$RestorePasswordCopyWithImpl(this._self, this._then);
+
+  final _RestorePassword _self;
+  final $Res Function(_RestorePassword) _then;
+
+/// Create a copy of AuthEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? phone = null,Object? code = null,Object? password = null,}) {
+  return _then(_RestorePassword(
+phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String,code: null == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
+as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
 mixin _$AuthState {
 
 
@@ -524,14 +672,18 @@ extension AuthStatePatterns on AuthState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _LoadingFailure value)?  loadingFailure,TResult Function( _Loaded value)?  loaded,TResult Function( _LoadingSchools value)?  loadingSchools,TResult Function( _LoadedSchools value)?  loadedSchools,TResult Function( _OtpSended value)?  otpSended,TResult Function( _LoadingHistory value)?  loadingHistory,TResult Function( _LoadedHistory value)?  loadedHistory,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _LoadingFailure value)?  loadingFailure,TResult Function( _Loaded value)?  loaded,TResult Function( _ResetPasswordOtpSended value)?  resetPasswordOtpSended,TResult Function( _ResetPasswordOtpFailure value)?  resetPasswordOtpFailure,TResult Function( _ResetPasswordSended value)?  resetPasswordSended,TResult Function( _ResetPasswordFailure value)?  resetPasswordFailure,TResult Function( _LoadingSchools value)?  loadingSchools,TResult Function( _LoadedSchools value)?  loadedSchools,TResult Function( _OtpSended value)?  otpSended,TResult Function( _LoadingHistory value)?  loadingHistory,TResult Function( _LoadedHistory value)?  loadedHistory,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _LoadingFailure() when loadingFailure != null:
 return loadingFailure(_that);case _Loaded() when loaded != null:
-return loaded(_that);case _LoadingSchools() when loadingSchools != null:
+return loaded(_that);case _ResetPasswordOtpSended() when resetPasswordOtpSended != null:
+return resetPasswordOtpSended(_that);case _ResetPasswordOtpFailure() when resetPasswordOtpFailure != null:
+return resetPasswordOtpFailure(_that);case _ResetPasswordSended() when resetPasswordSended != null:
+return resetPasswordSended(_that);case _ResetPasswordFailure() when resetPasswordFailure != null:
+return resetPasswordFailure(_that);case _LoadingSchools() when loadingSchools != null:
 return loadingSchools(_that);case _LoadedSchools() when loadedSchools != null:
 return loadedSchools(_that);case _OtpSended() when otpSended != null:
 return otpSended(_that);case _LoadingHistory() when loadingHistory != null:
@@ -554,14 +706,18 @@ return loadedHistory(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _LoadingFailure value)  loadingFailure,required TResult Function( _Loaded value)  loaded,required TResult Function( _LoadingSchools value)  loadingSchools,required TResult Function( _LoadedSchools value)  loadedSchools,required TResult Function( _OtpSended value)  otpSended,required TResult Function( _LoadingHistory value)  loadingHistory,required TResult Function( _LoadedHistory value)  loadedHistory,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _LoadingFailure value)  loadingFailure,required TResult Function( _Loaded value)  loaded,required TResult Function( _ResetPasswordOtpSended value)  resetPasswordOtpSended,required TResult Function( _ResetPasswordOtpFailure value)  resetPasswordOtpFailure,required TResult Function( _ResetPasswordSended value)  resetPasswordSended,required TResult Function( _ResetPasswordFailure value)  resetPasswordFailure,required TResult Function( _LoadingSchools value)  loadingSchools,required TResult Function( _LoadedSchools value)  loadedSchools,required TResult Function( _OtpSended value)  otpSended,required TResult Function( _LoadingHistory value)  loadingHistory,required TResult Function( _LoadedHistory value)  loadedHistory,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case _Loading():
 return loading(_that);case _LoadingFailure():
 return loadingFailure(_that);case _Loaded():
-return loaded(_that);case _LoadingSchools():
+return loaded(_that);case _ResetPasswordOtpSended():
+return resetPasswordOtpSended(_that);case _ResetPasswordOtpFailure():
+return resetPasswordOtpFailure(_that);case _ResetPasswordSended():
+return resetPasswordSended(_that);case _ResetPasswordFailure():
+return resetPasswordFailure(_that);case _LoadingSchools():
 return loadingSchools(_that);case _LoadedSchools():
 return loadedSchools(_that);case _OtpSended():
 return otpSended(_that);case _LoadingHistory():
@@ -583,14 +739,18 @@ return loadedHistory(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _LoadingFailure value)?  loadingFailure,TResult? Function( _Loaded value)?  loaded,TResult? Function( _LoadingSchools value)?  loadingSchools,TResult? Function( _LoadedSchools value)?  loadedSchools,TResult? Function( _OtpSended value)?  otpSended,TResult? Function( _LoadingHistory value)?  loadingHistory,TResult? Function( _LoadedHistory value)?  loadedHistory,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _LoadingFailure value)?  loadingFailure,TResult? Function( _Loaded value)?  loaded,TResult? Function( _ResetPasswordOtpSended value)?  resetPasswordOtpSended,TResult? Function( _ResetPasswordOtpFailure value)?  resetPasswordOtpFailure,TResult? Function( _ResetPasswordSended value)?  resetPasswordSended,TResult? Function( _ResetPasswordFailure value)?  resetPasswordFailure,TResult? Function( _LoadingSchools value)?  loadingSchools,TResult? Function( _LoadedSchools value)?  loadedSchools,TResult? Function( _OtpSended value)?  otpSended,TResult? Function( _LoadingHistory value)?  loadingHistory,TResult? Function( _LoadedHistory value)?  loadedHistory,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _LoadingFailure() when loadingFailure != null:
 return loadingFailure(_that);case _Loaded() when loaded != null:
-return loaded(_that);case _LoadingSchools() when loadingSchools != null:
+return loaded(_that);case _ResetPasswordOtpSended() when resetPasswordOtpSended != null:
+return resetPasswordOtpSended(_that);case _ResetPasswordOtpFailure() when resetPasswordOtpFailure != null:
+return resetPasswordOtpFailure(_that);case _ResetPasswordSended() when resetPasswordSended != null:
+return resetPasswordSended(_that);case _ResetPasswordFailure() when resetPasswordFailure != null:
+return resetPasswordFailure(_that);case _LoadingSchools() when loadingSchools != null:
 return loadingSchools(_that);case _LoadedSchools() when loadedSchools != null:
 return loadedSchools(_that);case _OtpSended() when otpSended != null:
 return otpSended(_that);case _LoadingHistory() when loadingHistory != null:
@@ -612,13 +772,17 @@ return loadedHistory(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( String message)?  loadingFailure,TResult Function()?  loaded,TResult Function()?  loadingSchools,TResult Function( SchoolResponse schools)?  loadedSchools,TResult Function()?  otpSended,TResult Function()?  loadingHistory,TResult Function( HistoryResponse history)?  loadedHistory,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( String message)?  loadingFailure,TResult Function()?  loaded,TResult Function()?  resetPasswordOtpSended,TResult Function( String message)?  resetPasswordOtpFailure,TResult Function()?  resetPasswordSended,TResult Function( String message)?  resetPasswordFailure,TResult Function()?  loadingSchools,TResult Function( SchoolResponse schools)?  loadedSchools,TResult Function()?  otpSended,TResult Function()?  loadingHistory,TResult Function( HistoryResponse history)?  loadedHistory,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _LoadingFailure() when loadingFailure != null:
 return loadingFailure(_that.message);case _Loaded() when loaded != null:
-return loaded();case _LoadingSchools() when loadingSchools != null:
+return loaded();case _ResetPasswordOtpSended() when resetPasswordOtpSended != null:
+return resetPasswordOtpSended();case _ResetPasswordOtpFailure() when resetPasswordOtpFailure != null:
+return resetPasswordOtpFailure(_that.message);case _ResetPasswordSended() when resetPasswordSended != null:
+return resetPasswordSended();case _ResetPasswordFailure() when resetPasswordFailure != null:
+return resetPasswordFailure(_that.message);case _LoadingSchools() when loadingSchools != null:
 return loadingSchools();case _LoadedSchools() when loadedSchools != null:
 return loadedSchools(_that.schools);case _OtpSended() when otpSended != null:
 return otpSended();case _LoadingHistory() when loadingHistory != null:
@@ -641,13 +805,17 @@ return loadedHistory(_that.history);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( String message)  loadingFailure,required TResult Function()  loaded,required TResult Function()  loadingSchools,required TResult Function( SchoolResponse schools)  loadedSchools,required TResult Function()  otpSended,required TResult Function()  loadingHistory,required TResult Function( HistoryResponse history)  loadedHistory,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( String message)  loadingFailure,required TResult Function()  loaded,required TResult Function()  resetPasswordOtpSended,required TResult Function( String message)  resetPasswordOtpFailure,required TResult Function()  resetPasswordSended,required TResult Function( String message)  resetPasswordFailure,required TResult Function()  loadingSchools,required TResult Function( SchoolResponse schools)  loadedSchools,required TResult Function()  otpSended,required TResult Function()  loadingHistory,required TResult Function( HistoryResponse history)  loadedHistory,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _LoadingFailure():
 return loadingFailure(_that.message);case _Loaded():
-return loaded();case _LoadingSchools():
+return loaded();case _ResetPasswordOtpSended():
+return resetPasswordOtpSended();case _ResetPasswordOtpFailure():
+return resetPasswordOtpFailure(_that.message);case _ResetPasswordSended():
+return resetPasswordSended();case _ResetPasswordFailure():
+return resetPasswordFailure(_that.message);case _LoadingSchools():
 return loadingSchools();case _LoadedSchools():
 return loadedSchools(_that.schools);case _OtpSended():
 return otpSended();case _LoadingHistory():
@@ -669,13 +837,17 @@ return loadedHistory(_that.history);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( String message)?  loadingFailure,TResult? Function()?  loaded,TResult? Function()?  loadingSchools,TResult? Function( SchoolResponse schools)?  loadedSchools,TResult? Function()?  otpSended,TResult? Function()?  loadingHistory,TResult? Function( HistoryResponse history)?  loadedHistory,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( String message)?  loadingFailure,TResult? Function()?  loaded,TResult? Function()?  resetPasswordOtpSended,TResult? Function( String message)?  resetPasswordOtpFailure,TResult? Function()?  resetPasswordSended,TResult? Function( String message)?  resetPasswordFailure,TResult? Function()?  loadingSchools,TResult? Function( SchoolResponse schools)?  loadedSchools,TResult? Function()?  otpSended,TResult? Function()?  loadingHistory,TResult? Function( HistoryResponse history)?  loadedHistory,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _LoadingFailure() when loadingFailure != null:
 return loadingFailure(_that.message);case _Loaded() when loaded != null:
-return loaded();case _LoadingSchools() when loadingSchools != null:
+return loaded();case _ResetPasswordOtpSended() when resetPasswordOtpSended != null:
+return resetPasswordOtpSended();case _ResetPasswordOtpFailure() when resetPasswordOtpFailure != null:
+return resetPasswordOtpFailure(_that.message);case _ResetPasswordSended() when resetPasswordSended != null:
+return resetPasswordSended();case _ResetPasswordFailure() when resetPasswordFailure != null:
+return resetPasswordFailure(_that.message);case _LoadingSchools() when loadingSchools != null:
 return loadingSchools();case _LoadedSchools() when loadedSchools != null:
 return loadedSchools(_that.schools);case _OtpSended() when otpSended != null:
 return otpSended();case _LoadingHistory() when loadingHistory != null:
@@ -849,6 +1021,202 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class _ResetPasswordOtpSended implements AuthState {
+  const _ResetPasswordOtpSended();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ResetPasswordOtpSended);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AuthState.resetPasswordOtpSended()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _ResetPasswordOtpFailure implements AuthState {
+  const _ResetPasswordOtpFailure({required this.message});
+  
+
+ final  String message;
+
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ResetPasswordOtpFailureCopyWith<_ResetPasswordOtpFailure> get copyWith => __$ResetPasswordOtpFailureCopyWithImpl<_ResetPasswordOtpFailure>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ResetPasswordOtpFailure&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'AuthState.resetPasswordOtpFailure(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ResetPasswordOtpFailureCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
+  factory _$ResetPasswordOtpFailureCopyWith(_ResetPasswordOtpFailure value, $Res Function(_ResetPasswordOtpFailure) _then) = __$ResetPasswordOtpFailureCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class __$ResetPasswordOtpFailureCopyWithImpl<$Res>
+    implements _$ResetPasswordOtpFailureCopyWith<$Res> {
+  __$ResetPasswordOtpFailureCopyWithImpl(this._self, this._then);
+
+  final _ResetPasswordOtpFailure _self;
+  final $Res Function(_ResetPasswordOtpFailure) _then;
+
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(_ResetPasswordOtpFailure(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _ResetPasswordSended implements AuthState {
+  const _ResetPasswordSended();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ResetPasswordSended);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AuthState.resetPasswordSended()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _ResetPasswordFailure implements AuthState {
+  const _ResetPasswordFailure({required this.message});
+  
+
+ final  String message;
+
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ResetPasswordFailureCopyWith<_ResetPasswordFailure> get copyWith => __$ResetPasswordFailureCopyWithImpl<_ResetPasswordFailure>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ResetPasswordFailure&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'AuthState.resetPasswordFailure(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ResetPasswordFailureCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
+  factory _$ResetPasswordFailureCopyWith(_ResetPasswordFailure value, $Res Function(_ResetPasswordFailure) _then) = __$ResetPasswordFailureCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class __$ResetPasswordFailureCopyWithImpl<$Res>
+    implements _$ResetPasswordFailureCopyWith<$Res> {
+  __$ResetPasswordFailureCopyWithImpl(this._self, this._then);
+
+  final _ResetPasswordFailure _self;
+  final $Res Function(_ResetPasswordFailure) _then;
+
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(_ResetPasswordFailure(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

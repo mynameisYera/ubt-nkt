@@ -14,6 +14,20 @@ class AuthState with _$AuthState {
   // Успешный логин
   const factory AuthState.loaded() = _Loaded;
 
+  // Успешный сброс пароля
+  const factory AuthState.resetPasswordOtpSended() = _ResetPasswordOtpSended;
+  // Ошибка сброса пароля OTP
+  const factory AuthState.resetPasswordOtpFailure({
+    required String message,
+  }) = _ResetPasswordOtpFailure;
+
+  // Успешный сброс пароля
+  const factory AuthState.resetPasswordSended() = _ResetPasswordSended;
+  // Ошибка сброса пароля
+  const factory AuthState.resetPasswordFailure({
+    required String message,
+  }) = _ResetPasswordFailure;
+
   // Школы
   const factory AuthState.loadingSchools() = _LoadingSchools;
   const factory AuthState.loadedSchools({

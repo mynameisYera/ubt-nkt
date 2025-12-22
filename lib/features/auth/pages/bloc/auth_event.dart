@@ -20,4 +20,12 @@ abstract class AuthEvent with _$AuthEvent {
   }) = _Register;
   const factory AuthEvent.getSchools() = _GetSchools;
   const factory AuthEvent.getHistory() = _GetHistory;
+  const factory AuthEvent.restorePasswordOtp({
+    required String phone
+  }) = _RestorePasswordOtp;
+  const factory AuthEvent.restorePassword({
+    required String phone,
+    required String code,
+    required String password,
+  }) = _RestorePassword;
 }

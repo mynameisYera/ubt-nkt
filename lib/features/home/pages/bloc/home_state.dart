@@ -7,6 +7,7 @@ class HomeState with _$HomeState {
   const factory HomeState.loadingFailure({
     required String message
   }) = _LoadingFailure;
+  const factory HomeState.quotaExhausted() = _QuotaExhausted;
   const factory HomeState.loaded({
     required HomeViewModel examModel
   }) = _Loaded;
