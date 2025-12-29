@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
-import 'package:ubt_pbb/config/constants/app_colors.dart';
-import 'package:ubt_pbb/config/widgets/cors_aware_image.dart';
-import 'package:ubt_pbb/features/home/models/solution_model.dart';
+import 'package:brand_test/config/constants/app_colors.dart';
+import 'package:brand_test/config/widgets/cors_aware_image.dart';
+import 'package:brand_test/features/home/models/solution_model.dart';
 
 class SolutionPage extends StatefulWidget {
   final SolutionQuestion solutionQuestion;

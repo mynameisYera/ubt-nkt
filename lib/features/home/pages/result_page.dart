@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
-import 'package:ubt_pbb/config/constants/app_colors.dart';
-import 'package:ubt_pbb/config/endpoints/dio_sender.dart';
-import 'package:ubt_pbb/config/endpoints/endpoints.dart';
-import 'package:ubt_pbb/config/getit/get_injection.dart';
-import 'package:ubt_pbb/config/route/go_router_help.dart';
-import 'package:ubt_pbb/config/widgets/app_button.dart';
-import 'package:ubt_pbb/config/widgets/cors_aware_image.dart';
-import 'package:ubt_pbb/features/home/models/result_model.dart';
-import 'package:ubt_pbb/features/home/models/solution_model.dart';
-import 'package:ubt_pbb/features/home/pages/bloc/home_bloc.dart';
+import 'package:brand_test/config/constants/app_colors.dart';
+import 'package:brand_test/config/endpoints/dio_sender.dart';
+import 'package:brand_test/config/endpoints/endpoints.dart';
+import 'package:brand_test/config/getit/get_injection.dart';
+import 'package:brand_test/config/route/go_router_help.dart';
+import 'package:brand_test/config/widgets/app_button.dart';
+import 'package:brand_test/config/widgets/cors_aware_image.dart';
+import 'package:brand_test/features/home/models/result_model.dart';
+import 'package:brand_test/features/home/models/solution_model.dart';
+import 'package:brand_test/features/home/pages/bloc/home_bloc.dart';
 
 class ResultPage extends StatefulWidget {
   final int attemptId;
@@ -35,13 +35,12 @@ class _ResultPageState extends State<ResultPage> {
   @override
   void initState() {
     super.initState();
-    _homeBloc = sl<HomeBloc>();
+    _homeBloc = sl.get<HomeBloc>();
     _loadResults();
   }
 
   @override
   void dispose() {
-    _homeBloc.close();
     super.dispose();
   }
 

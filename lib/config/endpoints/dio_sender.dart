@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:ubt_pbb/config/endpoints/endpoints.dart';
-import 'package:ubt_pbb/config/logger/l.dart';
-import 'package:ubt_pbb/config/storage/flutter_secure_storage_func.dart';
+import 'package:brand_test/config/endpoints/endpoints.dart';
+import 'package:brand_test/config/logger/l.dart';
+import 'package:brand_test/config/storage/flutter_secure_storage_func.dart';
 
 class ApiException implements Exception {
   final String message;

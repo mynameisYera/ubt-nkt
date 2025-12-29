@@ -1,11 +1,11 @@
 {
-    "name": "ubt_pbb",
-    "short_name": "ubt_pbb",
+    "name": "ҰБТ-НКТ пробный",
+    "short_name": "ҰБТ-НКТ.",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "ҰБТ-НКТ пробный тестілеу! @Brand Online",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

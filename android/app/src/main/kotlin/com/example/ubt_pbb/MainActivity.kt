@@ -1,4 +1,4 @@
-package com.example.ubt_pbb
+package com.example.brand_test
 
 import io.flutter.embedding.android.FlutterActivity
 

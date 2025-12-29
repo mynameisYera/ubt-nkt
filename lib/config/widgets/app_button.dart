@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ubt_pbb/config/constants/app_colors.dart';
+import 'package:brand_test/config/constants/app_colors.dart';
 
 /// Primary rounded button.
 class AppButton extends StatelessWidget {

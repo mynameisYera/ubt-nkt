@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:ubt_pbb/config/constants/app_colors.dart';
-import 'package:ubt_pbb/config/getit/get_injection.dart';
-import 'package:ubt_pbb/config/route/go_router_help.dart';
-import 'package:ubt_pbb/config/widgets/app_button.dart';
-import 'package:ubt_pbb/features/auth/models/history_model.dart';
-import 'package:ubt_pbb/features/auth/pages/bloc/auth_bloc.dart';
+import 'package:brand_test/config/constants/app_colors.dart';
+import 'package:brand_test/config/getit/get_injection.dart';
+import 'package:brand_test/config/route/go_router_help.dart';
+import 'package:brand_test/config/widgets/app_button.dart';
+import 'package:brand_test/features/auth/models/history_model.dart';
+import 'package:brand_test/features/auth/pages/bloc/auth_bloc.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});

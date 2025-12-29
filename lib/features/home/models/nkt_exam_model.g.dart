@@ -20,6 +20,11 @@ _NktExamModel _$NktExamModelFromJson(Map<String, dynamic> json) =>
         json['time_limit_minutes'] as Map<String, dynamic>,
       ),
       quota: (json['quota'] as num).toInt(),
+      in_progress_attempt: json['in_progress_attempt'] == null
+          ? null
+          : InProgressAttempt.fromJson(
+              json['in_progress_attempt'] as Map<String, dynamic>,
+            ),
     );
 
 Map<String, dynamic> _$NktExamModelToJson(_NktExamModel instance) =>
@@ -30,6 +35,7 @@ Map<String, dynamic> _$NktExamModelToJson(_NktExamModel instance) =>
       'tools': instance.tools,
       'time_limit_minutes': instance.timeLimitMinutes,
       'quota': instance.quota,
+      'in_progress_attempt': instance.in_progress_attempt,
     };
 
 _NktSubject _$NktSubjectFromJson(Map<String, dynamic> json) => _NktSubject(

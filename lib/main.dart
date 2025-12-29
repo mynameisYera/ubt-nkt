@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:ubt_pbb/config/constants/app_colors.dart';
-import 'package:ubt_pbb/config/getit/get_injection.dart';
-import 'package:ubt_pbb/config/route/go_router_help.dart';
-import 'package:ubt_pbb/config/storage/flutter_secure_storage_func.dart';
-import 'package:ubt_pbb/firebase_options.dart';
+import 'package:brand_test/config/constants/app_colors.dart';
+import 'package:brand_test/config/getit/get_injection.dart';
+import 'package:brand_test/config/route/go_router_help.dart';
+import 'package:brand_test/config/storage/flutter_secure_storage_func.dart';
+import 'package:brand_test/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

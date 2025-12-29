@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_annotation_target
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:brand_test/features/home/models/exam_model.dart';
 part 'nkt_exam_model.freezed.dart';
 part 'nkt_exam_model.g.dart';
 
@@ -13,6 +14,7 @@ abstract class NktExamModel with _$NktExamModel {
     required List<String> tools,
     @JsonKey(name: 'time_limit_minutes') required NktTimeLimit timeLimitMinutes,
     required int quota,
+    InProgressAttempt? in_progress_attempt,
   }) = _NktExamModel;
 
   factory NktExamModel.fromJson(Map<String, dynamic> json) =>

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ubt_pbb/config/storage/flutter_secure_storage_func.dart';
-import 'package:ubt_pbb/config/widgets/app_button.dart';
-import 'package:ubt_pbb/config/route/go_router_help.dart';
-import 'package:ubt_pbb/features/home/pages/bloc/home_bloc.dart';
+import 'package:brand_test/config/storage/flutter_secure_storage_func.dart';
+import 'package:brand_test/config/widgets/app_button.dart';
+import 'package:brand_test/config/route/go_router_help.dart';
+import 'package:brand_test/config/getit/get_injection.dart';
+import 'package:brand_test/features/home/pages/bloc/home_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,13 +21,46 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _homeBloc = HomeBloc();
-    _homeBloc.add(const HomeEvent.getPairs());
+    _homeBloc = sl.get<HomeBloc>();
+    
+    // Если блок закрыт, это проблема - нужно перезагрузить данные
+    if (_homeBloc.isClosed) {
+      debugPrint('⚠️ HomeBloc is closed, this should not happen with singleton');
+      // В этом случае нужно перезагрузить приложение или создать новый блок
+      // Но так как это singleton, лучше просто попробовать загрузить данные
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Ошибка инициализации. Пожалуйста, перезагрузите приложение.'),
+            ),
+          );
+        }
+      });
+      return;
+    }
+    
+    final currentState = _homeBloc.state;
+    final shouldLoadPairs = currentState.maybeWhen(
+      initial: () => true,
+      loaded: (examModel) {
+        if (examModel.testModel != null && examModel.examModel == null && examModel.nktExamModel == null) {
+          return true;
+        }
+        return examModel.examModel == null && examModel.nktExamModel == null;
+      },
+      orElse: () => false,
+    );
+    
+    if (shouldLoadPairs && !_homeBloc.isClosed) {
+      _homeBloc.add(const HomeEvent.getPairs());
+    }
   }
 
   @override
   void dispose() {
-    _homeBloc.close();
+    // НЕ закрываем блок, так как это singleton и он используется в других местах
+    // _homeBloc.close();
     super.dispose();
   }
 
@@ -46,7 +80,6 @@ class _HomePageState extends State<HomePage> {
                 });
               }
               if (examModel.nktExamModel != null) {
-                // NKT exam model loaded - can show subject selection
               }
             },
             loadingFailure: (message) {
@@ -106,7 +139,9 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(height: 16),
                               AppButton(
                                 onPressed: () {
-                                  _homeBloc.add(const HomeEvent.getPairs());
+                                  if (!_homeBloc.isClosed) {
+                                    _homeBloc.add(const HomeEvent.getPairs());
+                                  }
                                 },
                                 text: 'Түсінікті',
                               ),
@@ -119,7 +154,9 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(height: 16),
                               AppButton(
                                 onPressed: () {
-                                  _homeBloc.add(const HomeEvent.getPairs());
+                                  if (!_homeBloc.isClosed) {
+                                    _homeBloc.add(const HomeEvent.getPairs());
+                                  }
                                 },
                                 text: 'Түсінікті',
                               ),
@@ -250,7 +287,7 @@ class _HomePageState extends State<HomePage> {
 
                          Widget startButton = AppButton(
                             onPressed: () {
-                              if (_selectedNktSubjectId != null) {
+                              if (_selectedNktSubjectId != null && !_homeBloc.isClosed) {
                                 _homeBloc.add(HomeEvent.startExam(
                                     id: _selectedNktSubjectId!));
                               }
@@ -460,7 +497,17 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(height: 16),
                                 AppButton(
                                   onPressed: () {
-                                    _homeBloc.add(const HomeEvent.getPairs());
+                                    if (!_homeBloc.isClosed) {
+                                      _homeBloc.add(const HomeEvent.getPairs());
+                                    } else {
+                                      // Если блок закрыт, перезагружаем страницу
+                                      // или показываем сообщение об ошибке
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Ошибка: блок закрыт. Пожалуйста, перезагрузите приложение.'),
+                                        ),
+                                      );
+                                    }
                                   },
                                   text: 'Қайталау',
                                 ),

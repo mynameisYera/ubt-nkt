@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
-import 'package:ubt_pbb/config/constants/app_colors.dart';
-import 'package:ubt_pbb/config/widgets/cors_aware_image.dart';
-import 'package:ubt_pbb/config/getit/get_injection.dart';
-import 'package:ubt_pbb/config/widgets/app_button.dart';
-import 'package:ubt_pbb/config/endpoints/dio_sender.dart';
-import 'package:ubt_pbb/config/endpoints/endpoints.dart';
-import 'package:ubt_pbb/config/storage/flutter_secure_storage_func.dart';
-import 'package:ubt_pbb/features/home/pages/bloc/home_bloc.dart';
-import 'package:ubt_pbb/features/home/pages/widgets/finish_dialog_widget.dart';
-import 'package:ubt_pbb/features/home/models/test_model.dart';
+import 'package:brand_test/config/constants/app_colors.dart';
+import 'package:brand_test/config/widgets/cors_aware_image.dart';
+import 'package:brand_test/config/getit/get_injection.dart';
+import 'package:brand_test/config/widgets/app_button.dart';
+import 'package:brand_test/config/endpoints/dio_sender.dart';
+import 'package:brand_test/config/endpoints/endpoints.dart';
+import 'package:brand_test/config/storage/flutter_secure_storage_func.dart';
+import 'package:brand_test/features/home/pages/bloc/home_bloc.dart';
+import 'package:brand_test/features/home/pages/widgets/finish_dialog_widget.dart';
+import 'package:brand_test/features/home/models/test_model.dart';
 
 class TestPage extends StatefulWidget {
   final int? pairId;
@@ -44,17 +44,40 @@ class _TestPageState extends State<TestPage> {
   bool _isTimeExpired = false;
   bool _timerInitialized = false;
   bool _isSidebarCollapsed = true;
+  bool _isDialogOpen = false; // Флаг для блокировки обновления UI во время показа диалога
 
   @override
   void initState() {
     super.initState();
     _homeBloc = sl.get<HomeBloc>();
+    
+    // Проверяем текущее состояние блока
+    final currentState = _homeBloc.state;
+    final hasActiveTest = currentState.maybeWhen(
+      loaded: (examModel) => examModel.testModel != null,
+      orElse: () => false,
+    );
+    
     if (widget.examAttempt != null && !_homeBloc.isClosed) {
+      // Если передан examAttempt, используем его
       _homeBloc.add(HomeEvent.setExamAttempt(examAttempt: widget.examAttempt!));
+      // Инициализируем таймер сразу, если есть examAttempt
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && !_timerInitialized) {
+          _timerInitialized = true;
+          _startCountdownTimer(widget.examAttempt!);
+        }
+      });
     } else if (widget.pairId != null && !_homeBloc.isClosed) {
-      // Сбрасываем состояние блока перед запуском нового теста
-      // чтобы избежать проблем с предыдущими данными
-      _homeBloc.add(HomeEvent.startExam(id: widget.pairId!));
+      // Запускаем новый тест только если:
+      // 1. Нет активного теста в состоянии блока
+      // 2. Или текущий тест не соответствует переданному pairId
+      if (!hasActiveTest) {
+        _homeBloc.add(HomeEvent.startExam(id: widget.pairId!));
+      } else {
+        // Если тест уже активен, просто используем существующее состояние
+        debugPrint('ℹ️ Test already active, using existing state');
+      }
     }
     _startAutoSaveTimer();
   }
@@ -75,25 +98,26 @@ class _TestPageState extends State<TestPage> {
     });
   }
 
-  void _startCountdownTimer(ExamAttempt examAttempt) {
+  void _startCountdownTimer(ExamAttempt examAttempt, {bool useCurrentTime = false}) {
     _countdownTimer?.cancel();
     
-    // Используем remaining_seconds или вычисляем из expires_at
-    if (examAttempt.remainingSeconds > 0) {
-      _remainingSeconds = examAttempt.remainingSeconds;
-    } else {
-      // Вычисляем время до expires_at
-      try {
-        final expiresAt = DateTime.parse(examAttempt.expiresAt);
-        final now = DateTime.now();
-        final difference = expiresAt.difference(now);
-        _remainingSeconds = difference.inSeconds.clamp(0, 999999); // Максимум ~11 дней
-      } catch (e) {
-        debugPrint('⚠️ Error parsing expires_at: $e');
-        // Используем time_limit_minutes как fallback
-        _remainingSeconds = examAttempt.timeLimitMinutes * 60;
+    if (!useCurrentTime) {
+      if (examAttempt.remainingSeconds > 0) {
+        _remainingSeconds = examAttempt.remainingSeconds;
+      } else {
+        try {
+          final expiresAt = DateTime.parse(examAttempt.expiresAt);
+          final now = DateTime.now();
+          final difference = expiresAt.difference(now);
+          _remainingSeconds = difference.inSeconds.clamp(0, 999999);
+        } catch (e) {
+          debugPrint('⚠️ Error parsing expires_at: $e');
+          // Используем time_limit_minutes как fallback
+          _remainingSeconds = examAttempt.timeLimitMinutes * 60;
+        }
       }
     }
+    // Если useCurrentTime = true, _remainingSeconds уже содержит актуальное значение
 
     // Если время уже истекло, сразу завершаем тест
     if (_remainingSeconds <= 0) {
@@ -111,13 +135,14 @@ class _TestPageState extends State<TestPage> {
         return;
       }
 
-      setState(() {
-        if (_remainingSeconds > 0) {
-          _remainingSeconds--;
-          
-          // Показываем предупреждение при остатке 5 минут и 1 минута
-          if (_remainingSeconds == 300) {
-            // 5 минут
+      // Обновляем состояние без полной перерисовки всего виджета
+      if (_remainingSeconds > 0) {
+        _remainingSeconds--;
+        
+        // Показываем предупреждение при остатке 5 минут и 1 минута
+        if (_remainingSeconds == 300) {
+          // 5 минут
+          if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Ескерту: 5 минут қалды!'),
@@ -125,8 +150,10 @@ class _TestPageState extends State<TestPage> {
                 duration: Duration(seconds: 3),
               ),
             );
-          } else if (_remainingSeconds == 60) {
-            // 1 минута
+          }
+        } else if (_remainingSeconds == 60) {
+          // 1 минута
+          if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Ескерту: 1 минут қалды!'),
@@ -135,14 +162,24 @@ class _TestPageState extends State<TestPage> {
               ),
             );
           }
-        } else {
-          _remainingSeconds = 0;
-          _isTimeExpired = true;
-          timer.cancel();
-          // Автоматически завершаем тест
+        }
+        
+        // Обновляем только таймер в AppBar, используя минимальный setState
+        // НЕ обновляем, если диалог открыт
+        if (mounted && !_isDialogOpen) {
+          setState(() {
+            // Только обновляем счетчик секунд
+          });
+        }
+      } else {
+        _remainingSeconds = 0;
+        _isTimeExpired = true;
+        timer.cancel();
+        // Автоматически завершаем тест
+        if (mounted) {
           _autoFinishTest();
         }
-      });
+      }
     });
   }
 
@@ -468,15 +505,20 @@ class _TestPageState extends State<TestPage> {
             actions: [
               BlocBuilder<HomeBloc, HomeState>(
                 bloc: _homeBloc,
+                buildWhen: (previous, current) {
+                  // Не перерисовываем таймер, если диалог открыт
+                  return !_isDialogOpen;
+                },
                 builder: (context, state) {
                   return state.maybeWhen(
                     loaded: (examModel) {
                       final testModel = examModel.testModel;
                       if (testModel != null) {
-                        if (!_timerInitialized) {
+                        // Инициализируем таймер только один раз, если еще не инициализирован
+                        if (!_timerInitialized && !_isTimeExpired && !_isDialogOpen) {
                           _timerInitialized = true;
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            if (mounted && !_isTimeExpired) {
+                            if (mounted && !_isTimeExpired && !_isDialogOpen) {
                               _startCountdownTimer(testModel);
                             }
                           });
@@ -539,25 +581,62 @@ class _TestPageState extends State<TestPage> {
               // Кнопка завершения теста
               BlocBuilder<HomeBloc, HomeState>(
                 bloc: _homeBloc,
+                buildWhen: (previous, current) {
+                  // Не перерисовываем кнопку, если диалог открыт
+                  return !_isDialogOpen;
+                },
                 builder: (context, state) {
                   return state.maybeWhen(
                     loaded: (_) => Container(
                       margin: const EdgeInsets.only(right: 8),
                       child: ElevatedButton.icon(
-                        onPressed: _isTimeExpired
+                        onPressed: (_isTimeExpired || _isDialogOpen)
                             ? null
                             : () async {
+                                // Предотвращаем множественные нажатия
+                                if (_isDialogOpen) return;
+                                
+                                // Устанавливаем флаг, что диалог открыт (блокируем обновление UI)
+                                setState(() {
+                                  _isDialogOpen = true;
+                                });
+                                
                                 await _sendAnswersToBackend();
-                                final result = await showDialog<bool>(
-                                  context: context,
-                                  builder: (context) => FinishDialogWidget(
-                                    onBeforeFinish: _sendAnswersToBackend,
-                                  ),
-                                );
-                                if (result == true && mounted) {
-                                  // Очищаем attemptId после завершения теста
-                                  await FlutterSecureStorageFunc.deleteAttemptId();
-                                  Navigator.of(context).popUntil((route) => route.isFirst);
+                                
+                                if (!mounted) {
+                                  _isDialogOpen = false;
+                                  return;
+                                }
+                                
+                                try {
+                                  await showDialog<bool>(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) => WillPopScope(
+                                      onWillPop: () async => false, // Предотвращаем закрытие по кнопке назад
+                                      child: FinishDialogWidget(
+                                        onBeforeFinish: _sendAnswersToBackend,
+                                      ),
+                                    ),
+                                  );
+                                  
+                                  // Сбрасываем флаг после закрытия диалога
+                                  if (mounted) {
+                                    setState(() {
+                                      _isDialogOpen = false;
+                                    });
+                                  }
+                                  
+                                  // Если тест завершен (result == true), переход на result_page
+                                  // уже происходит в finish_dialog_widget.dart через appRouter.pushReplacement
+                                  // Здесь ничего не делаем, просто сбрасываем флаг
+                                } catch (e) {
+                                  // В случае ошибки сбрасываем флаг
+                                  if (mounted) {
+                                    setState(() {
+                                      _isDialogOpen = false;
+                                    });
+                                  }
                                 }
                               },
                         icon: const Icon(Icons.check_circle, size: 22),
@@ -623,20 +702,53 @@ class _TestPageState extends State<TestPage> {
                         ),
                         const SizedBox(height: 10),
                         AppButton(
-                          onPressed: _isTimeExpired
+                          onPressed: (_isTimeExpired || _isDialogOpen)
                             ? null
                             : () async {
+                                // Предотвращаем множественные нажатия
+                                if (_isDialogOpen) return;
+                                
+                                // Устанавливаем флаг, что диалог открыт (блокируем обновление UI)
+                                setState(() {
+                                  _isDialogOpen = true;
+                                });
+                                
                                 await _sendAnswersToBackend();
-                                final result = await showDialog<bool>(
-                                  context: context,
-                                  builder: (context) => FinishDialogWidget(
-                                    onBeforeFinish: _sendAnswersToBackend,
-                                  ),
-                                );
-                                if (result == true && mounted) {
-                                  // Очищаем attemptId после завершения теста
-                                  await FlutterSecureStorageFunc.deleteAttemptId();
-                                  Navigator.of(context).popUntil((route) => route.isFirst);
+                                
+                                if (!mounted) {
+                                  _isDialogOpen = false;
+                                  return;
+                                }
+                                
+                                try {
+                                  await showDialog<bool>(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) => WillPopScope(
+                                      onWillPop: () async => false, // Предотвращаем закрытие по кнопке назад
+                                      child: FinishDialogWidget(
+                                        onBeforeFinish: _sendAnswersToBackend,
+                                      ),
+                                    ),
+                                  );
+                                  
+                                  // Сбрасываем флаг после закрытия диалога
+                                  if (mounted) {
+                                    setState(() {
+                                      _isDialogOpen = false;
+                                    });
+                                  }
+                                  
+                                  // Если тест завершен (result == true), переход на result_page
+                                  // уже происходит в finish_dialog_widget.dart через appRouter.pushReplacement
+                                  // Здесь ничего не делаем, просто сбрасываем флаг
+                                } catch (e) {
+                                  // В случае ошибки сбрасываем флаг
+                                  if (mounted) {
+                                    setState(() {
+                                      _isDialogOpen = false;
+                                    });
+                                  }
                                 }
                           },
                           text: 'Тестті аяқтау',

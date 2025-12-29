@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:ubt_pbb/config/endpoints/dio_sender.dart';
-import 'package:ubt_pbb/config/endpoints/endpoints.dart';
-import 'package:ubt_pbb/config/logger/l.dart';
-import 'package:ubt_pbb/config/storage/flutter_secure_storage_func.dart';
-import 'package:ubt_pbb/features/home/models/exam_model.dart';
-import 'package:ubt_pbb/features/home/models/solution_model.dart';
-import 'package:ubt_pbb/features/home/models/test_model.dart';
-import 'package:ubt_pbb/features/home/models/nkt_exam_model.dart';
+import 'package:brand_test/config/endpoints/dio_sender.dart';
+import 'package:brand_test/config/endpoints/endpoints.dart';
+import 'package:brand_test/config/logger/l.dart';
+import 'package:brand_test/config/storage/flutter_secure_storage_func.dart';
+import 'package:brand_test/features/home/models/exam_model.dart';
+import 'package:brand_test/features/home/models/solution_model.dart';
+import 'package:brand_test/features/home/models/test_model.dart';
+import 'package:brand_test/features/home/models/nkt_exam_model.dart';
 
 
 part 'home_bloc.freezed.dart';
@@ -100,6 +100,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
 
   Future<void> _onExamStart(_StartExam event, Emitter<HomeState> emit) async {
+    final currentState = state;
+    final hasActiveTest = currentState.maybeWhen(
+      loaded: (examModel) => examModel.testModel != null,
+      orElse: () => false,
+    );
+    
+    if (hasActiveTest) {
+      L.log('EXAM_START', 'Test already active, skipping start');
+      return;
+    }
+    
     emit(const HomeState.loading());
 
     try {
@@ -181,6 +192,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (role == "teacher") {
         try {
           final nktExamModel = NktExamModel.fromJson(responseData);
+          
+          if (nktExamModel.in_progress_attempt != null) {
+            L.log('IN_PROGRESS_ATTEMPT', 'Found NKT in_progress_attempt: ${nktExamModel.in_progress_attempt?.id}');
+            final continueEvent = HomeEvent.continueExam(attemptId: nktExamModel.in_progress_attempt!.id);
+            await continueEvent.map(
+              getPairs: (_) async {},
+              startExam: (_) async {},
+              setExamAttempt: (_) async {},
+              continueExam: (e) => _onContinueExam(e, emit),
+              getSolutionQuestion: (_) async {},
+            );
+            return;
+          }
+          
           emit(HomeState.loaded(examModel: HomeViewModel(nktExamModel: nktExamModel)));
           return;
         } catch (e) {

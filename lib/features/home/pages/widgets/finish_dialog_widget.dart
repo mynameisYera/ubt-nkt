@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ubt_pbb/config/constants/app_colors.dart';
-import 'package:ubt_pbb/config/endpoints/dio_sender.dart';
-import 'package:ubt_pbb/config/endpoints/endpoints.dart';
-import 'package:ubt_pbb/config/route/go_router_help.dart';
-import 'package:ubt_pbb/config/storage/flutter_secure_storage_func.dart';
-import 'package:ubt_pbb/features/home/models/finish_request_model.dart';
+import 'package:brand_test/config/constants/app_colors.dart';
+import 'package:brand_test/config/endpoints/dio_sender.dart';
+import 'package:brand_test/config/endpoints/endpoints.dart';
+import 'package:brand_test/config/route/go_router_help.dart';
+import 'package:brand_test/config/storage/flutter_secure_storage_func.dart';
+import 'package:brand_test/config/getit/get_injection.dart';
+import 'package:brand_test/features/home/pages/bloc/home_bloc.dart';
+import 'package:brand_test/features/home/models/finish_request_model.dart';
 
 enum FinishDialogStep {
   confirmation,
@@ -114,9 +116,19 @@ class _FinishDialogWidgetState extends State<FinishDialogWidget> {
           
           await FlutterSecureStorageFunc.deleteAttemptId();
           
+          try {
+            final homeBloc = sl.get<HomeBloc>();
+            if (!homeBloc.isClosed) {
+              homeBloc.add(const HomeEvent.getPairs());
+            }
+          } catch (e) {
+            debugPrint('⚠️ Error reloading bloc data: $e');
+          }
+          
           Future.delayed(const Duration(seconds: 1), () async {
             if (mounted) {
               Navigator.of(context).pop(true);
+              await Future.delayed(const Duration(milliseconds: 100));
               if (savedAttemptId != null && mounted) {
                 appRouter.pushReplacement('/result', extra: savedAttemptId);
               }

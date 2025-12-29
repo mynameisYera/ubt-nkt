@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:ubt_pbb/config/endpoints/dio_sender.dart';
-import 'package:ubt_pbb/config/endpoints/endpoints.dart';
-import 'package:ubt_pbb/config/storage/flutter_secure_storage_func.dart';
-import 'package:ubt_pbb/features/auth/models/history_model.dart';
-import 'package:ubt_pbb/features/auth/models/login_request.dart';
-import 'package:ubt_pbb/features/auth/models/schools_model.dart';
-import 'package:ubt_pbb/features/auth/models/user_login_model.dart';
+import 'package:brand_test/config/endpoints/dio_sender.dart';
+import 'package:brand_test/config/endpoints/endpoints.dart';
+import 'package:brand_test/config/storage/flutter_secure_storage_func.dart';
+import 'package:brand_test/features/auth/models/history_model.dart';
+import 'package:brand_test/features/auth/models/login_request.dart';
+import 'package:brand_test/features/auth/models/schools_model.dart';
+import 'package:brand_test/features/auth/models/user_login_model.dart';
 
 
 part 'auth_bloc.freezed.dart';
@@ -254,7 +254,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         {
           "phone": event.phone,
           "code": event.code,
-          "password": event.password,
+          "1": event.password,
         }
       );
       if(response.statusCode == 200){

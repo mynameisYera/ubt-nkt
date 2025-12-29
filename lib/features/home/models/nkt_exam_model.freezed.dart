@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NktExamModel {
 
-@JsonKey(name: 'exam_type') String get examType; List<NktSubject> get subjects;@JsonKey(name: 'ordering_rules') List<String> get orderingRules; List<String> get tools;@JsonKey(name: 'time_limit_minutes') NktTimeLimit get timeLimitMinutes; int get quota;
+@JsonKey(name: 'exam_type') String get examType; List<NktSubject> get subjects;@JsonKey(name: 'ordering_rules') List<String> get orderingRules; List<String> get tools;@JsonKey(name: 'time_limit_minutes') NktTimeLimit get timeLimitMinutes; int get quota; InProgressAttempt? get in_progress_attempt;
 /// Create a copy of NktExamModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $NktExamModelCopyWith<NktExamModel> get copyWith => _$NktExamModelCopyWithImpl<N
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NktExamModel&&(identical(other.examType, examType) || other.examType == examType)&&const DeepCollectionEquality().equals(other.subjects, subjects)&&const DeepCollectionEquality().equals(other.orderingRules, orderingRules)&&const DeepCollectionEquality().equals(other.tools, tools)&&(identical(other.timeLimitMinutes, timeLimitMinutes) || other.timeLimitMinutes == timeLimitMinutes)&&(identical(other.quota, quota) || other.quota == quota));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NktExamModel&&(identical(other.examType, examType) || other.examType == examType)&&const DeepCollectionEquality().equals(other.subjects, subjects)&&const DeepCollectionEquality().equals(other.orderingRules, orderingRules)&&const DeepCollectionEquality().equals(other.tools, tools)&&(identical(other.timeLimitMinutes, timeLimitMinutes) || other.timeLimitMinutes == timeLimitMinutes)&&(identical(other.quota, quota) || other.quota == quota)&&(identical(other.in_progress_attempt, in_progress_attempt) || other.in_progress_attempt == in_progress_attempt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,examType,const DeepCollectionEquality().hash(subjects),const DeepCollectionEquality().hash(orderingRules),const DeepCollectionEquality().hash(tools),timeLimitMinutes,quota);
+int get hashCode => Object.hash(runtimeType,examType,const DeepCollectionEquality().hash(subjects),const DeepCollectionEquality().hash(orderingRules),const DeepCollectionEquality().hash(tools),timeLimitMinutes,quota,in_progress_attempt);
 
 @override
 String toString() {
-  return 'NktExamModel(examType: $examType, subjects: $subjects, orderingRules: $orderingRules, tools: $tools, timeLimitMinutes: $timeLimitMinutes, quota: $quota)';
+  return 'NktExamModel(examType: $examType, subjects: $subjects, orderingRules: $orderingRules, tools: $tools, timeLimitMinutes: $timeLimitMinutes, quota: $quota, in_progress_attempt: $in_progress_attempt)';
 }
 
 
@@ -48,11 +48,11 @@ abstract mixin class $NktExamModelCopyWith<$Res>  {
   factory $NktExamModelCopyWith(NktExamModel value, $Res Function(NktExamModel) _then) = _$NktExamModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'exam_type') String examType, List<NktSubject> subjects,@JsonKey(name: 'ordering_rules') List<String> orderingRules, List<String> tools,@JsonKey(name: 'time_limit_minutes') NktTimeLimit timeLimitMinutes, int quota
+@JsonKey(name: 'exam_type') String examType, List<NktSubject> subjects,@JsonKey(name: 'ordering_rules') List<String> orderingRules, List<String> tools,@JsonKey(name: 'time_limit_minutes') NktTimeLimit timeLimitMinutes, int quota, InProgressAttempt? in_progress_attempt
 });
 
 
-$NktTimeLimitCopyWith<$Res> get timeLimitMinutes;
+$NktTimeLimitCopyWith<$Res> get timeLimitMinutes;$InProgressAttemptCopyWith<$Res>? get in_progress_attempt;
 
 }
 /// @nodoc
@@ -65,7 +65,7 @@ class _$NktExamModelCopyWithImpl<$Res>
 
 /// Create a copy of NktExamModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? examType = null,Object? subjects = null,Object? orderingRules = null,Object? tools = null,Object? timeLimitMinutes = null,Object? quota = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? examType = null,Object? subjects = null,Object? orderingRules = null,Object? tools = null,Object? timeLimitMinutes = null,Object? quota = null,Object? in_progress_attempt = freezed,}) {
   return _then(_self.copyWith(
 examType: null == examType ? _self.examType : examType // ignore: cast_nullable_to_non_nullable
 as String,subjects: null == subjects ? _self.subjects : subjects // ignore: cast_nullable_to_non_nullable
@@ -73,7 +73,8 @@ as List<NktSubject>,orderingRules: null == orderingRules ? _self.orderingRules :
 as List<String>,tools: null == tools ? _self.tools : tools // ignore: cast_nullable_to_non_nullable
 as List<String>,timeLimitMinutes: null == timeLimitMinutes ? _self.timeLimitMinutes : timeLimitMinutes // ignore: cast_nullable_to_non_nullable
 as NktTimeLimit,quota: null == quota ? _self.quota : quota // ignore: cast_nullable_to_non_nullable
-as int,
+as int,in_progress_attempt: freezed == in_progress_attempt ? _self.in_progress_attempt : in_progress_attempt // ignore: cast_nullable_to_non_nullable
+as InProgressAttempt?,
   ));
 }
 /// Create a copy of NktExamModel
@@ -84,6 +85,18 @@ $NktTimeLimitCopyWith<$Res> get timeLimitMinutes {
   
   return $NktTimeLimitCopyWith<$Res>(_self.timeLimitMinutes, (value) {
     return _then(_self.copyWith(timeLimitMinutes: value));
+  });
+}/// Create a copy of NktExamModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$InProgressAttemptCopyWith<$Res>? get in_progress_attempt {
+    if (_self.in_progress_attempt == null) {
+    return null;
+  }
+
+  return $InProgressAttemptCopyWith<$Res>(_self.in_progress_attempt!, (value) {
+    return _then(_self.copyWith(in_progress_attempt: value));
   });
 }
 }
@@ -167,10 +180,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'exam_type')  String examType,  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules')  List<String> orderingRules,  List<String> tools, @JsonKey(name: 'time_limit_minutes')  NktTimeLimit timeLimitMinutes,  int quota)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'exam_type')  String examType,  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules')  List<String> orderingRules,  List<String> tools, @JsonKey(name: 'time_limit_minutes')  NktTimeLimit timeLimitMinutes,  int quota,  InProgressAttempt? in_progress_attempt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NktExamModel() when $default != null:
-return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_that.timeLimitMinutes,_that.quota);case _:
+return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_that.timeLimitMinutes,_that.quota,_that.in_progress_attempt);case _:
   return orElse();
 
 }
@@ -188,10 +201,10 @@ return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'exam_type')  String examType,  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules')  List<String> orderingRules,  List<String> tools, @JsonKey(name: 'time_limit_minutes')  NktTimeLimit timeLimitMinutes,  int quota)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'exam_type')  String examType,  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules')  List<String> orderingRules,  List<String> tools, @JsonKey(name: 'time_limit_minutes')  NktTimeLimit timeLimitMinutes,  int quota,  InProgressAttempt? in_progress_attempt)  $default,) {final _that = this;
 switch (_that) {
 case _NktExamModel():
-return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_that.timeLimitMinutes,_that.quota);case _:
+return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_that.timeLimitMinutes,_that.quota,_that.in_progress_attempt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -208,10 +221,10 @@ return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'exam_type')  String examType,  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules')  List<String> orderingRules,  List<String> tools, @JsonKey(name: 'time_limit_minutes')  NktTimeLimit timeLimitMinutes,  int quota)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'exam_type')  String examType,  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules')  List<String> orderingRules,  List<String> tools, @JsonKey(name: 'time_limit_minutes')  NktTimeLimit timeLimitMinutes,  int quota,  InProgressAttempt? in_progress_attempt)?  $default,) {final _that = this;
 switch (_that) {
 case _NktExamModel() when $default != null:
-return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_that.timeLimitMinutes,_that.quota);case _:
+return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_that.timeLimitMinutes,_that.quota,_that.in_progress_attempt);case _:
   return null;
 
 }
@@ -223,7 +236,7 @@ return $default(_that.examType,_that.subjects,_that.orderingRules,_that.tools,_t
 @JsonSerializable()
 
 class _NktExamModel implements NktExamModel {
-  const _NktExamModel({@JsonKey(name: 'exam_type') required this.examType, required final  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules') required final  List<String> orderingRules, required final  List<String> tools, @JsonKey(name: 'time_limit_minutes') required this.timeLimitMinutes, required this.quota}): _subjects = subjects,_orderingRules = orderingRules,_tools = tools;
+  const _NktExamModel({@JsonKey(name: 'exam_type') required this.examType, required final  List<NktSubject> subjects, @JsonKey(name: 'ordering_rules') required final  List<String> orderingRules, required final  List<String> tools, @JsonKey(name: 'time_limit_minutes') required this.timeLimitMinutes, required this.quota, this.in_progress_attempt}): _subjects = subjects,_orderingRules = orderingRules,_tools = tools;
   factory _NktExamModel.fromJson(Map<String, dynamic> json) => _$NktExamModelFromJson(json);
 
 @override@JsonKey(name: 'exam_type') final  String examType;
@@ -250,6 +263,7 @@ class _NktExamModel implements NktExamModel {
 
 @override@JsonKey(name: 'time_limit_minutes') final  NktTimeLimit timeLimitMinutes;
 @override final  int quota;
+@override final  InProgressAttempt? in_progress_attempt;
 
 /// Create a copy of NktExamModel
 /// with the given fields replaced by the non-null parameter values.
@@ -264,16 +278,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NktExamModel&&(identical(other.examType, examType) || other.examType == examType)&&const DeepCollectionEquality().equals(other._subjects, _subjects)&&const DeepCollectionEquality().equals(other._orderingRules, _orderingRules)&&const DeepCollectionEquality().equals(other._tools, _tools)&&(identical(other.timeLimitMinutes, timeLimitMinutes) || other.timeLimitMinutes == timeLimitMinutes)&&(identical(other.quota, quota) || other.quota == quota));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NktExamModel&&(identical(other.examType, examType) || other.examType == examType)&&const DeepCollectionEquality().equals(other._subjects, _subjects)&&const DeepCollectionEquality().equals(other._orderingRules, _orderingRules)&&const DeepCollectionEquality().equals(other._tools, _tools)&&(identical(other.timeLimitMinutes, timeLimitMinutes) || other.timeLimitMinutes == timeLimitMinutes)&&(identical(other.quota, quota) || other.quota == quota)&&(identical(other.in_progress_attempt, in_progress_attempt) || other.in_progress_attempt == in_progress_attempt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,examType,const DeepCollectionEquality().hash(_subjects),const DeepCollectionEquality().hash(_orderingRules),const DeepCollectionEquality().hash(_tools),timeLimitMinutes,quota);
+int get hashCode => Object.hash(runtimeType,examType,const DeepCollectionEquality().hash(_subjects),const DeepCollectionEquality().hash(_orderingRules),const DeepCollectionEquality().hash(_tools),timeLimitMinutes,quota,in_progress_attempt);
 
 @override
 String toString() {
-  return 'NktExamModel(examType: $examType, subjects: $subjects, orderingRules: $orderingRules, tools: $tools, timeLimitMinutes: $timeLimitMinutes, quota: $quota)';
+  return 'NktExamModel(examType: $examType, subjects: $subjects, orderingRules: $orderingRules, tools: $tools, timeLimitMinutes: $timeLimitMinutes, quota: $quota, in_progress_attempt: $in_progress_attempt)';
 }
 
 
@@ -284,11 +298,11 @@ abstract mixin class _$NktExamModelCopyWith<$Res> implements $NktExamModelCopyWi
   factory _$NktExamModelCopyWith(_NktExamModel value, $Res Function(_NktExamModel) _then) = __$NktExamModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'exam_type') String examType, List<NktSubject> subjects,@JsonKey(name: 'ordering_rules') List<String> orderingRules, List<String> tools,@JsonKey(name: 'time_limit_minutes') NktTimeLimit timeLimitMinutes, int quota
+@JsonKey(name: 'exam_type') String examType, List<NktSubject> subjects,@JsonKey(name: 'ordering_rules') List<String> orderingRules, List<String> tools,@JsonKey(name: 'time_limit_minutes') NktTimeLimit timeLimitMinutes, int quota, InProgressAttempt? in_progress_attempt
 });
 
 
-@override $NktTimeLimitCopyWith<$Res> get timeLimitMinutes;
+@override $NktTimeLimitCopyWith<$Res> get timeLimitMinutes;@override $InProgressAttemptCopyWith<$Res>? get in_progress_attempt;
 
 }
 /// @nodoc
@@ -301,7 +315,7 @@ class __$NktExamModelCopyWithImpl<$Res>
 
 /// Create a copy of NktExamModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? examType = null,Object? subjects = null,Object? orderingRules = null,Object? tools = null,Object? timeLimitMinutes = null,Object? quota = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? examType = null,Object? subjects = null,Object? orderingRules = null,Object? tools = null,Object? timeLimitMinutes = null,Object? quota = null,Object? in_progress_attempt = freezed,}) {
   return _then(_NktExamModel(
 examType: null == examType ? _self.examType : examType // ignore: cast_nullable_to_non_nullable
 as String,subjects: null == subjects ? _self._subjects : subjects // ignore: cast_nullable_to_non_nullable
@@ -309,7 +323,8 @@ as List<NktSubject>,orderingRules: null == orderingRules ? _self._orderingRules 
 as List<String>,tools: null == tools ? _self._tools : tools // ignore: cast_nullable_to_non_nullable
 as List<String>,timeLimitMinutes: null == timeLimitMinutes ? _self.timeLimitMinutes : timeLimitMinutes // ignore: cast_nullable_to_non_nullable
 as NktTimeLimit,quota: null == quota ? _self.quota : quota // ignore: cast_nullable_to_non_nullable
-as int,
+as int,in_progress_attempt: freezed == in_progress_attempt ? _self.in_progress_attempt : in_progress_attempt // ignore: cast_nullable_to_non_nullable
+as InProgressAttempt?,
   ));
 }
 
@@ -321,6 +336,18 @@ $NktTimeLimitCopyWith<$Res> get timeLimitMinutes {
   
   return $NktTimeLimitCopyWith<$Res>(_self.timeLimitMinutes, (value) {
     return _then(_self.copyWith(timeLimitMinutes: value));
+  });
+}/// Create a copy of NktExamModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$InProgressAttemptCopyWith<$Res>? get in_progress_attempt {
+    if (_self.in_progress_attempt == null) {
+    return null;
+  }
+
+  return $InProgressAttemptCopyWith<$Res>(_self.in_progress_attempt!, (value) {
+    return _then(_self.copyWith(in_progress_attempt: value));
   });
 }
 }
