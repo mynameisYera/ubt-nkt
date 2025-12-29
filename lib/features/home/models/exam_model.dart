@@ -13,6 +13,7 @@ abstract class ExamModel with _$ExamModel {
     required List<String> ordering_rules,
     required List<String> tools,
     required int quota,
+    InProgressAttempt? in_progress_attempt,
   }) = _ExamModel;
 
   factory ExamModel.fromJson(Map<String, dynamic> json) =>
@@ -70,4 +71,33 @@ abstract class QuestionType with _$QuestionType {
 
   factory QuestionType.fromJson(Map<String, dynamic> json) =>
       _$QuestionTypeFromJson(json);
+}
+
+@freezed
+abstract class InProgressAttempt with _$InProgressAttempt {
+  const factory InProgressAttempt({
+    required int id,
+    required String exam_type,
+    required String status,
+    required int time_limit_minutes,
+    required String started_at,
+    required String expires_at,
+    required int remaining_seconds,
+    EntPair? ent_pair,
+    dynamic nkt_subject,
+  }) = _InProgressAttempt;
+
+  factory InProgressAttempt.fromJson(Map<String, dynamic> json) =>
+      _$InProgressAttemptFromJson(json);
+}
+
+@freezed
+abstract class EntPair with _$EntPair {
+  const factory EntPair({
+    required int id,
+    required String label,
+  }) = _EntPair;
+
+  factory EntPair.fromJson(Map<String, dynamic> json) =>
+      _$EntPairFromJson(json);
 }

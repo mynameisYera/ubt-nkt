@@ -110,13 +110,15 @@ class _FinishDialogWidgetState extends State<FinishDialogWidget> {
             _currentStep = FinishDialogStep.success;
           });
           
+          final savedAttemptId = attemptId;
+          
+          await FlutterSecureStorageFunc.deleteAttemptId();
+          
           Future.delayed(const Duration(seconds: 1), () async {
             if (mounted) {
               Navigator.of(context).pop(true);
-              // Переход на страницу результатов
-              final attemptId = await FlutterSecureStorageFunc.getAttemptId();
-              if (attemptId != null && mounted) {
-                appRouter.push('/result', extra: attemptId);
+              if (savedAttemptId != null && mounted) {
+                appRouter.pushReplacement('/result', extra: savedAttemptId);
               }
             }
           });

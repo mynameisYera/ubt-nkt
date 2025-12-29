@@ -52,6 +52,8 @@ class _TestPageState extends State<TestPage> {
     if (widget.examAttempt != null && !_homeBloc.isClosed) {
       _homeBloc.add(HomeEvent.setExamAttempt(examAttempt: widget.examAttempt!));
     } else if (widget.pairId != null && !_homeBloc.isClosed) {
+      // Сбрасываем состояние блока перед запуском нового теста
+      // чтобы избежать проблем с предыдущими данными
       _homeBloc.add(HomeEvent.startExam(id: widget.pairId!));
     }
     _startAutoSaveTimer();
@@ -192,6 +194,9 @@ class _TestPageState extends State<TestPage> {
               if (confirmData['ok'] == true) {
                 debugPrint('✅ Test finished successfully');
                 
+                // Очищаем attemptId после завершения теста
+                await FlutterSecureStorageFunc.deleteAttemptId();
+                
                 // Показываем сообщение на казахском языке
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -322,17 +327,14 @@ class _TestPageState extends State<TestPage> {
           return;
         }
 
-        // Проходим по всем предметам
         for (final subject in testModel.subjects) {
           final questions = subject.questions ?? [];
           
-          // Проходим по всем вопросам предмета
           for (final question in questions) {
             try {
               final questionMap = question as Map<String, dynamic>;
               final attemptQuestionId = questionMap['attempt_question_id'];
               
-              // Проверяем и преобразуем attempt_question_id
               int? questionId;
               if (attemptQuestionId is int) {
                 questionId = attemptQuestionId;
@@ -352,7 +354,6 @@ class _TestPageState extends State<TestPage> {
               Map<String, dynamic> answerPayload = {};
 
               if (questionType == 'single' || questionType == 'context_single') {
-                // Один ответ
                 if (answer is String) {
                   answerPayload['selected_option_id'] = answer;
                 } else {
@@ -360,7 +361,6 @@ class _TestPageState extends State<TestPage> {
                   continue;
                 }
               } else if (questionType == 'multiple') {
-                // Несколько ответов
                 if (answer is List) {
                   answerPayload['selected_option_ids'] = answer.cast<String>();
                 } else {
@@ -368,7 +368,6 @@ class _TestPageState extends State<TestPage> {
                   continue;
                 }
               } else if (questionType == 'matching') {
-                // Сопоставление
                 if (answer is Map) {
                   final matches = answer as Map<String, dynamic>;
                   final rows = matches.entries.map((entry) {
@@ -556,6 +555,8 @@ class _TestPageState extends State<TestPage> {
                                   ),
                                 );
                                 if (result == true && mounted) {
+                                  // Очищаем attemptId после завершения теста
+                                  await FlutterSecureStorageFunc.deleteAttemptId();
                                   Navigator.of(context).popUntil((route) => route.isFirst);
                                 }
                               },
@@ -633,6 +634,8 @@ class _TestPageState extends State<TestPage> {
                                   ),
                                 );
                                 if (result == true && mounted) {
+                                  // Очищаем attemptId после завершения теста
+                                  await FlutterSecureStorageFunc.deleteAttemptId();
                                   Navigator.of(context).popUntil((route) => route.isFirst);
                                 }
                           },
@@ -659,7 +662,51 @@ class _TestPageState extends State<TestPage> {
                 loaded: (examModel) {
                   final testModel = examModel.testModel;
                   if (testModel == null || testModel.subjects.isEmpty) {
-                    return const Center(child: Text('Нет данных'));
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.error_outline,
+                              size: 64,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(height: 16),
+                            const Text(
+                              'Нет данных',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Тест не загружен или не содержит вопросов',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 24),
+                            if (widget.pairId != null)
+                              AppButton(
+                                onPressed: () {
+                                  if (!_homeBloc.isClosed) {
+                                    _homeBloc.add(HomeEvent.startExam(id: widget.pairId!));
+                                  }
+                                },
+                                text: 'Повторить попытку',
+                                isLoading: false,
+                                isDisabled: false,
+                              ),
+                          ],
+                        ),
+                      ),
+                    );
                   }
 
                   if (_selectedSubjectIndex >= testModel.subjects.length) {

@@ -103,6 +103,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(const HomeState.loading());
 
     try {
+      await FlutterSecureStorageFunc.deleteAttemptId();
+      
       final role = await FlutterSecureStorageFunc.getRole();
       final response = role == "teacher" ? await DioSender.post(
         Endpoints.startExamNkt,
@@ -135,6 +137,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       L.log('PARSING', 'Parsing response for role $role: $jsonData');
 
       final testModel = ExamAttempt.fromJson(jsonData);
+      
+      // Проверяем, что данные валидны
+      if (testModel.subjects.isEmpty) {
+        throw Exception('Test model has no subjects');
+      }
+      
       // ------------ save attempt id ------------
       await FlutterSecureStorageFunc.saveAttemptId(testModel.id);
       emit(HomeState.loaded(examModel: HomeViewModel(testModel: testModel)));
@@ -182,6 +190,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       // Parse as ExamModel (for student or fallback for teacher)
       final examModel = ExamModel.fromJson(responseData);
+      
+      // Если есть in_progress_attempt, автоматически продолжаем экзамен
+      if (examModel.in_progress_attempt != null) {
+        L.log('IN_PROGRESS_ATTEMPT', 'Found in_progress_attempt: ${examModel.in_progress_attempt?.id}');
+        final continueEvent = HomeEvent.continueExam(attemptId: examModel.in_progress_attempt!.id);
+        await continueEvent.map(
+          getPairs: (_) async {},
+          startExam: (_) async {},
+          setExamAttempt: (_) async {},
+          continueExam: (e) => _onContinueExam(e, emit),
+          getSolutionQuestion: (_) async {},
+        );
+        return;
+      }
+      
       emit(HomeState.loaded(examModel: HomeViewModel(examModel: examModel)));
     } on ApiException catch (e) {
       emit(HomeState.loadingFailure(message: e.message));

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ExamModel {
 
- String get exam_type; int get time_limit_minutes; List<BlockSubject> get block1_subjects; List<Pair> get pairs; List<QuestionType> get question_types; List<String> get ordering_rules; List<String> get tools; int get quota;
+ String get exam_type; int get time_limit_minutes; List<BlockSubject> get block1_subjects; List<Pair> get pairs; List<QuestionType> get question_types; List<String> get ordering_rules; List<String> get tools; int get quota; InProgressAttempt? get in_progress_attempt;
 /// Create a copy of ExamModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ExamModelCopyWith<ExamModel> get copyWith => _$ExamModelCopyWithImpl<ExamModel>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExamModel&&(identical(other.exam_type, exam_type) || other.exam_type == exam_type)&&(identical(other.time_limit_minutes, time_limit_minutes) || other.time_limit_minutes == time_limit_minutes)&&const DeepCollectionEquality().equals(other.block1_subjects, block1_subjects)&&const DeepCollectionEquality().equals(other.pairs, pairs)&&const DeepCollectionEquality().equals(other.question_types, question_types)&&const DeepCollectionEquality().equals(other.ordering_rules, ordering_rules)&&const DeepCollectionEquality().equals(other.tools, tools)&&(identical(other.quota, quota) || other.quota == quota));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExamModel&&(identical(other.exam_type, exam_type) || other.exam_type == exam_type)&&(identical(other.time_limit_minutes, time_limit_minutes) || other.time_limit_minutes == time_limit_minutes)&&const DeepCollectionEquality().equals(other.block1_subjects, block1_subjects)&&const DeepCollectionEquality().equals(other.pairs, pairs)&&const DeepCollectionEquality().equals(other.question_types, question_types)&&const DeepCollectionEquality().equals(other.ordering_rules, ordering_rules)&&const DeepCollectionEquality().equals(other.tools, tools)&&(identical(other.quota, quota) || other.quota == quota)&&(identical(other.in_progress_attempt, in_progress_attempt) || other.in_progress_attempt == in_progress_attempt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,exam_type,time_limit_minutes,const DeepCollectionEquality().hash(block1_subjects),const DeepCollectionEquality().hash(pairs),const DeepCollectionEquality().hash(question_types),const DeepCollectionEquality().hash(ordering_rules),const DeepCollectionEquality().hash(tools),quota);
+int get hashCode => Object.hash(runtimeType,exam_type,time_limit_minutes,const DeepCollectionEquality().hash(block1_subjects),const DeepCollectionEquality().hash(pairs),const DeepCollectionEquality().hash(question_types),const DeepCollectionEquality().hash(ordering_rules),const DeepCollectionEquality().hash(tools),quota,in_progress_attempt);
 
 @override
 String toString() {
-  return 'ExamModel(exam_type: $exam_type, time_limit_minutes: $time_limit_minutes, block1_subjects: $block1_subjects, pairs: $pairs, question_types: $question_types, ordering_rules: $ordering_rules, tools: $tools, quota: $quota)';
+  return 'ExamModel(exam_type: $exam_type, time_limit_minutes: $time_limit_minutes, block1_subjects: $block1_subjects, pairs: $pairs, question_types: $question_types, ordering_rules: $ordering_rules, tools: $tools, quota: $quota, in_progress_attempt: $in_progress_attempt)';
 }
 
 
@@ -48,11 +48,11 @@ abstract mixin class $ExamModelCopyWith<$Res>  {
   factory $ExamModelCopyWith(ExamModel value, $Res Function(ExamModel) _then) = _$ExamModelCopyWithImpl;
 @useResult
 $Res call({
- String exam_type, int time_limit_minutes, List<BlockSubject> block1_subjects, List<Pair> pairs, List<QuestionType> question_types, List<String> ordering_rules, List<String> tools, int quota
+ String exam_type, int time_limit_minutes, List<BlockSubject> block1_subjects, List<Pair> pairs, List<QuestionType> question_types, List<String> ordering_rules, List<String> tools, int quota, InProgressAttempt? in_progress_attempt
 });
 
 
-
+$InProgressAttemptCopyWith<$Res>? get in_progress_attempt;
 
 }
 /// @nodoc
@@ -65,7 +65,7 @@ class _$ExamModelCopyWithImpl<$Res>
 
 /// Create a copy of ExamModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? exam_type = null,Object? time_limit_minutes = null,Object? block1_subjects = null,Object? pairs = null,Object? question_types = null,Object? ordering_rules = null,Object? tools = null,Object? quota = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? exam_type = null,Object? time_limit_minutes = null,Object? block1_subjects = null,Object? pairs = null,Object? question_types = null,Object? ordering_rules = null,Object? tools = null,Object? quota = null,Object? in_progress_attempt = freezed,}) {
   return _then(_self.copyWith(
 exam_type: null == exam_type ? _self.exam_type : exam_type // ignore: cast_nullable_to_non_nullable
 as String,time_limit_minutes: null == time_limit_minutes ? _self.time_limit_minutes : time_limit_minutes // ignore: cast_nullable_to_non_nullable
@@ -75,10 +75,23 @@ as List<Pair>,question_types: null == question_types ? _self.question_types : qu
 as List<QuestionType>,ordering_rules: null == ordering_rules ? _self.ordering_rules : ordering_rules // ignore: cast_nullable_to_non_nullable
 as List<String>,tools: null == tools ? _self.tools : tools // ignore: cast_nullable_to_non_nullable
 as List<String>,quota: null == quota ? _self.quota : quota // ignore: cast_nullable_to_non_nullable
-as int,
+as int,in_progress_attempt: freezed == in_progress_attempt ? _self.in_progress_attempt : in_progress_attempt // ignore: cast_nullable_to_non_nullable
+as InProgressAttempt?,
   ));
 }
+/// Create a copy of ExamModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$InProgressAttemptCopyWith<$Res>? get in_progress_attempt {
+    if (_self.in_progress_attempt == null) {
+    return null;
+  }
 
+  return $InProgressAttemptCopyWith<$Res>(_self.in_progress_attempt!, (value) {
+    return _then(_self.copyWith(in_progress_attempt: value));
+  });
+}
 }
 
 
@@ -160,10 +173,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String exam_type,  int time_limit_minutes,  List<BlockSubject> block1_subjects,  List<Pair> pairs,  List<QuestionType> question_types,  List<String> ordering_rules,  List<String> tools,  int quota)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String exam_type,  int time_limit_minutes,  List<BlockSubject> block1_subjects,  List<Pair> pairs,  List<QuestionType> question_types,  List<String> ordering_rules,  List<String> tools,  int quota,  InProgressAttempt? in_progress_attempt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ExamModel() when $default != null:
-return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_that.pairs,_that.question_types,_that.ordering_rules,_that.tools,_that.quota);case _:
+return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_that.pairs,_that.question_types,_that.ordering_rules,_that.tools,_that.quota,_that.in_progress_attempt);case _:
   return orElse();
 
 }
@@ -181,10 +194,10 @@ return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String exam_type,  int time_limit_minutes,  List<BlockSubject> block1_subjects,  List<Pair> pairs,  List<QuestionType> question_types,  List<String> ordering_rules,  List<String> tools,  int quota)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String exam_type,  int time_limit_minutes,  List<BlockSubject> block1_subjects,  List<Pair> pairs,  List<QuestionType> question_types,  List<String> ordering_rules,  List<String> tools,  int quota,  InProgressAttempt? in_progress_attempt)  $default,) {final _that = this;
 switch (_that) {
 case _ExamModel():
-return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_that.pairs,_that.question_types,_that.ordering_rules,_that.tools,_that.quota);case _:
+return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_that.pairs,_that.question_types,_that.ordering_rules,_that.tools,_that.quota,_that.in_progress_attempt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +214,10 @@ return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String exam_type,  int time_limit_minutes,  List<BlockSubject> block1_subjects,  List<Pair> pairs,  List<QuestionType> question_types,  List<String> ordering_rules,  List<String> tools,  int quota)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String exam_type,  int time_limit_minutes,  List<BlockSubject> block1_subjects,  List<Pair> pairs,  List<QuestionType> question_types,  List<String> ordering_rules,  List<String> tools,  int quota,  InProgressAttempt? in_progress_attempt)?  $default,) {final _that = this;
 switch (_that) {
 case _ExamModel() when $default != null:
-return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_that.pairs,_that.question_types,_that.ordering_rules,_that.tools,_that.quota);case _:
+return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_that.pairs,_that.question_types,_that.ordering_rules,_that.tools,_that.quota,_that.in_progress_attempt);case _:
   return null;
 
 }
@@ -216,7 +229,7 @@ return $default(_that.exam_type,_that.time_limit_minutes,_that.block1_subjects,_
 @JsonSerializable()
 
 class _ExamModel implements ExamModel {
-  const _ExamModel({required this.exam_type, required this.time_limit_minutes, required final  List<BlockSubject> block1_subjects, required final  List<Pair> pairs, required final  List<QuestionType> question_types, required final  List<String> ordering_rules, required final  List<String> tools, required this.quota}): _block1_subjects = block1_subjects,_pairs = pairs,_question_types = question_types,_ordering_rules = ordering_rules,_tools = tools;
+  const _ExamModel({required this.exam_type, required this.time_limit_minutes, required final  List<BlockSubject> block1_subjects, required final  List<Pair> pairs, required final  List<QuestionType> question_types, required final  List<String> ordering_rules, required final  List<String> tools, required this.quota, this.in_progress_attempt}): _block1_subjects = block1_subjects,_pairs = pairs,_question_types = question_types,_ordering_rules = ordering_rules,_tools = tools;
   factory _ExamModel.fromJson(Map<String, dynamic> json) => _$ExamModelFromJson(json);
 
 @override final  String exam_type;
@@ -257,6 +270,7 @@ class _ExamModel implements ExamModel {
 }
 
 @override final  int quota;
+@override final  InProgressAttempt? in_progress_attempt;
 
 /// Create a copy of ExamModel
 /// with the given fields replaced by the non-null parameter values.
@@ -271,16 +285,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExamModel&&(identical(other.exam_type, exam_type) || other.exam_type == exam_type)&&(identical(other.time_limit_minutes, time_limit_minutes) || other.time_limit_minutes == time_limit_minutes)&&const DeepCollectionEquality().equals(other._block1_subjects, _block1_subjects)&&const DeepCollectionEquality().equals(other._pairs, _pairs)&&const DeepCollectionEquality().equals(other._question_types, _question_types)&&const DeepCollectionEquality().equals(other._ordering_rules, _ordering_rules)&&const DeepCollectionEquality().equals(other._tools, _tools)&&(identical(other.quota, quota) || other.quota == quota));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExamModel&&(identical(other.exam_type, exam_type) || other.exam_type == exam_type)&&(identical(other.time_limit_minutes, time_limit_minutes) || other.time_limit_minutes == time_limit_minutes)&&const DeepCollectionEquality().equals(other._block1_subjects, _block1_subjects)&&const DeepCollectionEquality().equals(other._pairs, _pairs)&&const DeepCollectionEquality().equals(other._question_types, _question_types)&&const DeepCollectionEquality().equals(other._ordering_rules, _ordering_rules)&&const DeepCollectionEquality().equals(other._tools, _tools)&&(identical(other.quota, quota) || other.quota == quota)&&(identical(other.in_progress_attempt, in_progress_attempt) || other.in_progress_attempt == in_progress_attempt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,exam_type,time_limit_minutes,const DeepCollectionEquality().hash(_block1_subjects),const DeepCollectionEquality().hash(_pairs),const DeepCollectionEquality().hash(_question_types),const DeepCollectionEquality().hash(_ordering_rules),const DeepCollectionEquality().hash(_tools),quota);
+int get hashCode => Object.hash(runtimeType,exam_type,time_limit_minutes,const DeepCollectionEquality().hash(_block1_subjects),const DeepCollectionEquality().hash(_pairs),const DeepCollectionEquality().hash(_question_types),const DeepCollectionEquality().hash(_ordering_rules),const DeepCollectionEquality().hash(_tools),quota,in_progress_attempt);
 
 @override
 String toString() {
-  return 'ExamModel(exam_type: $exam_type, time_limit_minutes: $time_limit_minutes, block1_subjects: $block1_subjects, pairs: $pairs, question_types: $question_types, ordering_rules: $ordering_rules, tools: $tools, quota: $quota)';
+  return 'ExamModel(exam_type: $exam_type, time_limit_minutes: $time_limit_minutes, block1_subjects: $block1_subjects, pairs: $pairs, question_types: $question_types, ordering_rules: $ordering_rules, tools: $tools, quota: $quota, in_progress_attempt: $in_progress_attempt)';
 }
 
 
@@ -291,11 +305,11 @@ abstract mixin class _$ExamModelCopyWith<$Res> implements $ExamModelCopyWith<$Re
   factory _$ExamModelCopyWith(_ExamModel value, $Res Function(_ExamModel) _then) = __$ExamModelCopyWithImpl;
 @override @useResult
 $Res call({
- String exam_type, int time_limit_minutes, List<BlockSubject> block1_subjects, List<Pair> pairs, List<QuestionType> question_types, List<String> ordering_rules, List<String> tools, int quota
+ String exam_type, int time_limit_minutes, List<BlockSubject> block1_subjects, List<Pair> pairs, List<QuestionType> question_types, List<String> ordering_rules, List<String> tools, int quota, InProgressAttempt? in_progress_attempt
 });
 
 
-
+@override $InProgressAttemptCopyWith<$Res>? get in_progress_attempt;
 
 }
 /// @nodoc
@@ -308,7 +322,7 @@ class __$ExamModelCopyWithImpl<$Res>
 
 /// Create a copy of ExamModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? exam_type = null,Object? time_limit_minutes = null,Object? block1_subjects = null,Object? pairs = null,Object? question_types = null,Object? ordering_rules = null,Object? tools = null,Object? quota = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? exam_type = null,Object? time_limit_minutes = null,Object? block1_subjects = null,Object? pairs = null,Object? question_types = null,Object? ordering_rules = null,Object? tools = null,Object? quota = null,Object? in_progress_attempt = freezed,}) {
   return _then(_ExamModel(
 exam_type: null == exam_type ? _self.exam_type : exam_type // ignore: cast_nullable_to_non_nullable
 as String,time_limit_minutes: null == time_limit_minutes ? _self.time_limit_minutes : time_limit_minutes // ignore: cast_nullable_to_non_nullable
@@ -318,11 +332,24 @@ as List<Pair>,question_types: null == question_types ? _self._question_types : q
 as List<QuestionType>,ordering_rules: null == ordering_rules ? _self._ordering_rules : ordering_rules // ignore: cast_nullable_to_non_nullable
 as List<String>,tools: null == tools ? _self._tools : tools // ignore: cast_nullable_to_non_nullable
 as List<String>,quota: null == quota ? _self.quota : quota // ignore: cast_nullable_to_non_nullable
-as int,
+as int,in_progress_attempt: freezed == in_progress_attempt ? _self.in_progress_attempt : in_progress_attempt // ignore: cast_nullable_to_non_nullable
+as InProgressAttempt?,
   ));
 }
 
+/// Create a copy of ExamModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$InProgressAttemptCopyWith<$Res>? get in_progress_attempt {
+    if (_self.in_progress_attempt == null) {
+    return null;
+  }
 
+  return $InProgressAttemptCopyWith<$Res>(_self.in_progress_attempt!, (value) {
+    return _then(_self.copyWith(in_progress_attempt: value));
+  });
+}
 }
 
 
@@ -1445,6 +1472,583 @@ class __$QuestionTypeCopyWithImpl<$Res>
   return _then(_QuestionType(
 label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,scoring: null == scoring ? _self.scoring : scoring // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$InProgressAttempt {
+
+ int get id; String get exam_type; String get status; int get time_limit_minutes; String get started_at; String get expires_at; int get remaining_seconds; EntPair? get ent_pair; dynamic get nkt_subject;
+/// Create a copy of InProgressAttempt
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$InProgressAttemptCopyWith<InProgressAttempt> get copyWith => _$InProgressAttemptCopyWithImpl<InProgressAttempt>(this as InProgressAttempt, _$identity);
+
+  /// Serializes this InProgressAttempt to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InProgressAttempt&&(identical(other.id, id) || other.id == id)&&(identical(other.exam_type, exam_type) || other.exam_type == exam_type)&&(identical(other.status, status) || other.status == status)&&(identical(other.time_limit_minutes, time_limit_minutes) || other.time_limit_minutes == time_limit_minutes)&&(identical(other.started_at, started_at) || other.started_at == started_at)&&(identical(other.expires_at, expires_at) || other.expires_at == expires_at)&&(identical(other.remaining_seconds, remaining_seconds) || other.remaining_seconds == remaining_seconds)&&(identical(other.ent_pair, ent_pair) || other.ent_pair == ent_pair)&&const DeepCollectionEquality().equals(other.nkt_subject, nkt_subject));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,exam_type,status,time_limit_minutes,started_at,expires_at,remaining_seconds,ent_pair,const DeepCollectionEquality().hash(nkt_subject));
+
+@override
+String toString() {
+  return 'InProgressAttempt(id: $id, exam_type: $exam_type, status: $status, time_limit_minutes: $time_limit_minutes, started_at: $started_at, expires_at: $expires_at, remaining_seconds: $remaining_seconds, ent_pair: $ent_pair, nkt_subject: $nkt_subject)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $InProgressAttemptCopyWith<$Res>  {
+  factory $InProgressAttemptCopyWith(InProgressAttempt value, $Res Function(InProgressAttempt) _then) = _$InProgressAttemptCopyWithImpl;
+@useResult
+$Res call({
+ int id, String exam_type, String status, int time_limit_minutes, String started_at, String expires_at, int remaining_seconds, EntPair? ent_pair, dynamic nkt_subject
+});
+
+
+$EntPairCopyWith<$Res>? get ent_pair;
+
+}
+/// @nodoc
+class _$InProgressAttemptCopyWithImpl<$Res>
+    implements $InProgressAttemptCopyWith<$Res> {
+  _$InProgressAttemptCopyWithImpl(this._self, this._then);
+
+  final InProgressAttempt _self;
+  final $Res Function(InProgressAttempt) _then;
+
+/// Create a copy of InProgressAttempt
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? exam_type = null,Object? status = null,Object? time_limit_minutes = null,Object? started_at = null,Object? expires_at = null,Object? remaining_seconds = null,Object? ent_pair = freezed,Object? nkt_subject = freezed,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,exam_type: null == exam_type ? _self.exam_type : exam_type // ignore: cast_nullable_to_non_nullable
+as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,time_limit_minutes: null == time_limit_minutes ? _self.time_limit_minutes : time_limit_minutes // ignore: cast_nullable_to_non_nullable
+as int,started_at: null == started_at ? _self.started_at : started_at // ignore: cast_nullable_to_non_nullable
+as String,expires_at: null == expires_at ? _self.expires_at : expires_at // ignore: cast_nullable_to_non_nullable
+as String,remaining_seconds: null == remaining_seconds ? _self.remaining_seconds : remaining_seconds // ignore: cast_nullable_to_non_nullable
+as int,ent_pair: freezed == ent_pair ? _self.ent_pair : ent_pair // ignore: cast_nullable_to_non_nullable
+as EntPair?,nkt_subject: freezed == nkt_subject ? _self.nkt_subject : nkt_subject // ignore: cast_nullable_to_non_nullable
+as dynamic,
+  ));
+}
+/// Create a copy of InProgressAttempt
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$EntPairCopyWith<$Res>? get ent_pair {
+    if (_self.ent_pair == null) {
+    return null;
+  }
+
+  return $EntPairCopyWith<$Res>(_self.ent_pair!, (value) {
+    return _then(_self.copyWith(ent_pair: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [InProgressAttempt].
+extension InProgressAttemptPatterns on InProgressAttempt {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _InProgressAttempt value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _InProgressAttempt() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _InProgressAttempt value)  $default,){
+final _that = this;
+switch (_that) {
+case _InProgressAttempt():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _InProgressAttempt value)?  $default,){
+final _that = this;
+switch (_that) {
+case _InProgressAttempt() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String exam_type,  String status,  int time_limit_minutes,  String started_at,  String expires_at,  int remaining_seconds,  EntPair? ent_pair,  dynamic nkt_subject)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _InProgressAttempt() when $default != null:
+return $default(_that.id,_that.exam_type,_that.status,_that.time_limit_minutes,_that.started_at,_that.expires_at,_that.remaining_seconds,_that.ent_pair,_that.nkt_subject);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String exam_type,  String status,  int time_limit_minutes,  String started_at,  String expires_at,  int remaining_seconds,  EntPair? ent_pair,  dynamic nkt_subject)  $default,) {final _that = this;
+switch (_that) {
+case _InProgressAttempt():
+return $default(_that.id,_that.exam_type,_that.status,_that.time_limit_minutes,_that.started_at,_that.expires_at,_that.remaining_seconds,_that.ent_pair,_that.nkt_subject);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String exam_type,  String status,  int time_limit_minutes,  String started_at,  String expires_at,  int remaining_seconds,  EntPair? ent_pair,  dynamic nkt_subject)?  $default,) {final _that = this;
+switch (_that) {
+case _InProgressAttempt() when $default != null:
+return $default(_that.id,_that.exam_type,_that.status,_that.time_limit_minutes,_that.started_at,_that.expires_at,_that.remaining_seconds,_that.ent_pair,_that.nkt_subject);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _InProgressAttempt implements InProgressAttempt {
+  const _InProgressAttempt({required this.id, required this.exam_type, required this.status, required this.time_limit_minutes, required this.started_at, required this.expires_at, required this.remaining_seconds, this.ent_pair, this.nkt_subject});
+  factory _InProgressAttempt.fromJson(Map<String, dynamic> json) => _$InProgressAttemptFromJson(json);
+
+@override final  int id;
+@override final  String exam_type;
+@override final  String status;
+@override final  int time_limit_minutes;
+@override final  String started_at;
+@override final  String expires_at;
+@override final  int remaining_seconds;
+@override final  EntPair? ent_pair;
+@override final  dynamic nkt_subject;
+
+/// Create a copy of InProgressAttempt
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$InProgressAttemptCopyWith<_InProgressAttempt> get copyWith => __$InProgressAttemptCopyWithImpl<_InProgressAttempt>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$InProgressAttemptToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InProgressAttempt&&(identical(other.id, id) || other.id == id)&&(identical(other.exam_type, exam_type) || other.exam_type == exam_type)&&(identical(other.status, status) || other.status == status)&&(identical(other.time_limit_minutes, time_limit_minutes) || other.time_limit_minutes == time_limit_minutes)&&(identical(other.started_at, started_at) || other.started_at == started_at)&&(identical(other.expires_at, expires_at) || other.expires_at == expires_at)&&(identical(other.remaining_seconds, remaining_seconds) || other.remaining_seconds == remaining_seconds)&&(identical(other.ent_pair, ent_pair) || other.ent_pair == ent_pair)&&const DeepCollectionEquality().equals(other.nkt_subject, nkt_subject));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,exam_type,status,time_limit_minutes,started_at,expires_at,remaining_seconds,ent_pair,const DeepCollectionEquality().hash(nkt_subject));
+
+@override
+String toString() {
+  return 'InProgressAttempt(id: $id, exam_type: $exam_type, status: $status, time_limit_minutes: $time_limit_minutes, started_at: $started_at, expires_at: $expires_at, remaining_seconds: $remaining_seconds, ent_pair: $ent_pair, nkt_subject: $nkt_subject)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$InProgressAttemptCopyWith<$Res> implements $InProgressAttemptCopyWith<$Res> {
+  factory _$InProgressAttemptCopyWith(_InProgressAttempt value, $Res Function(_InProgressAttempt) _then) = __$InProgressAttemptCopyWithImpl;
+@override @useResult
+$Res call({
+ int id, String exam_type, String status, int time_limit_minutes, String started_at, String expires_at, int remaining_seconds, EntPair? ent_pair, dynamic nkt_subject
+});
+
+
+@override $EntPairCopyWith<$Res>? get ent_pair;
+
+}
+/// @nodoc
+class __$InProgressAttemptCopyWithImpl<$Res>
+    implements _$InProgressAttemptCopyWith<$Res> {
+  __$InProgressAttemptCopyWithImpl(this._self, this._then);
+
+  final _InProgressAttempt _self;
+  final $Res Function(_InProgressAttempt) _then;
+
+/// Create a copy of InProgressAttempt
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? exam_type = null,Object? status = null,Object? time_limit_minutes = null,Object? started_at = null,Object? expires_at = null,Object? remaining_seconds = null,Object? ent_pair = freezed,Object? nkt_subject = freezed,}) {
+  return _then(_InProgressAttempt(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,exam_type: null == exam_type ? _self.exam_type : exam_type // ignore: cast_nullable_to_non_nullable
+as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,time_limit_minutes: null == time_limit_minutes ? _self.time_limit_minutes : time_limit_minutes // ignore: cast_nullable_to_non_nullable
+as int,started_at: null == started_at ? _self.started_at : started_at // ignore: cast_nullable_to_non_nullable
+as String,expires_at: null == expires_at ? _self.expires_at : expires_at // ignore: cast_nullable_to_non_nullable
+as String,remaining_seconds: null == remaining_seconds ? _self.remaining_seconds : remaining_seconds // ignore: cast_nullable_to_non_nullable
+as int,ent_pair: freezed == ent_pair ? _self.ent_pair : ent_pair // ignore: cast_nullable_to_non_nullable
+as EntPair?,nkt_subject: freezed == nkt_subject ? _self.nkt_subject : nkt_subject // ignore: cast_nullable_to_non_nullable
+as dynamic,
+  ));
+}
+
+/// Create a copy of InProgressAttempt
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$EntPairCopyWith<$Res>? get ent_pair {
+    if (_self.ent_pair == null) {
+    return null;
+  }
+
+  return $EntPairCopyWith<$Res>(_self.ent_pair!, (value) {
+    return _then(_self.copyWith(ent_pair: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$EntPair {
+
+ int get id; String get label;
+/// Create a copy of EntPair
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$EntPairCopyWith<EntPair> get copyWith => _$EntPairCopyWithImpl<EntPair>(this as EntPair, _$identity);
+
+  /// Serializes this EntPair to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntPair&&(identical(other.id, id) || other.id == id)&&(identical(other.label, label) || other.label == label));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,label);
+
+@override
+String toString() {
+  return 'EntPair(id: $id, label: $label)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $EntPairCopyWith<$Res>  {
+  factory $EntPairCopyWith(EntPair value, $Res Function(EntPair) _then) = _$EntPairCopyWithImpl;
+@useResult
+$Res call({
+ int id, String label
+});
+
+
+
+
+}
+/// @nodoc
+class _$EntPairCopyWithImpl<$Res>
+    implements $EntPairCopyWith<$Res> {
+  _$EntPairCopyWithImpl(this._self, this._then);
+
+  final EntPair _self;
+  final $Res Function(EntPair) _then;
+
+/// Create a copy of EntPair
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? label = null,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [EntPair].
+extension EntPairPatterns on EntPair {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _EntPair value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _EntPair() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _EntPair value)  $default,){
+final _that = this;
+switch (_that) {
+case _EntPair():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _EntPair value)?  $default,){
+final _that = this;
+switch (_that) {
+case _EntPair() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String label)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _EntPair() when $default != null:
+return $default(_that.id,_that.label);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String label)  $default,) {final _that = this;
+switch (_that) {
+case _EntPair():
+return $default(_that.id,_that.label);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String label)?  $default,) {final _that = this;
+switch (_that) {
+case _EntPair() when $default != null:
+return $default(_that.id,_that.label);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _EntPair implements EntPair {
+  const _EntPair({required this.id, required this.label});
+  factory _EntPair.fromJson(Map<String, dynamic> json) => _$EntPairFromJson(json);
+
+@override final  int id;
+@override final  String label;
+
+/// Create a copy of EntPair
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$EntPairCopyWith<_EntPair> get copyWith => __$EntPairCopyWithImpl<_EntPair>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$EntPairToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntPair&&(identical(other.id, id) || other.id == id)&&(identical(other.label, label) || other.label == label));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,label);
+
+@override
+String toString() {
+  return 'EntPair(id: $id, label: $label)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$EntPairCopyWith<$Res> implements $EntPairCopyWith<$Res> {
+  factory _$EntPairCopyWith(_EntPair value, $Res Function(_EntPair) _then) = __$EntPairCopyWithImpl;
+@override @useResult
+$Res call({
+ int id, String label
+});
+
+
+
+
+}
+/// @nodoc
+class __$EntPairCopyWithImpl<$Res>
+    implements _$EntPairCopyWith<$Res> {
+  __$EntPairCopyWithImpl(this._self, this._then);
+
+  final _EntPair _self;
+  final $Res Function(_EntPair) _then;
+
+/// Create a copy of EntPair
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? label = null,}) {
+  return _then(_EntPair(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

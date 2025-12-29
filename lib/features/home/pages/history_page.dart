@@ -136,7 +136,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   itemCount: history.attempts.length,
                   itemBuilder: (context, index) {
                     final attempt = history.attempts[index];
-                    return _buildAttemptCard(attempt);
+                    return attempt.status == 'in_progress' ? const SizedBox.shrink() : _buildAttemptCard(attempt) ;
                   },
                 ),
               );
@@ -309,7 +309,6 @@ class _HistoryPageState extends State<HistoryPage> {
           ],
         ),
         children: [
-          // Детали по предметам
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
