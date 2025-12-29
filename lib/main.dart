@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      title: 'UBT PBB',
+      title: 'Пробный: ҰБТ-НКТ',
       routerConfig: appRouter,
     );
   }

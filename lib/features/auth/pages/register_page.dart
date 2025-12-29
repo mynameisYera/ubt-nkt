@@ -218,7 +218,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       items: const [
                         DropdownMenuItem(value: 'student', child: Text('Оқушы')),
                         DropdownMenuItem(value: 'teacher', child: Text('Мұғалім')),
-                        DropdownMenuItem(value: 'parent', child: Text('Ата-ана')),
                       ],
                       onChanged: (value) => setState(() => _role = value ?? 'student'),
                     ),

@@ -13,6 +13,7 @@ class AppTextField extends StatelessWidget {
     this.keyboardType,
     this.inputFormatters,
     this.enabled = true,
+    this.prefixText,
   });
 
   final TextEditingController? controller;
@@ -24,6 +25,7 @@ class AppTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final bool enabled;
+  final String? prefixText;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,10 @@ class AppTextField extends StatelessWidget {
           hintText: hintText,
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
+          prefixText: prefixText,
+          prefixStyle: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurface,
+          ),
           filled: true,
           fillColor: theme.colorScheme.surface,
           border: OutlineInputBorder(

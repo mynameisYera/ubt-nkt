@@ -8,7 +8,6 @@ class ApiException implements Exception {
   ApiException(this.message);
 }
 
-// Мап ошибок сервера → человеко-понятный текст
 String mapError(String code) {
   switch (code) {
     case 'invalid_phone':
@@ -23,6 +22,8 @@ String mapError(String code) {
       return 'Пользователь не найден';
     case 'quota_exhausted':
       return 'У вас нет квоты для прохождения теста';
+    case 'locked':
+      return 'Попробуйте после 20 минут';
     default:
       return 'Ошибка, попробуйте ещё раз';
   }

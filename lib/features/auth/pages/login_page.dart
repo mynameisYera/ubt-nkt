@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubt_pbb/config/constants/app_colors.dart';
 import 'package:ubt_pbb/config/widgets/app_button.dart';
@@ -42,7 +43,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void _validateForm() {
     final isValid =
-        _phoneController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+        _phoneController.text.isNotEmpty && 
+        _passwordController.text.length >= 8 && 
+        _passwordController.text.length <= 20;
     if (isValid != _isFormValid) {
       setState(() {
         _isFormValid = isValid;
@@ -137,15 +140,24 @@ class _LoginPageState extends State<LoginPage> {
                     AppTextField(
                       controller: _phoneController,
                       labelText: 'Телефон нөмірі',
-                      hintText: '+7 777 777-77-77',
+                      hintText: '777 777-77-77',
                       keyboardType: TextInputType.phone,
                       prefixIcon: const Icon(Icons.phone),
+                      prefixText: '+7 ',
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(10),
+                        _PhoneNumberFormatter(),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     AppTextField(
                       controller: _passwordController,
                       labelText: 'Пароль',
                       hintText: 'Парольді енгізіңіз',
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(20),
+                      ],
                       obscureText: !_isPasswordVisible,
                       prefixIcon: const Icon(Icons.lock),
                       suffixIcon: IconButton(
@@ -169,12 +181,14 @@ class _LoginPageState extends State<LoginPage> {
                           ? null
                           : () {
                               debugPrint('Login button pressed');
-                              debugPrint('Phone: ${_phoneController.text}');
+                              final phoneNumber = _phoneController.text.replaceAll(RegExp(r'[^\d]'), '');
+                              final fullPhoneNumber = '+7$phoneNumber';
+                              debugPrint('Phone: $fullPhoneNumber');
                               debugPrint('Password: ${_passwordController.text.isNotEmpty ? "***" : "empty"}');
                               sl<AuthBloc>().add(
                                 AuthEvent.login(
                                   loginRequest: LoginRequest(
-                                    phone: _phoneController.text, 
+                                    phone: fullPhoneNumber, 
                                     password: _passwordController.text
                                   )
                                 ),
@@ -228,6 +242,36 @@ class _LoginPageState extends State<LoginPage> {
           )
       ),
     )
+    );
+  }
+}
+
+class _PhoneNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final text = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+    
+    if (text.isEmpty) {
+      return newValue.copyWith(text: '');
+    }
+    
+    String formatted = '';
+    if (text.length <= 3) {
+      formatted = text;
+    } else if (text.length <= 6) {
+      formatted = '${text.substring(0, 3)} ${text.substring(3)}';
+    } else if (text.length <= 8) {
+      formatted = '${text.substring(0, 3)} ${text.substring(3, 6)}-${text.substring(6)}';
+    } else {
+      formatted = '${text.substring(0, 3)} ${text.substring(3, 6)}-${text.substring(6, 8)}-${text.substring(8, 10)}';
+    }
+    
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 }
