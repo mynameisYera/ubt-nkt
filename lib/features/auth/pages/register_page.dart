@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:ubt_pbb/config/constants/app_colors.dart';
 import 'package:ubt_pbb/config/endpoints/dio_sender.dart';
 import 'package:ubt_pbb/config/endpoints/endpoints.dart';
@@ -209,7 +210,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     AppTextField(
                       controller: _passwordController,
                       labelText: 'Пароль',
+                      hintText: 'Парольді енгізіңіз',
                       obscureText: true,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(20),
+                      ],
                     ),
                     const SizedBox(height: 12),
                     styledDropdown<String>(

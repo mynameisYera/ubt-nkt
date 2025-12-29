@@ -24,6 +24,8 @@ String mapError(String code) {
       return 'У вас нет квоты для прохождения теста';
     case 'locked':
       return 'Попробуйте после 20 минут';
+    case 'invalid_payload':
+      return 'Не надежный пароль';
     default:
       return 'Ошибка, попробуйте ещё раз';
   }

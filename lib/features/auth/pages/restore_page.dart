@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:ubt_pbb/config/getit/get_injection.dart';
 import 'package:ubt_pbb/config/route/go_router_help.dart';
 import 'package:ubt_pbb/config/widgets/app_button.dart';
@@ -248,6 +249,10 @@ class _RestorePageState extends State<RestorePage> {
                       AppTextField(
                         controller: _passwordController,
                         labelText: 'Жаңа құпия сөз',
+                        hintText: 'Жаңа құпия сөзді енгізіңіз',
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(20),
+                        ],
                         obscureText: true,
                         prefixIcon: const Icon(Icons.lock),
                       ),
@@ -255,6 +260,10 @@ class _RestorePageState extends State<RestorePage> {
                       AppTextField(
                         controller: _confirmPasswordController,
                         labelText: 'Құпия сөзді растау',
+                        hintText: 'Құпия сөзді растаңыз',
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(20),
+                        ],
                         obscureText: true,
                         prefixIcon: const Icon(Icons.lock),
                       ),
