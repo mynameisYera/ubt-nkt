@@ -70,6 +70,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '340579925002',
     projectId: 'ubt-nkt',
     storageBucket: 'ubt-nkt.firebasestorage.app',
-    iosBundleId: 'com.example.ubtPbb',
+    iosBundleId: 'com.example.brandTest',
   );
 }
