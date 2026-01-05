@@ -149,12 +149,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       final testModel = ExamAttempt.fromJson(jsonData);
       
-      // Проверяем, что данные валидны
       if (testModel.subjects.isEmpty) {
         throw Exception('Test model has no subjects');
       }
       
-      // ------------ save attempt id ------------
       await FlutterSecureStorageFunc.saveAttemptId(testModel.id);
       emit(HomeState.loaded(examModel: HomeViewModel(testModel: testModel)));
     } on ApiException catch (e) {
@@ -170,15 +168,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _onGetPairs(_GetPairs event, Emitter<HomeState> emit) async {
+    L.log('GET_PAIRS', 'Starting getPairs request');
     emit(const HomeState.loading());
 
     try {
       final role = await FlutterSecureStorageFunc.getRole();
+      L.log('GET_PAIRS', 'Role: $role, endpoint: ${role == "teacher" ? Endpoints.getPairsNkt : Endpoints.getPairs}');
       final response = role == "teacher" ? await DioSender.get(
         Endpoints.getPairsNkt,
       ) : await DioSender.get(
         Endpoints.getPairs,
       );
+      L.log('GET_PAIRS', 'Response received: ${response.statusCode}');
       // final healthResponse = await DioSender.get(
       //   Endpoints.health,
       // );

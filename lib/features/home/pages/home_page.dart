@@ -17,6 +17,8 @@ class _HomePageState extends State<HomePage> {
   String? _selectedPair;
   int? _selectedNktSubjectId;
   late HomeBloc _homeBloc;
+  bool _hasNavigatedToTest = false; // Флаг для предотвращения повторных переходов
+  bool _hasLoadedPairs = false; // Флаг для предотвращения повторных вызовов getPairs
 
   @override
   void initState() {
@@ -52,15 +54,14 @@ class _HomePageState extends State<HomePage> {
       orElse: () => false,
     );
     
-    if (shouldLoadPairs && !_homeBloc.isClosed) {
+    if (shouldLoadPairs && !_homeBloc.isClosed && !_hasLoadedPairs) {
+      _hasLoadedPairs = true; // Устанавливаем флаг перед вызовом
       _homeBloc.add(const HomeEvent.getPairs());
     }
   }
 
   @override
   void dispose() {
-    // НЕ закрываем блок, так как это singleton и он используется в других местах
-    // _homeBloc.close();
     super.dispose();
   }
 
@@ -74,15 +75,19 @@ class _HomePageState extends State<HomePage> {
         listener: (context, state) {
           state.maybeWhen(
             loaded: (examModel) {
-              if (examModel.testModel != null) {
+              if (examModel.testModel != null && !_hasNavigatedToTest) {
+                _hasNavigatedToTest = true; // Устанавливаем флаг перед навигацией
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  appRouter.push('/test', extra: examModel.testModel);
+                  if (mounted) {
+                    appRouter.pushReplacement('/test', extra: examModel.testModel);
+                  }
                 });
               }
               if (examModel.nktExamModel != null) {
               }
             },
             loadingFailure: (message) {
+              _hasNavigatedToTest = false; // Сбрасываем флаг при ошибке
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(message)),
               );
@@ -140,6 +145,7 @@ class _HomePageState extends State<HomePage> {
                               AppButton(
                                 onPressed: () {
                                   if (!_homeBloc.isClosed) {
+                                    _hasLoadedPairs = false; // Сбрасываем флаг при ручном вызове
                                     _homeBloc.add(const HomeEvent.getPairs());
                                   }
                                 },
@@ -155,6 +161,7 @@ class _HomePageState extends State<HomePage> {
                               AppButton(
                                 onPressed: () {
                                   if (!_homeBloc.isClosed) {
+                                    _hasLoadedPairs = false; // Сбрасываем флаг при ручном вызове
                                     _homeBloc.add(const HomeEvent.getPairs());
                                   }
                                 },
@@ -435,7 +442,7 @@ class _HomePageState extends State<HomePage> {
 
                           Widget startButton = AppButton(
                             onPressed: () {
-                              appRouter.push("/test",
+                              appRouter.pushReplacement("/test",
                                   extra: pairs
                                       .firstWhere(
                                           (p) => p.label == _selectedPair)
@@ -498,6 +505,7 @@ class _HomePageState extends State<HomePage> {
                                 AppButton(
                                   onPressed: () {
                                     if (!_homeBloc.isClosed) {
+                                      _hasLoadedPairs = false; // Сбрасываем флаг при ручном вызове
                                       _homeBloc.add(const HomeEvent.getPairs());
                                     } else {
                                       // Если блок закрыт, перезагружаем страницу

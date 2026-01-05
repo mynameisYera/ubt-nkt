@@ -73,8 +73,15 @@ class DioSender {
           final requestOptions = error.requestOptions;
 
           // Если сервер вернул 401 Unauthorized
+          // Проверяем, что это не refresh token запрос и мы еще не пытались повторить
+          final isRefreshRequest = requestOptions.path == Endpoints.refresh;
+          final hasRetried = requestOptions.extra['retry'] == true;
+          final retryCount = (requestOptions.extra['retryCount'] as int?) ?? 0;
+          
           if (error.response?.statusCode == 401 &&
-              requestOptions.extra['retry'] != true) {
+              !isRefreshRequest &&
+              !hasRetried &&
+              retryCount < 1) {
             try {
               L.log('TOKEN_REFRESH', 'Attempting to refresh token due to 401');
               
@@ -104,7 +111,11 @@ class DioSender {
                     ...requestOptions.headers,
                     'Authorization': 'Bearer $newAccessToken',
                   },
-                  extra: {...requestOptions.extra, 'retry': true},
+                  extra: {
+                    ...requestOptions.extra,
+                    'retry': true,
+                    'retryCount': retryCount + 1,
+                  },
                 );
 
                 final cloneReq = await _dio.request(
@@ -150,8 +161,6 @@ class DioSender {
 
       L.log('TOKEN_REFRESH', 'Sending refresh request');
       
-      // Создаем отдельный Dio экземпляр без interceptors для refresh запроса
-      // чтобы избежать бесконечной рекурсии
       final dio = Dio(
         BaseOptions(
           baseUrl: Endpoints.baseUrl,
@@ -160,6 +169,9 @@ class DioSender {
           },
         ),
       );
+      
+      dio.options.connectTimeout = const Duration(seconds: 10);
+      dio.options.receiveTimeout = const Duration(seconds: 10);
 
       final response = await dio.post(
         Endpoints.refresh,

@@ -44,11 +44,20 @@ class _TestPageState extends State<TestPage> {
   bool _isTimeExpired = false;
   bool _timerInitialized = false;
   bool _isSidebarCollapsed = true;
-  bool _isDialogOpen = false; // Флаг для блокировки обновления UI во время показа диалога
+  bool _isDialogOpen = false; 
+  bool _isInitializing = false;
 
   @override
   void initState() {
     super.initState();
+    
+    // Предотвращаем повторную инициализацию
+    if (_isInitializing) {
+      debugPrint('⚠️ Already initializing, skipping');
+      return;
+    }
+    _isInitializing = true;
+    
     _homeBloc = sl.get<HomeBloc>();
     
     // Проверяем текущее состояние блока
@@ -73,6 +82,7 @@ class _TestPageState extends State<TestPage> {
       // 1. Нет активного теста в состоянии блока
       // 2. Или текущий тест не соответствует переданному pairId
       if (!hasActiveTest) {
+        debugPrint('📤 Starting exam with pairId: ${widget.pairId}');
         _homeBloc.add(HomeEvent.startExam(id: widget.pairId!));
       } else {
         // Если тест уже активен, просто используем существующее состояние
