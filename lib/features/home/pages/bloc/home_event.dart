@@ -16,4 +16,5 @@ abstract class HomeEvent with _$HomeEvent {
     required int attemptId,
     required int attemptQuestionId,
   }) = _GetSolutionQuestion;
+  const factory HomeEvent.getProfile() = _GetProfile;
 }

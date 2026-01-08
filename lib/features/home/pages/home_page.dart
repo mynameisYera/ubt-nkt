@@ -17,19 +17,19 @@ class _HomePageState extends State<HomePage> {
   String? _selectedPair;
   int? _selectedNktSubjectId;
   late HomeBloc _homeBloc;
-  bool _hasNavigatedToTest = false; // Флаг для предотвращения повторных переходов
-  bool _hasLoadedPairs = false; // Флаг для предотвращения повторных вызовов getPairs
+  bool _hasNavigatedToTest = false; 
+  bool _hasLoadedPairs = false; 
 
   @override
   void initState() {
     super.initState();
     _homeBloc = sl.get<HomeBloc>();
-    
-    // Если блок закрыт, это проблема - нужно перезагрузить данные
+    _loadDataIfNeeded();
+  }
+
+  void _loadDataIfNeeded() {
     if (_homeBloc.isClosed) {
       debugPrint('⚠️ HomeBloc is closed, this should not happen with singleton');
-      // В этом случае нужно перезагрузить приложение или создать новый блок
-      // Но так как это singleton, лучше просто попробовать загрузить данные
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -55,9 +55,35 @@ class _HomePageState extends State<HomePage> {
     );
     
     if (shouldLoadPairs && !_homeBloc.isClosed && !_hasLoadedPairs) {
-      _hasLoadedPairs = true; // Устанавливаем флаг перед вызовом
+      _hasLoadedPairs = true;
       _homeBloc.add(const HomeEvent.getPairs());
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_homeBloc.isClosed) {
+        final currentState = _homeBloc.state;
+        final needsReload = currentState.maybeWhen(
+          initial: () => true,
+          loaded: (examModel) {
+            if (examModel.testModel != null) {
+              return false;
+            }
+            return examModel.examModel == null && examModel.nktExamModel == null;
+          },
+          loadingFailure: (_) => false,
+          orElse: () => false,
+        );
+        
+        if (needsReload) {
+          _hasLoadedPairs = false;
+          _loadDataIfNeeded();
+        }
+      }
+    });
   }
 
   @override
@@ -102,14 +128,140 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Colors.transparent,
             foregroundColor: Colors.black,
             actions: [
-              IconButton(
-                onPressed: () {
-                  FlutterSecureStorageFunc.deleteToken();
-                  FlutterSecureStorageFunc.deleteRefreshToken();
-                  appRouter.pushReplacement("/login");
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 64,
+                              height: 64,
+                              decoration: BoxDecoration(
+                                color: Colors.red.withOpacity(0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.logout,
+                                color: Colors.red,
+                                size: 32,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              'Аккаунттан шығу',
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Сіз аккаунттан шығып бара жатырсыз ба?',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: Colors.grey[600],
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 24),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: OutlinedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      side: BorderSide(
+                                        color: Colors.grey[300]!,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Жоқ',
+                                      style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      FlutterSecureStorageFunc.deleteToken();
+                                      FlutterSecureStorageFunc.deleteRefreshToken();
+                                      appRouter.pushReplacement("/login");
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      elevation: 0,
+                                    ),
+                                    child: const Text(
+                                      'Шығу',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
                 },
-                icon: const Icon(Icons.logout),
-              )
+                child: Container(
+                  margin: EdgeInsets.all(10),
+                  width: 150,
+                  height: 70,
+                  decoration: BoxDecoration(
+                    color: Colors.red[400],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text('Выйти', style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white),),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  appRouter.push("/profile");
+                },
+                child: Container(
+                  margin: EdgeInsets.all(10),
+                  width: 150,
+                  height: 70,
+                  decoration: BoxDecoration(
+                    color: Colors.blue[400],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text('Профиль', style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white),),
+                  ),
+                ),
+              ),
+              
             ],
             title: Text(
               'Brand Online',

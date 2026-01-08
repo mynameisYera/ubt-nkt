@@ -1,3 +1,4 @@
+import 'package:brand_test/features/auth/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,7 @@ import 'package:brand_test/config/getit/get_injection.dart';
 import 'package:brand_test/config/route/go_router_help.dart';
 import 'package:brand_test/config/widgets/dropdown_widget.dart';
 import 'package:brand_test/features/auth/pages/bloc/auth_bloc.dart';
+import 'package:brand_test/features/auth/models/schools_model.dart';
 import 'package:dio/dio.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -29,6 +31,8 @@ class _RegisterPageState extends State<RegisterPage> {
   
   String _role = 'student';
   int? _schoolId;
+  List<School>? _schools;
+  bool _isLoadingSchools = false;
 
   bool _isLoading = false;
   bool _isLoadingOtp = false;
@@ -77,7 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
       final response = await DioSender.post(
         Endpoints.requestOtp,
         {
-          "phone": _phoneController.text,
+          "phone": "+7${_phoneController.text.replaceAll(RegExp(r'[^\d]'), '')}",
         }
       );
       if(response.statusCode == 200){
@@ -113,7 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     _authBloc.add(
       AuthEvent.register(
-        phone: _phoneController.text,
+        phone: "+7${_phoneController.text.replaceAll(RegExp(r'[^\d]'), '')}",
         code: _codeController.text,
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
@@ -155,6 +159,15 @@ class _RegisterPageState extends State<RegisterPage> {
               otpSended: () {
                 setState(() => _isLoadingOtp = false);
               },
+              loadingSchools: () {
+                setState(() => _isLoadingSchools = true);
+              },
+              loadedSchools: (schoolsResp) {
+                setState(() {
+                  _schools = schoolsResp.results;
+                  _isLoadingSchools = false;
+                });
+              },
               orElse: () {
               },
             );
@@ -178,9 +191,15 @@ class _RegisterPageState extends State<RegisterPage> {
                     AppTextField(
                       controller: _phoneController,
                       labelText: 'Телефон нөмірі',
-                      hintText: '+7 777 777-77-77',
+                      hintText: '777 777-77-77',
                       keyboardType: TextInputType.phone,
                       prefixIcon: const Icon(Icons.phone),
+                      prefixText: '+7 ',
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(10),
+                        PhoneNumberFormatter(),
+                      ],
                     ),
                     const SizedBox(height: 12),
                     AppButton(
@@ -227,67 +246,56 @@ class _RegisterPageState extends State<RegisterPage> {
                       onChanged: (value) => setState(() => _role = value ?? 'student'),
                     ),
                     const SizedBox(height: 12),
-                    BlocBuilder<AuthBloc, AuthState>(
-                      bloc: _authBloc,
-                      builder: (context, state) {
-                        return state.maybeWhen(
-                          loadingSchools: (){
-                            return Container(
-                              height: 100,
-                              child: Center(
-                                child: CircularProgressIndicator(color: AppColors.mainBlue,),
-                              ),
-                            );
-                          },
-                          loadedSchools: (schoolsResp) {
-                            final schools = schoolsResp.results;
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                styledDropdown<String>(
-                                  value: _schoolId?.toString(),
-                                  hint: const Text("Выберите школу"),
-                                  // isExpanded: true,
-                                  items: [
-                                    ...schools.map(
-                                      (s) => DropdownMenuItem(
-                                        value: s.id.toString(),
-                                        child: Text(s.name),
+                    _isLoadingSchools
+                        ? Container(
+                            height: 100,
+                            child: Center(
+                              child: CircularProgressIndicator(color: AppColors.mainBlue,),
+                            ),
+                          )
+                        : _schools != null
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  styledDropdown<String>(
+                                    value: _schoolId?.toString(),
+                                    hint: const Text("Выберите школу"),
+                                    // isExpanded: true,
+                                    items: [
+                                      ..._schools!.map(
+                                        (s) => DropdownMenuItem(
+                                          value: s.id.toString(),
+                                          child: Text(s.name),
+                                        ),
                                       ),
-                                    ),
 
-                                    const DropdownMenuItem(
-                                      value: "other",
-                                      child: Text("Нет моей школы"),
-                                    ),
-                                  ],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      if (value == "other") {
-                                        _schoolId = null;
-                                      } else {
-                                        _schoolId = int.tryParse(value ?? "");
-                                      }
-                                    });
-                                  },
-                                  label: "Школа"
-                                ),
-
-                                const SizedBox(height: 10),
-
-                                if (_schoolId == null)
-                                  AppTextField(
-                                    controller: _schoolOtherController,
-                                    labelText: "Введите название школы",
+                                      const DropdownMenuItem(
+                                        value: "other",
+                                        child: Text("Нет моей школы"),
+                                      ),
+                                    ],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        if (value == "other") {
+                                          _schoolId = null;
+                                        } else {
+                                          _schoolId = int.tryParse(value ?? "");
+                                        }
+                                      });
+                                    },
+                                    label: "Школа"
                                   ),
-                              ],
-                            );
-                          },
-                          
-                          orElse: () => const SizedBox(),
-                        );
-                      },
-                    ),
+
+                                  const SizedBox(height: 10),
+
+                                  if (_schoolId == null)
+                                    AppTextField(
+                                      controller: _schoolOtherController,
+                                      labelText: "Введите название школы",
+                                    ),
+                                ],
+                              )
+                            : const SizedBox(),
 
                     const SizedBox(height: 24),
                     AppButton(

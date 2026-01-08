@@ -1,3 +1,4 @@
+import 'package:brand_test/features/home/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:brand_test/config/constants/app_colors.dart';
@@ -98,6 +99,10 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) {
         return NoTransitionPage(child: RestorePage());
       },
+    ),
+    GoRoute(
+      path: "/profile",
+      pageBuilder: (context, state) => NoTransitionPage(child: ProfilePage()),
     ),
   ],
 );

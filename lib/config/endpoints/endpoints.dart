@@ -54,4 +54,7 @@ class Endpoints {
   // reset password
   static const String resetPasswordOtp = 'auth/request-password-reset-otp';
   static const String resetPassword = 'auth/reset-password';
+
+  // profile
+  static const String getProfile = 'profile';
 }

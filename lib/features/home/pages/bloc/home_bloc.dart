@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:brand_test/features/home/models/profile_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:brand_test/config/endpoints/dio_sender.dart';
@@ -32,7 +33,28 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       setExamAttempt: (value) => _onSetExamAttempt(value, emit),
       continueExam: (value) => _onContinueExam(value, emit),
       getSolutionQuestion: (value) => _onGetSolutionQuestion(value, emit),
+      getProfile: (value) => _onGetProfile(value, emit),
     );
+  }
+
+  Future<void> _onGetProfile(_GetProfile event, Emitter<HomeState> emit) async {
+    emit(const HomeState.loading());
+    try {
+      final response = await DioSender.get(
+        Endpoints.getProfile,
+      );
+      final responseData = response.data;
+      if (responseData == null) {
+        throw Exception('Response data is null');
+      }
+      final profileModel = ProfileModel.fromJson(responseData);
+      emit(HomeState.loaded(examModel: HomeViewModel(profileModel: profileModel)));
+    } on ApiException catch (e) {
+      emit(HomeState.loadingFailure(message: e.message));
+    } catch (e, stackTrace) {
+      L.error('GET_PROFILE_ERROR', 'Error: $e\nStackTrace: $stackTrace');
+      emit(HomeState.loadingFailure(message: "Ошибка: ${e.toString()}"));
+    }
   }
 
   Future<void> _onGetSolutionQuestion(_GetSolutionQuestion event, Emitter<HomeState> emit) async {
@@ -203,6 +225,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
               setExamAttempt: (_) async {},
               continueExam: (e) => _onContinueExam(e, emit),
               getSolutionQuestion: (_) async {},
+              getProfile: (_) async {},
             );
             return;
           }
@@ -227,6 +250,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           setExamAttempt: (_) async {},
           continueExam: (e) => _onContinueExam(e, emit),
           getSolutionQuestion: (_) async {},
+          getProfile: (_) async {},
         );
         return;
       }

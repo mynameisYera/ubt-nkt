@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(10),
-                        _PhoneNumberFormatter(),
+                        PhoneNumberFormatter(),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -246,7 +246,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class _PhoneNumberFormatter extends TextInputFormatter {
+class PhoneNumberFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,
