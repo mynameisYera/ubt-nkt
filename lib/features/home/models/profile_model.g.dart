@@ -24,11 +24,16 @@ Map<String, dynamic> _$ProfileModelToJson(_ProfileModel instance) =>
       'attempts': instance.attempts,
     };
 
-_QuotaModel _$QuotaModelFromJson(Map<String, dynamic> json) =>
-    _QuotaModel(entQuota: (json['ent_quota'] as num).toInt());
+_QuotaModel _$QuotaModelFromJson(Map<String, dynamic> json) => _QuotaModel(
+  entQuota: (json['ent_quota'] as num?)?.toInt(),
+  nktQuota: (json['nkt_quota'] as num?)?.toInt(),
+);
 
 Map<String, dynamic> _$QuotaModelToJson(_QuotaModel instance) =>
-    <String, dynamic>{'ent_quota': instance.entQuota};
+    <String, dynamic>{
+      'ent_quota': instance.entQuota,
+      'nkt_quota': instance.nktQuota,
+    };
 
 _AttemptModel _$AttemptModelFromJson(Map<String, dynamic> json) =>
     _AttemptModel(

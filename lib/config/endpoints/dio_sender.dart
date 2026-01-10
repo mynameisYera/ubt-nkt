@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:brand_test/config/endpoints/endpoints.dart';
 import 'package:brand_test/config/logger/l.dart';
 import 'package:brand_test/config/storage/flutter_secure_storage_func.dart';
+import 'package:brand_test/config/route/go_router_help.dart';
 
 class ApiException implements Exception {
   final String message;
@@ -26,6 +27,12 @@ String mapError(String code) {
       return 'Попробуйте после 20 минут';
     case 'invalid_payload':
       return 'Не надежный пароль';
+    case 'phone_in_use':
+      return 'Этот номер телефона уже используется';
+    case 'otp_expired':
+      return 'Код истек';
+    case 'otp_invalid':
+      return 'Неправильный код';
     default:
       return 'Ошибка, попробуйте ещё раз';
   }
@@ -38,7 +45,6 @@ class DioSender {
   )..interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          // Добавляем access токен
           try {
             final token = await FlutterSecureStorageFunc.getToken();
             if (token != null && token.isNotEmpty) {
@@ -128,9 +134,22 @@ class DioSender {
               } else {
                 L.error('TOKEN_REFRESH', 'Failed to refresh token: no access token received');
                 
-                // Если refresh не удался, удаляем токены и пробрасываем ошибку
+                // Если refresh не удался, удаляем токены и перенаправляем на логин
                 await FlutterSecureStorageFunc.deleteToken();
                 await FlutterSecureStorageFunc.deleteRefreshToken();
+                
+                // Проверяем, что токенов действительно нет, и перенаправляем
+                final accessToken = await FlutterSecureStorageFunc.getToken();
+                final refreshToken = await FlutterSecureStorageFunc.getRefreshToken();
+                if ((accessToken == null || accessToken.isEmpty) && 
+                    (refreshToken == null || refreshToken.isEmpty)) {
+                  try {
+                    appRouter.pushReplacement('/login');
+                  } catch (e) {
+                    L.error('NAVIGATION', 'Error redirecting to login: $e');
+                  }
+                }
+                
                 return handler.reject(error);
               }
             } catch (refreshError) {
@@ -138,6 +157,19 @@ class DioSender {
               // Если refresh не удался, удаляем токены
               await FlutterSecureStorageFunc.deleteToken();
               await FlutterSecureStorageFunc.deleteRefreshToken();
+              
+              // Проверяем, что токенов действительно нет, и перенаправляем
+              final accessToken = await FlutterSecureStorageFunc.getToken();
+              final refreshToken = await FlutterSecureStorageFunc.getRefreshToken();
+              if ((accessToken == null || accessToken.isEmpty) && 
+                  (refreshToken == null || refreshToken.isEmpty)) {
+                try {
+                  appRouter.pushReplacement('/login');
+                } catch (e) {
+                  L.error('NAVIGATION', 'Error redirecting to login: $e');
+                }
+              }
+              
               return handler.reject(error);
             }
           }
@@ -156,6 +188,16 @@ class DioSender {
       if (refreshToken == null || refreshToken.isEmpty) {
         L.error('TOKEN_REFRESH', 'No refresh token available \n refresh token: $refreshToken');
         L.error('TOKEN_ACCESS', 'No access token available \n access token: $accessToken');
+        
+        // Если нет refresh токена, проверяем access токен и перенаправляем на логин
+        if (accessToken == null || accessToken.isEmpty) {
+          try {
+            appRouter.pushReplacement('/login');
+          } catch (e) {
+            L.error('NAVIGATION', 'Error redirecting to login: $e');
+          }
+        }
+        
         return null;
       }
 
@@ -191,10 +233,33 @@ class DioSender {
       if (e.response?.statusCode == 401) {
         // Refresh token тоже истек
         L.error('TOKEN_REFRESH', 'Refresh token expired');
+        
+        // Удаляем токены и перенаправляем на логин
+        await FlutterSecureStorageFunc.deleteToken();
+        await FlutterSecureStorageFunc.deleteRefreshToken();
+        
+        try {
+          appRouter.pushReplacement('/login');
+        } catch (navError) {
+          L.error('NAVIGATION', 'Error redirecting to login: $navError');
+        }
       }
       return null;
     } catch (e) {
       L.error('TOKEN_REFRESH', 'Unexpected error: $e');
+      
+      // Проверяем наличие токенов и перенаправляем, если их нет
+      final accessToken = await FlutterSecureStorageFunc.getToken();
+      final refreshToken = await FlutterSecureStorageFunc.getRefreshToken();
+      if ((accessToken == null || accessToken.isEmpty) && 
+          (refreshToken == null || refreshToken.isEmpty)) {
+        try {
+          appRouter.pushReplacement('/login');
+        } catch (navError) {
+          L.error('NAVIGATION', 'Error redirecting to login: $navError');
+        }
+      }
+      
       return null;
     }
   }

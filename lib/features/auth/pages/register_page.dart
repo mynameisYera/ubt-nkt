@@ -10,6 +10,7 @@ import 'package:brand_test/config/widgets/app_text_field.dart';
 import 'package:brand_test/config/getit/get_injection.dart';
 import 'package:brand_test/config/route/go_router_help.dart';
 import 'package:brand_test/config/widgets/dropdown_widget.dart';
+import 'package:brand_test/config/widgets/error_message_widget.dart';
 import 'package:brand_test/features/auth/pages/bloc/auth_bloc.dart';
 import 'package:brand_test/features/auth/models/schools_model.dart';
 import 'package:dio/dio.dart';
@@ -37,7 +38,10 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _isLoading = false;
   bool _isLoadingOtp = false;
   bool _isFormValid = false;
+  bool isException = false;
+  String errorMessage = "Белгісіз қателік, кейінірек қайталап көріңіз";
   late AuthBloc _authBloc;
+  bool _isPasswordVisible = false;  
 
   @override
   void initState() {
@@ -49,6 +53,12 @@ class _RegisterPageState extends State<RegisterPage> {
     _firstNameController.addListener(_validateForm);
     _lastNameController.addListener(_validateForm);
     _passwordController.addListener(_validateForm);
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isPasswordVisible = !_isPasswordVisible;
+    });
   }
 
   void _validateForm() {
@@ -65,11 +75,21 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-    setState(() { _isLoading = false; _isLoadingOtp = false;});
+  void exception(String message) {
+    setState(() {
+      _isLoading = false;
+      _isLoadingOtp = false;
+      isException = true;
+      errorMessage = message;
+    });
+
+    Future.delayed(const Duration(seconds: 5), () {
+      if (!mounted) return;
+      setState(() {
+        isException = false;
+        errorMessage = "Белгісіз қателік, кейінірек қайталап көріңіз";
+      });
+    });
   }
 
   void _sendOtp() async{
@@ -94,21 +114,20 @@ class _RegisterPageState extends State<RegisterPage> {
         });
       }
     } on ApiException catch (e) {
-      _showError(e.message);
+      exception(e.message);
     } on DioException catch (e) {
-      // Обработка DioException для случаев, когда ошибка не была обработана в DioSender
       if (e.response?.statusCode == 429) {
         final data = e.response?.data;
         if (data is Map && data['error'] == 'otp_rate_limited') {
-          _showError('Кейінірек байқап көріңіз');
+          exception('Кейінірек байқап көріңіз');
         } else {
-          _showError('Кейінірек байқап көріңіз');
+          exception('Кейінірек байқап көріңіз');
         }
       } else {
-        _showError('Ошибка сети, попробуйте ещё раз');
+        exception('Ошибка сети, попробуйте ещё раз');
       }
     } catch (e) {
-      _showError('Ошибка, попробуйте ещё раз');
+      exception('Ошибка, попробуйте ещё раз');
     }
   }
 
@@ -124,7 +143,7 @@ class _RegisterPageState extends State<RegisterPage> {
         password: _passwordController.text,
         role: _role,
         schoolId: _schoolId ?? 0,
-        schoolOtherName: _schoolOtherController.text,
+        schoolOtherName: '',
       ),
     );
   }
@@ -151,7 +170,7 @@ class _RegisterPageState extends State<RegisterPage> {
             state.maybeWhen(
               initial: () => _isLoading = false,
               loading: () => setState(() => _isLoading = true),
-              loadingFailure: (message) => _showError(message),
+              loadingFailure: (message) => exception(message),
               loaded: () {
                 setState(() => _isLoading = false);
                 appRouter.pushReplacement('/login');
@@ -230,11 +249,20 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: _passwordController,
                       labelText: 'Пароль',
                       hintText: 'Парольді енгізіңіз',
-                      obscureText: true,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(20),
                       ],
-                    ),
+                      obscureText: !_isPasswordVisible,
+                      prefixIcon: const Icon(Icons.lock),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          _togglePasswordVisibility();
+                        },
+                      ),
+                    ),  
                     const SizedBox(height: 12),
                     styledDropdown<String>(
                       label: "Роль",
@@ -268,31 +296,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                           child: Text(s.name),
                                         ),
                                       ),
-
-                                      const DropdownMenuItem(
-                                        value: "other",
-                                        child: Text("Нет моей школы"),
-                                      ),
                                     ],
                                     onChanged: (value) {
                                       setState(() {
-                                        if (value == "other") {
-                                          _schoolId = null;
-                                        } else {
-                                          _schoolId = int.tryParse(value ?? "");
-                                        }
+                                        _schoolId = int.tryParse(value ?? "");
                                       });
                                     },
                                     label: "Школа"
                                   ),
 
                                   const SizedBox(height: 10),
-
-                                  if (_schoolId == null)
-                                    AppTextField(
-                                      controller: _schoolOtherController,
-                                      labelText: "Введите название школы",
-                                    ),
                                 ],
                               )
                             : const SizedBox(),
@@ -304,6 +317,18 @@ class _RegisterPageState extends State<RegisterPage> {
                       isDisabled: !_isFormValid,
                       isLoading: _isLoading,
                       onPressed: _register,
+                    ),
+                    const SizedBox(height: 16),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      switchInCurve: Curves.easeInOut,
+                      switchOutCurve: Curves.easeInOutCirc,
+                      child: isException
+                          ? ErrorMessageWidget(
+                              key: const ValueKey("error"),
+                              message: errorMessage,
+                            )
+                          : const SizedBox(key: ValueKey("empty")),
                     ),
                   ],
                 ),

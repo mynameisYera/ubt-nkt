@@ -22,7 +22,8 @@ abstract class ProfileModel with _$ProfileModel {
 @freezed
 abstract class QuotaModel with _$QuotaModel {
   const factory QuotaModel({
-    @JsonKey(name: 'ent_quota') required int entQuota,
+    @JsonKey(name: 'ent_quota') int? entQuota,
+    @JsonKey(name: 'nkt_quota') int? nktQuota,
   }) = _QuotaModel;
 
   factory QuotaModel.fromJson(Map<String, dynamic> json) =>

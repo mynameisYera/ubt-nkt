@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:brand_test/config/route/go_router_help.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -58,12 +59,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onLogin(_Login event, Emitter<AuthState> emit) async {
-    debugPrint('_onLogin called with phone: ${event.loginRequest.phone}');
     emit(const AuthState.loading());
-    debugPrint('Loading state emitted');
 
     try {
-      debugPrint('Sending login request...');
       final response = await DioSender.post(
         Endpoints.login,
         {
@@ -71,7 +69,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           "password": event.loginRequest.password
         }
       );
-      debugPrint('Login response received: ${response.statusCode}');
 
       final responseData = response.data;
       Map<String, dynamic> dataMap;
@@ -89,19 +86,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await FlutterSecureStorageFunc.saveRefreshToken(userLogin.tokens.refresh);
         await FlutterSecureStorageFunc.saveRole(userLogin.user.role);
         
-        // Проверяем, что токены действительно сохранились
         final savedToken = await FlutterSecureStorageFunc.getToken();
         final savedRefreshToken = await FlutterSecureStorageFunc.getRefreshToken();
+        final savedRole = await FlutterSecureStorageFunc.getRole();
         
-        debugPrint('Токены сохранены: access=${savedToken != null && savedToken.isNotEmpty}, refresh=${savedRefreshToken != null && savedRefreshToken.isNotEmpty}');
+        debugPrint('Токены сохранены: access=${savedToken != null && savedToken.isNotEmpty}, refresh=${savedRefreshToken != null && savedRefreshToken.isNotEmpty} ');
+        debugPrint('Роль сохранена: role=${savedRole != null && savedRole.isNotEmpty}');
         
         if (savedToken == null || savedToken.isEmpty) {
           debugPrint('Предупреждение: токен не был сохранен, но продолжаем выполнение');
         }
       } catch (e) {
         debugPrint('Ошибка сохранения токенов: $e');
-        // Продолжаем выполнение, так как токены могут быть использованы из памяти
-        // На веб-платформе flutter_secure_storage может работать некорректно
       }
 
       emit(const AuthState.loaded());
@@ -134,31 +130,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthState.loading());
 
     try {
-      if(event.schoolId == 0){
-        final response = await DioSender.post(
-          Endpoints.registerWithOtp,
-          {
-            "phone": event.phone,
-            "code": event.code,
-            "first_name": event.firstName,
-            "last_name": event.lastName,
-            "role": event.role,
-            "school_other_name": event.schoolOtherName,
-            "password": event.password
-          }
-        );
-        final userLogin = UserLoginModel.fromJson(
-          response.data as Map<String, dynamic>,
-        );
-        print(userLogin);
-        try {
-          await FlutterSecureStorageFunc.saveToken(userLogin.tokens.access);
-          await FlutterSecureStorageFunc.saveRefreshToken(userLogin.tokens.refresh);
-        } catch (e) {
-          debugPrint('Ошибка сохранения токенов: $e');
-        }
-
-      }else{
         final response = await DioSender.post(
           Endpoints.registerWithOtp,
           {
@@ -171,20 +142,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             "password": event.password
           }
         );
-        final userLogin = UserLoginModel.fromJson(
-          response.data as Map<String, dynamic>,
-        );
-        print(userLogin);
-
-        try {
-          await FlutterSecureStorageFunc.saveToken(userLogin.tokens.access);
-          await FlutterSecureStorageFunc.saveRefreshToken(userLogin.tokens.refresh);
-        } catch (e) {
-          debugPrint('Ошибка сохранения токенов: $e');
+        if(response.statusCode == 201 || response.statusCode == 200){
+          emit(const AuthState.registered());
+          appRouter.pushReplacement("/login");
+        }else{
+          emit(AuthState.loadingFailure(message: response.data['message']));
         }
-      }
-
-      emit(const AuthState.loaded());
     } on ApiException catch (e) {
       emit(AuthState.loadingFailure(message: e.message));
     } catch (_) {

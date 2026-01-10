@@ -190,25 +190,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _onGetPairs(_GetPairs event, Emitter<HomeState> emit) async {
-    L.log('GET_PAIRS', 'Starting getPairs request');
     emit(const HomeState.loading());
 
     try {
       final role = await FlutterSecureStorageFunc.getRole();
-      L.log('GET_PAIRS', 'Role: $role, endpoint: ${role == "teacher" ? Endpoints.getPairsNkt : Endpoints.getPairs}');
       final response = role == "teacher" ? await DioSender.get(
         Endpoints.getPairsNkt,
       ) : await DioSender.get(
         Endpoints.getPairs,
       );
-      L.log('GET_PAIRS', 'Response received: ${response.statusCode}');
-      // final healthResponse = await DioSender.get(
-      //   Endpoints.health,
-      // );
-      // if (healthResponse.statusCode != 200) {
-      //   throw ApiException('Health check failed: ${healthResponse.statusCode}');
-      // }
-      // L.log('HEALTH_CHECK', 'Health check passed: ${healthResponse}');
 
       final responseData = response.data as Map<String, dynamic>;
       

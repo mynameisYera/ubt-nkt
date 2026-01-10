@@ -329,7 +329,7 @@ $QuotaModelCopyWith<$Res> get quota {
 /// @nodoc
 mixin _$QuotaModel {
 
-@JsonKey(name: 'ent_quota') int get entQuota;
+@JsonKey(name: 'ent_quota') int? get entQuota;@JsonKey(name: 'nkt_quota') int? get nktQuota;
 /// Create a copy of QuotaModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -342,16 +342,16 @@ $QuotaModelCopyWith<QuotaModel> get copyWith => _$QuotaModelCopyWithImpl<QuotaMo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is QuotaModel&&(identical(other.entQuota, entQuota) || other.entQuota == entQuota));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is QuotaModel&&(identical(other.entQuota, entQuota) || other.entQuota == entQuota)&&(identical(other.nktQuota, nktQuota) || other.nktQuota == nktQuota));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,entQuota);
+int get hashCode => Object.hash(runtimeType,entQuota,nktQuota);
 
 @override
 String toString() {
-  return 'QuotaModel(entQuota: $entQuota)';
+  return 'QuotaModel(entQuota: $entQuota, nktQuota: $nktQuota)';
 }
 
 
@@ -362,7 +362,7 @@ abstract mixin class $QuotaModelCopyWith<$Res>  {
   factory $QuotaModelCopyWith(QuotaModel value, $Res Function(QuotaModel) _then) = _$QuotaModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'ent_quota') int entQuota
+@JsonKey(name: 'ent_quota') int? entQuota,@JsonKey(name: 'nkt_quota') int? nktQuota
 });
 
 
@@ -379,10 +379,11 @@ class _$QuotaModelCopyWithImpl<$Res>
 
 /// Create a copy of QuotaModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? entQuota = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? entQuota = freezed,Object? nktQuota = freezed,}) {
   return _then(_self.copyWith(
-entQuota: null == entQuota ? _self.entQuota : entQuota // ignore: cast_nullable_to_non_nullable
-as int,
+entQuota: freezed == entQuota ? _self.entQuota : entQuota // ignore: cast_nullable_to_non_nullable
+as int?,nktQuota: freezed == nktQuota ? _self.nktQuota : nktQuota // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -467,10 +468,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'ent_quota')  int entQuota)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'ent_quota')  int? entQuota, @JsonKey(name: 'nkt_quota')  int? nktQuota)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _QuotaModel() when $default != null:
-return $default(_that.entQuota);case _:
+return $default(_that.entQuota,_that.nktQuota);case _:
   return orElse();
 
 }
@@ -488,10 +489,10 @@ return $default(_that.entQuota);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'ent_quota')  int entQuota)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'ent_quota')  int? entQuota, @JsonKey(name: 'nkt_quota')  int? nktQuota)  $default,) {final _that = this;
 switch (_that) {
 case _QuotaModel():
-return $default(_that.entQuota);case _:
+return $default(_that.entQuota,_that.nktQuota);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -508,10 +509,10 @@ return $default(_that.entQuota);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'ent_quota')  int entQuota)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'ent_quota')  int? entQuota, @JsonKey(name: 'nkt_quota')  int? nktQuota)?  $default,) {final _that = this;
 switch (_that) {
 case _QuotaModel() when $default != null:
-return $default(_that.entQuota);case _:
+return $default(_that.entQuota,_that.nktQuota);case _:
   return null;
 
 }
@@ -523,10 +524,11 @@ return $default(_that.entQuota);case _:
 @JsonSerializable()
 
 class _QuotaModel implements QuotaModel {
-  const _QuotaModel({@JsonKey(name: 'ent_quota') required this.entQuota});
+  const _QuotaModel({@JsonKey(name: 'ent_quota') this.entQuota, @JsonKey(name: 'nkt_quota') this.nktQuota});
   factory _QuotaModel.fromJson(Map<String, dynamic> json) => _$QuotaModelFromJson(json);
 
-@override@JsonKey(name: 'ent_quota') final  int entQuota;
+@override@JsonKey(name: 'ent_quota') final  int? entQuota;
+@override@JsonKey(name: 'nkt_quota') final  int? nktQuota;
 
 /// Create a copy of QuotaModel
 /// with the given fields replaced by the non-null parameter values.
@@ -541,16 +543,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _QuotaModel&&(identical(other.entQuota, entQuota) || other.entQuota == entQuota));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _QuotaModel&&(identical(other.entQuota, entQuota) || other.entQuota == entQuota)&&(identical(other.nktQuota, nktQuota) || other.nktQuota == nktQuota));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,entQuota);
+int get hashCode => Object.hash(runtimeType,entQuota,nktQuota);
 
 @override
 String toString() {
-  return 'QuotaModel(entQuota: $entQuota)';
+  return 'QuotaModel(entQuota: $entQuota, nktQuota: $nktQuota)';
 }
 
 
@@ -561,7 +563,7 @@ abstract mixin class _$QuotaModelCopyWith<$Res> implements $QuotaModelCopyWith<$
   factory _$QuotaModelCopyWith(_QuotaModel value, $Res Function(_QuotaModel) _then) = __$QuotaModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'ent_quota') int entQuota
+@JsonKey(name: 'ent_quota') int? entQuota,@JsonKey(name: 'nkt_quota') int? nktQuota
 });
 
 
@@ -578,10 +580,11 @@ class __$QuotaModelCopyWithImpl<$Res>
 
 /// Create a copy of QuotaModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? entQuota = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? entQuota = freezed,Object? nktQuota = freezed,}) {
   return _then(_QuotaModel(
-entQuota: null == entQuota ? _self.entQuota : entQuota // ignore: cast_nullable_to_non_nullable
-as int,
+entQuota: freezed == entQuota ? _self.entQuota : entQuota // ignore: cast_nullable_to_non_nullable
+as int?,nktQuota: freezed == nktQuota ? _self.nktQuota : nktQuota // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 

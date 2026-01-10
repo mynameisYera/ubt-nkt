@@ -27,7 +27,12 @@ class _HistoryPageState extends State<HistoryPage> {
 
   String _formatDateTime(String dateTimeString) {
     try {
-      final dateTime = DateTime.parse(dateTimeString);
+      DateTime dateTime = DateTime.parse(dateTimeString);
+      if (dateTimeString.endsWith('Z') || dateTimeString.contains('+00:00')) {
+        dateTime = dateTime.add(const Duration(hours: 5));
+      } else if (dateTime.isUtc) {
+        dateTime = dateTime.add(const Duration(hours: 5));
+      }
       return DateFormat('dd.MM.yyyy HH:mm').format(dateTime);
     } catch (e) {
       return dateTimeString;

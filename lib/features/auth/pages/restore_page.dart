@@ -1,3 +1,4 @@
+import 'package:brand_test/features/auth/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
@@ -95,7 +96,7 @@ class _RestorePageState extends State<RestorePage> {
 
     _authBloc.add(
       AuthEvent.restorePasswordOtp(
-        phone: _phoneController.text,
+        phone: "+7${_phoneController.text.replaceAll(RegExp(r'[^\d]'), '')}",
       ),
     );
   }
@@ -110,7 +111,7 @@ class _RestorePageState extends State<RestorePage> {
 
     _authBloc.add(
       AuthEvent.restorePassword(
-        phone: _phoneController.text,
+        phone: "+7${_phoneController.text.replaceAll(RegExp(r'[^\d]'), '')}",
         code: _codeController.text,
         password: _passwordController.text,
       ),
@@ -203,12 +204,18 @@ class _RestorePageState extends State<RestorePage> {
                     const SizedBox(height: 32),
                     if (!_otpSended) ...[
                       AppTextField(
-                        controller: _phoneController,
-                        labelText: 'Телефон нөмірі',
-                        hintText: '+7 777 777-77-77',
-                        keyboardType: TextInputType.phone,
-                        prefixIcon: const Icon(Icons.phone),
-                      ),
+                      controller: _phoneController,
+                      labelText: 'Телефон нөмірі',
+                      hintText: '777 777-77-77',
+                      keyboardType: TextInputType.phone,
+                      prefixIcon: const Icon(Icons.phone),
+                      prefixText: '+7 ',
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(10),
+                        PhoneNumberFormatter(),
+                      ],
+                    ),
                       const SizedBox(height: 24),
                       AppButton(
                         text: 'Кодты жіберу',
@@ -232,10 +239,17 @@ class _RestorePageState extends State<RestorePage> {
                     ] else ...[
                       AppTextField(
                         controller: _phoneController,
+                        prefixText: '+7 ',
                         labelText: 'Телефон нөмірі',
+                        hintText: '777 777-77-77',
                         keyboardType: TextInputType.phone,
                         prefixIcon: const Icon(Icons.phone),
                         enabled: false,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10),
+                          PhoneNumberFormatter(),
+                        ],
                       ),
                       const SizedBox(height: 16),
                       AppTextField(

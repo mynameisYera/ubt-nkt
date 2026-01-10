@@ -203,6 +203,7 @@ class _HomePageState extends State<HomePage> {
                                       Navigator.of(context).pop();
                                       FlutterSecureStorageFunc.deleteToken();
                                       FlutterSecureStorageFunc.deleteRefreshToken();
+                                      FlutterSecureStorageFunc.deleteRole();
                                       appRouter.pushReplacement("/login");
                                     },
                                     style: ElevatedButton.styleFrom(
@@ -263,6 +264,11 @@ class _HomePageState extends State<HomePage> {
               ),
               
             ],
+            leading: IconButton(
+              icon: const Icon(Icons.menu_book_sharp, color: Colors.black,),
+              onPressed: () {
+              },
+            ),
             title: Text(
               'Brand Online',
               style: theme.textTheme.titleMedium?.copyWith(
@@ -279,7 +285,6 @@ class _HomePageState extends State<HomePage> {
               return BlocBuilder<HomeBloc, HomeState>(
                 bloc: _homeBloc,
                 builder: (context, state) {
-                  // Для состояний ошибки показываем центрированный контент
                   if (state.maybeWhen(
                     loadingFailure: (_) => true,
                     quotaExhausted: () => true,
@@ -297,7 +302,7 @@ class _HomePageState extends State<HomePage> {
                               AppButton(
                                 onPressed: () {
                                   if (!_homeBloc.isClosed) {
-                                    _hasLoadedPairs = false; // Сбрасываем флаг при ручном вызове
+                                    _hasLoadedPairs = false;
                                     _homeBloc.add(const HomeEvent.getPairs());
                                   }
                                 },
@@ -313,7 +318,7 @@ class _HomePageState extends State<HomePage> {
                               AppButton(
                                 onPressed: () {
                                   if (!_homeBloc.isClosed) {
-                                    _hasLoadedPairs = false; // Сбрасываем флаг при ручном вызове
+                                    _hasLoadedPairs = false;
                                     _homeBloc.add(const HomeEvent.getPairs());
                                   }
                                 },

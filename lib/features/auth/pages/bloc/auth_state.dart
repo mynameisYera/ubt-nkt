@@ -14,6 +14,9 @@ class AuthState with _$AuthState {
   // Успешный логин
   const factory AuthState.loaded() = _Loaded;
 
+  // Успешный регистрация
+  const factory AuthState.registered() = _Registered;
+
   // Успешный сброс пароля
   const factory AuthState.resetPasswordOtpSended() = _ResetPasswordOtpSended;
   // Ошибка сброса пароля OTP

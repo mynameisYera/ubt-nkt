@@ -104,7 +104,6 @@ class _LoginPageState extends State<LoginPage> {
               loaded: () {
                 debugPrint('AuthState: loaded - navigating to home');
                 setState(() => _isLoading = false);
-                // Небольшая задержка для гарантии сохранения токенов
                 Future.delayed(const Duration(milliseconds: 100), () {
                   if (mounted) {
                     appRouter.pushReplacement('/home');

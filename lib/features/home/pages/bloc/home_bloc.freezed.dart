@@ -975,12 +975,12 @@ $HomeViewModelCopyWith<HomeViewModel> get copyWith => _$HomeViewModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeViewModel&&(identical(other.examModel, examModel) || other.examModel == examModel)&&(identical(other.testModel, testModel) || other.testModel == testModel)&&(identical(other.nktExamModel, nktExamModel) || other.nktExamModel == nktExamModel)&&(identical(other.solutionQuestion, solutionQuestion) || other.solutionQuestion == solutionQuestion)&&const DeepCollectionEquality().equals(other.profileModel, profileModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeViewModel&&(identical(other.examModel, examModel) || other.examModel == examModel)&&(identical(other.testModel, testModel) || other.testModel == testModel)&&(identical(other.nktExamModel, nktExamModel) || other.nktExamModel == nktExamModel)&&(identical(other.solutionQuestion, solutionQuestion) || other.solutionQuestion == solutionQuestion)&&(identical(other.profileModel, profileModel) || other.profileModel == profileModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,examModel,testModel,nktExamModel,solutionQuestion,const DeepCollectionEquality().hash(profileModel));
+int get hashCode => Object.hash(runtimeType,examModel,testModel,nktExamModel,solutionQuestion,profileModel);
 
 @override
 String toString() {
@@ -999,7 +999,7 @@ $Res call({
 });
 
 
-$ExamModelCopyWith<$Res>? get examModel;$ExamAttemptCopyWith<$Res>? get testModel;$NktExamModelCopyWith<$Res>? get nktExamModel;$SolutionQuestionCopyWith<$Res>? get solutionQuestion;
+$ExamModelCopyWith<$Res>? get examModel;$ExamAttemptCopyWith<$Res>? get testModel;$NktExamModelCopyWith<$Res>? get nktExamModel;$SolutionQuestionCopyWith<$Res>? get solutionQuestion;$ProfileModelCopyWith<$Res>? get profileModel;
 
 }
 /// @nodoc
@@ -1069,6 +1069,18 @@ $SolutionQuestionCopyWith<$Res>? get solutionQuestion {
 
   return $SolutionQuestionCopyWith<$Res>(_self.solutionQuestion!, (value) {
     return _then(_self.copyWith(solutionQuestion: value));
+  });
+}/// Create a copy of HomeViewModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProfileModelCopyWith<$Res>? get profileModel {
+    if (_self.profileModel == null) {
+    return null;
+  }
+
+  return $ProfileModelCopyWith<$Res>(_self.profileModel!, (value) {
+    return _then(_self.copyWith(profileModel: value));
   });
 }
 }
@@ -1227,12 +1239,12 @@ _$HomeViewModelCopyWith<_HomeViewModel> get copyWith => __$HomeViewModelCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeViewModel&&(identical(other.examModel, examModel) || other.examModel == examModel)&&(identical(other.testModel, testModel) || other.testModel == testModel)&&(identical(other.nktExamModel, nktExamModel) || other.nktExamModel == nktExamModel)&&(identical(other.solutionQuestion, solutionQuestion) || other.solutionQuestion == solutionQuestion)&&const DeepCollectionEquality().equals(other.profileModel, profileModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeViewModel&&(identical(other.examModel, examModel) || other.examModel == examModel)&&(identical(other.testModel, testModel) || other.testModel == testModel)&&(identical(other.nktExamModel, nktExamModel) || other.nktExamModel == nktExamModel)&&(identical(other.solutionQuestion, solutionQuestion) || other.solutionQuestion == solutionQuestion)&&(identical(other.profileModel, profileModel) || other.profileModel == profileModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,examModel,testModel,nktExamModel,solutionQuestion,const DeepCollectionEquality().hash(profileModel));
+int get hashCode => Object.hash(runtimeType,examModel,testModel,nktExamModel,solutionQuestion,profileModel);
 
 @override
 String toString() {
@@ -1251,7 +1263,7 @@ $Res call({
 });
 
 
-@override $ExamModelCopyWith<$Res>? get examModel;@override $ExamAttemptCopyWith<$Res>? get testModel;@override $NktExamModelCopyWith<$Res>? get nktExamModel;@override $SolutionQuestionCopyWith<$Res>? get solutionQuestion;
+@override $ExamModelCopyWith<$Res>? get examModel;@override $ExamAttemptCopyWith<$Res>? get testModel;@override $NktExamModelCopyWith<$Res>? get nktExamModel;@override $SolutionQuestionCopyWith<$Res>? get solutionQuestion;@override $ProfileModelCopyWith<$Res>? get profileModel;
 
 }
 /// @nodoc
@@ -1322,6 +1334,18 @@ $SolutionQuestionCopyWith<$Res>? get solutionQuestion {
 
   return $SolutionQuestionCopyWith<$Res>(_self.solutionQuestion!, (value) {
     return _then(_self.copyWith(solutionQuestion: value));
+  });
+}/// Create a copy of HomeViewModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProfileModelCopyWith<$Res>? get profileModel {
+    if (_self.profileModel == null) {
+    return null;
+  }
+
+  return $ProfileModelCopyWith<$Res>(_self.profileModel!, (value) {
+    return _then(_self.copyWith(profileModel: value));
   });
 }
 }
