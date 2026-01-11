@@ -39,6 +39,28 @@ Map<String, dynamic> _$ExamAttemptToJson(_ExamAttempt instance) =>
       'subjects': instance.subjects,
     };
 
+_AnswerPayload _$AnswerPayloadFromJson(Map<String, dynamic> json) =>
+    _AnswerPayload(selectedOptionId: json['selected_option_id'] as String);
+
+Map<String, dynamic> _$AnswerPayloadToJson(_AnswerPayload instance) =>
+    <String, dynamic>{'selected_option_id': instance.selectedOptionId};
+
+_Answer _$AnswerFromJson(Map<String, dynamic> json) => _Answer(
+  answerPayload: AnswerPayload.fromJson(
+    json['answer_payload'] as Map<String, dynamic>,
+  ),
+  isAnswered: json['is_answered'] as bool,
+  scoreAwarded: (json['score_awarded'] as num).toInt(),
+  updatedAt: json['updated_at'] as String,
+);
+
+Map<String, dynamic> _$AnswerToJson(_Answer instance) => <String, dynamic>{
+  'answer_payload': instance.answerPayload,
+  'is_answered': instance.isAnswered,
+  'score_awarded': instance.scoreAwarded,
+  'updated_at': instance.updatedAt,
+};
+
 _SubjectAttempt _$SubjectAttemptFromJson(Map<String, dynamic> json) =>
     _SubjectAttempt(
       id: (json['id'] as num).toInt(),
@@ -50,6 +72,10 @@ _SubjectAttempt _$SubjectAttemptFromJson(Map<String, dynamic> json) =>
       maxScore: (json['max_score'] as num?)?.toInt(),
       score: (json['score'] as num?)?.toInt(),
       questions: json['questions'] as List<dynamic>?,
+      contextPayload: json['context_payload'],
+      answer: json['answer'] == null
+          ? null
+          : Answer.fromJson(json['answer'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SubjectAttemptToJson(_SubjectAttempt instance) =>
@@ -63,4 +89,6 @@ Map<String, dynamic> _$SubjectAttemptToJson(_SubjectAttempt instance) =>
       'max_score': instance.maxScore,
       'score': instance.score,
       'questions': instance.questions,
+      'context_payload': instance.contextPayload,
+      'answer': instance.answer,
     };

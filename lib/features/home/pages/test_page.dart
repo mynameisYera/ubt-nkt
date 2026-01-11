@@ -51,7 +51,6 @@ class _TestPageState extends State<TestPage> {
   void initState() {
     super.initState();
     
-    // Предотвращаем повторную инициализацию
     if (_isInitializing) {
       debugPrint('⚠️ Already initializing, skipping');
       return;
@@ -106,6 +105,117 @@ class _TestPageState extends State<TestPage> {
     _autoSaveTimer = Timer.periodic(const Duration(seconds: 20), (timer) {
       _sendAnswersToBackend();
     });
+  }
+
+  // Загрузка сохраненных ответов из данных
+  void _loadSavedAnswers() {
+    bool hasNewAnswers = false;
+    final state = _homeBloc.state;
+    state.maybeWhen(
+      loaded: (examModel) {
+        final testModel = examModel.testModel;
+        if (testModel == null || testModel.subjects.isEmpty) {
+          return;
+        }
+
+        for (final subject in testModel.subjects) {
+          final questions = subject.questions ?? [];
+          
+          for (final question in questions) {
+            try {
+              final questionMap = question as Map<String, dynamic>;
+              final attemptQuestionId = questionMap['attempt_question_id'];
+              
+              int? questionId;
+              if (attemptQuestionId is int) {
+                questionId = attemptQuestionId;
+              } else if (attemptQuestionId is num) {
+                questionId = attemptQuestionId.toInt();
+              } else {
+                continue;
+              }
+
+              final answerKey = '${subject.id}_$questionId';
+              
+              // Пропускаем, если ответ уже загружен
+              if (_answers.containsKey(answerKey) && _answers[answerKey] != null) {
+                continue;
+              }
+              
+              // Проверяем, есть ли сохраненный ответ в данных вопроса
+              final answerData = questionMap['answer'] as Map<String, dynamic>?;
+              if (answerData != null) {
+                final isAnswered = answerData['is_answered'] as bool? ?? false;
+                if (isAnswered) {
+                  final answerPayload = answerData['answer_payload'] as Map<String, dynamic>?;
+                  if (answerPayload != null) {
+                    final questionType = questionMap['question_type'] as String? ?? 'single';
+                    
+                    if (questionType == 'single' || questionType == 'context_single') {
+                      final selectedOptionId = answerPayload['selected_option_id'] as String?;
+                      if (selectedOptionId != null) {
+                        _answers[answerKey] = selectedOptionId;
+                        hasNewAnswers = true;
+                        debugPrint('✅ Loaded saved answer for question $questionId: $selectedOptionId');
+                      }
+                    } else if (questionType == 'multiple') {
+                      final selectedOptionIds = answerPayload['selected_option_ids'] as List<dynamic>?;
+                      if (selectedOptionIds != null && selectedOptionIds.isNotEmpty) {
+                        _answers[answerKey] = selectedOptionIds.cast<String>();
+                        hasNewAnswers = true;
+                        debugPrint('✅ Loaded saved answers for question $questionId: $selectedOptionIds');
+                      }
+                    } else if (questionType == 'matching') {
+                      final rows = answerPayload['rows'] as List<dynamic>?;
+                      if (rows != null && rows.isNotEmpty) {
+                        final matches = <String, String>{};
+                        for (final row in rows) {
+                          final rowMap = row as Map<String, dynamic>;
+                          final rowId = rowMap['row_id']?.toString();
+                          final optionId = rowMap['option_id']?.toString();
+                          if (rowId != null && optionId != null) {
+                            matches[rowId] = optionId;
+                          }
+                        }
+                        if (matches.isNotEmpty) {
+                          _answers[answerKey] = matches;
+                          hasNewAnswers = true;
+                          debugPrint('✅ Loaded saved matches for question $questionId: $matches');
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              
+              // Также проверяем answer в самом SubjectAttempt (если вопрос - это весь предмет)
+              if (subject.answer != null && subject.answer!.isAnswered) {
+                final answerPayload = subject.answer!.answerPayload;
+                final questionType = questionMap['question_type'] as String? ?? 'single';
+                
+                if (questionType == 'single' || questionType == 'context_single') {
+                  if (!_answers.containsKey(answerKey) || _answers[answerKey] == null) {
+                    _answers[answerKey] = answerPayload.selectedOptionId;
+                    hasNewAnswers = true;
+                    debugPrint('✅ Loaded saved answer from SubjectAttempt for question $questionId');
+                  }
+                }
+              }
+            } catch (e, stackTrace) {
+              debugPrint('⚠️ Error loading saved answer: $e');
+              debugPrint('   StackTrace: $stackTrace');
+              continue;
+            }
+          }
+        }
+      },
+      orElse: () {},
+    );
+    
+    // Обновляем UI если были загружены новые ответы
+    if (hasNewAnswers && mounted) {
+      setState(() {});
+    }
   }
 
   void _startCountdownTimer(ExamAttempt examAttempt, {bool useCurrentTime = false}) {
@@ -831,6 +941,11 @@ class _TestPageState extends State<TestPage> {
                     );
                   }
 
+                  // Загружаем сохраненные ответы при первой загрузке данных
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _loadSavedAnswers();
+                  });
+
                   if (_selectedSubjectIndex >= testModel.subjects.length) {
                     _selectedSubjectIndex = 0;
                   }
@@ -1336,6 +1451,12 @@ class _TestPageState extends State<TestPage> {
     final promptHtml = (renderPayload['prompt_html'] as String? ?? '').trim();
     final answerKey = '${subjectId}_$attemptQuestionId';
     
+    // Проверяем, есть ли сохраненный ответ
+    final hasAnswer = _answers.containsKey(answerKey) && _answers[answerKey] != null;
+    final answerData = question['answer'] as Map<String, dynamic>?;
+    final isAnswered = answerData?['is_answered'] as bool? ?? false;
+    final isQuestionAnswered = hasAnswer || isAnswered;
+    
     // Пропускаем пустые вопросы
     if (promptHtml.isEmpty && contextPayload == null) {
       return const SizedBox.shrink();
@@ -1349,55 +1470,96 @@ class _TestPageState extends State<TestPage> {
         borderRadius: BorderRadius.circular(8),
         side: isCurrent
             ? BorderSide(color: AppColors.mainBlue, width: 1.5)
-            : BorderSide.none,
+            : isQuestionAnswered
+                ? BorderSide(color: Colors.green.shade400, width: 1.5)
+                : BorderSide.none,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Компактный номер вопроса
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.mainBlue,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    'Вопрос $questionNumber',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10,
+      child: Container(
+        decoration: isQuestionAnswered && !isCurrent
+            ? BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.green.shade50,
+              )
+            : null,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Компактный номер вопроса
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.mainBlue,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      'Вопрос $questionNumber',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 4),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: _getQuestionTypeColor(questionType).withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: Text(
-                    _getQuestionTypeLabel(questionType),
-                    style: TextStyle(
-                      color: _getQuestionTypeColor(questionType),
-                      fontSize: 9,
-                      fontWeight: FontWeight.w500,
+                  const SizedBox(width: 4),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: _getQuestionTypeColor(questionType).withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                    child: Text(
+                      _getQuestionTypeLabel(questionType),
+                      style: TextStyle(
+                        color: _getQuestionTypeColor(questionType),
+                        fontSize: 9,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                  if (isQuestionAnswered) ...[
+                    const SizedBox(width: 4),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade600,
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.check_circle,
+                            size: 10,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 3),
+                          const Text(
+                            'Жауап берілді',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             const SizedBox(height: 6),
             // Контекст (для context_single)
             if (contextPayload != null) ...[
@@ -1455,6 +1617,7 @@ class _TestPageState extends State<TestPage> {
               answerKey,
             ),
           ],
+        ),
         ),
       ),
     );

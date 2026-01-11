@@ -27,6 +27,29 @@ abstract class ExamAttempt with _$ExamAttempt {
 
 
 @freezed
+abstract class AnswerPayload with _$AnswerPayload {
+  const factory AnswerPayload({
+    @JsonKey(name: 'selected_option_id') required String selectedOptionId,
+  }) = _AnswerPayload;
+
+  factory AnswerPayload.fromJson(Map<String, dynamic> json) =>
+      _$AnswerPayloadFromJson(json);
+}
+
+@freezed
+abstract class Answer with _$Answer {
+  const factory Answer({
+    @JsonKey(name: 'answer_payload') required AnswerPayload answerPayload,
+    @JsonKey(name: 'is_answered') required bool isAnswered,
+    @JsonKey(name: 'score_awarded') required int scoreAwarded,
+    @JsonKey(name: 'updated_at') required String updatedAt,
+  }) = _Answer;
+
+  factory Answer.fromJson(Map<String, dynamic> json) =>
+      _$AnswerFromJson(json);
+}
+
+@freezed
 abstract class SubjectAttempt with _$SubjectAttempt {
   const factory SubjectAttempt({
     required int id,
@@ -38,6 +61,8 @@ abstract class SubjectAttempt with _$SubjectAttempt {
     @JsonKey(name: 'max_score') int? maxScore,
     int? score,
     List<dynamic>? questions,
+    @JsonKey(name: 'context_payload') dynamic contextPayload,
+    Answer? answer,
   }) = _SubjectAttempt;
 
   factory SubjectAttempt.fromJson(Map<String, dynamic> json) =>
