@@ -1,4 +1,5 @@
 import 'package:brand_test/features/auth/pages/login_page.dart';
+import 'package:brand_test/features/home/models/contact_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +15,7 @@ import 'package:brand_test/config/widgets/error_message_widget.dart';
 import 'package:brand_test/features/auth/pages/bloc/auth_bloc.dart';
 import 'package:brand_test/features/auth/models/schools_model.dart';
 import 'package:dio/dio.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -42,6 +44,50 @@ class _RegisterPageState extends State<RegisterPage> {
   String errorMessage = "Белгісіз қателік, кейінірек қайталап көріңіз";
   late AuthBloc _authBloc;
   bool _isPasswordVisible = false;  
+  ContactModel? _contactModel;
+
+  Future<void> _loadContact() async {
+    final contactResponse = await DioSender.get(
+      Endpoints.getSupportContact,
+    );
+    final contactData = contactResponse.data as Map<String, dynamic>;
+    setState(() {
+      _contactModel = ContactModel.fromJson(contactData);
+    });
+  }
+
+  Future<void> openLink(String url) async {
+    final uri = Uri.tryParse(url);
+    if (uri == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Некорректная ссылка')),
+        );
+      }
+      return;
+    }
+
+    final canLaunch = await canLaunchUrl(uri);
+    if (!canLaunch) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Не удалось открыть ссылку')),
+        );
+      }
+      return;
+    }
+
+    final launched = await launchUrl(
+      uri,
+      mode: LaunchMode.platformDefault,
+      webOnlyWindowName: '_blank',
+    );
+    if (!launched && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Не удалось открыть ссылку')),
+      );
+    }
+  }
 
   @override
   void initState() {
@@ -53,6 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _firstNameController.addListener(_validateForm);
     _lastNameController.addListener(_validateForm);
     _passwordController.addListener(_validateForm);
+    _loadContact();
   }
 
   void _togglePasswordVisibility() {
@@ -317,6 +364,18 @@ class _RegisterPageState extends State<RegisterPage> {
                       isDisabled: !_isFormValid,
                       isLoading: _isLoading,
                       onPressed: _register,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            openLink(_contactModel!.whatsappUrl);
+                          },
+                          child: Text('Тіркелу кезінде қателік байқадыңыз ба?', style: TextStyle(color: AppColors.mainBlue, decoration: TextDecoration.underline, decorationColor: AppColors.mainBlue),),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     AnimatedSwitcher(

@@ -57,4 +57,8 @@ class Endpoints {
 
   // profile
   static const String getProfile = 'profile';
+
+  // get contact
+  static const String getContact = 'contact';
+  static const String getSupportContact = 'auth/support-contact';
 }

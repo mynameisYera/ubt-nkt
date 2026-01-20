@@ -1,3 +1,6 @@
+import 'package:brand_test/config/endpoints/dio_sender.dart';
+import 'package:brand_test/config/endpoints/endpoints.dart';
+import 'package:brand_test/features/home/models/contact_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:brand_test/config/storage/flutter_secure_storage_func.dart';
@@ -5,6 +8,7 @@ import 'package:brand_test/config/widgets/app_button.dart';
 import 'package:brand_test/config/route/go_router_help.dart';
 import 'package:brand_test/config/getit/get_injection.dart';
 import 'package:brand_test/features/home/pages/bloc/home_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,12 +23,57 @@ class _HomePageState extends State<HomePage> {
   late HomeBloc _homeBloc;
   bool _hasNavigatedToTest = false; 
   bool _hasLoadedPairs = false; 
+  ContactModel? contactModel;
 
   @override
   void initState() {
     super.initState();
     _homeBloc = sl.get<HomeBloc>();
     _loadDataIfNeeded();
+    _loadContact();
+  }
+
+  Future<void> _loadContact() async {
+    final contactResponse = await DioSender.get(
+      Endpoints.getContact,
+    );
+    final contactData = contactResponse.data as Map<String, dynamic>;
+    setState(() {
+      contactModel = ContactModel.fromJson(contactData);
+    });
+  }
+
+  Future<void> openLink(String url) async {
+    final uri = Uri.tryParse(url);
+    if (uri == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Некорректная ссылка')),
+        );
+      }
+      return;
+    }
+
+    final canLaunch = await canLaunchUrl(uri);
+    if (!canLaunch) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Не удалось открыть ссылку')),
+        );
+      }
+      return;
+    }
+
+    final launched = await launchUrl(
+      uri,
+      mode: LaunchMode.platformDefault,
+      webOnlyWindowName: '_blank',
+    );
+    if (!launched && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Не удалось открыть ссылку')),
+      );
+    }
   }
 
   void _loadDataIfNeeded() {
@@ -479,6 +528,13 @@ class _HomePageState extends State<HomePage> {
                                         },
                                         text: 'Менің тесттерім',
                                       ),
+                                      const SizedBox(height: 16),
+                                      AppButton(
+                                        onPressed: () {
+                                          openLink(contactModel!.whatsappUrl);
+                                        },
+                                        text: "Тест сатып алу",
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -496,6 +552,13 @@ class _HomePageState extends State<HomePage> {
                                     appRouter.push("/history");
                                   },
                                   text: 'Менің тесттерім',
+                                ),
+                                const SizedBox(height: 16),
+                                AppButton(
+                                  onPressed: () {
+                                    openLink(contactModel!.whatsappUrl);
+                                  },
+                                  text: 'Тест сатып алу',
                                 ),
                               ],
                             );
@@ -629,6 +692,14 @@ class _HomePageState extends State<HomePage> {
                                         },
                                         text: 'Менің тесттерім',
                                       ),
+                                      const SizedBox(height: 16),
+                                      AppButton(
+                                        onPressed: () {
+                                          print(contactModel!.whatsappUrl);
+                                          openLink(contactModel!.whatsappUrl);
+                                        },
+                                        text: 'Тест сатып алу',
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -647,6 +718,15 @@ class _HomePageState extends State<HomePage> {
                                     appRouter.push("/history");
                                   },
                                   text: 'Менің тесттерім',
+                                ),
+                                const SizedBox(height: 16),
+                                AppButton(
+                                  onPressed: () {
+                                    openLink(contactModel!.whatsappUrl);
+                                    print("contactModel!.whatsappUrl: ${contactModel!.whatsappUrl}");
+
+                                  },
+                                  text: 'Тест сатып алу',
                                 ),
                               ],
                             );
