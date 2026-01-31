@@ -272,7 +272,6 @@ class _ResultPageState extends State<ResultPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // Заголовок предмета
                                   InkWell(
                                     onTap: () {
                                       setState(() {
@@ -363,7 +362,7 @@ class _ResultPageState extends State<ResultPage> {
                                       ],
                                     ),
                                   ),
-                                  if (isExpanded) ...[
+                                  if (true) ...[
                                     const Divider(height: 24),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -459,19 +458,22 @@ class _ResultPageState extends State<ResultPage> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width,
+      ),
       backgroundColor: Colors.transparent,
       builder: (context) => DraggableScrollableSheet(
         initialChildSize: 0.9,
-        minChildSize: 0.5,
+        minChildSize: 0.9,
         maxChildSize: 0.95,
         builder: (context, scrollController) => Container(
+          width: double.infinity,
           decoration: const BoxDecoration(
             color: Color(0xFFF4F6FB),
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
             children: [
-              // Заголовок с кнопкой закрытия
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(

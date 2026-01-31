@@ -533,7 +533,7 @@ class _HomePageState extends State<HomePage> {
                                         onPressed: () {
                                           openLink(contactModel!.whatsappUrl);
                                         },
-                                        text: "Тест сатып алу",
+                                        text: "Мүмкіндік сатып алу",
                                       ),
                                     ],
                                   ),
@@ -558,7 +558,7 @@ class _HomePageState extends State<HomePage> {
                                   onPressed: () {
                                     openLink(contactModel!.whatsappUrl);
                                   },
-                                  text: 'Тест сатып алу',
+                                  text: 'Мүмкіндік сатып алу',
                                 ),
                               ],
                             );
@@ -698,7 +698,7 @@ class _HomePageState extends State<HomePage> {
                                           print(contactModel!.whatsappUrl);
                                           openLink(contactModel!.whatsappUrl);
                                         },
-                                        text: 'Тест сатып алу',
+                                        text: 'Мүмкіндік сатып алу',
                                       ),
                                     ],
                                   ),
@@ -726,7 +726,7 @@ class _HomePageState extends State<HomePage> {
                                     print("contactModel!.whatsappUrl: ${contactModel!.whatsappUrl}");
 
                                   },
-                                  text: 'Тест сатып алу',
+                                  text: 'Мүмкіндік сатып алу',
                                 ),
                               ],
                             );

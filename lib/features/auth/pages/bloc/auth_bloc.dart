@@ -217,7 +217,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         {
           "phone": event.phone,
           "code": event.code,
-          "1": event.password,
+          "password": event.password,
         }
       );
       if(response.statusCode == 200){
