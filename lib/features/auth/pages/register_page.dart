@@ -56,37 +56,22 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
+
   Future<void> openLink(String url) async {
-    final uri = Uri.tryParse(url);
-    if (uri == null) {
+    launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+  }
+
+  void _openWhatsappContact() {
+    final url = _contactModel?.whatsappUrl;
+    if (url == null || url.trim().isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Некорректная ссылка')),
+          const SnackBar(content: Text('Контакт недоступен')),
         );
       }
       return;
     }
-
-    final canLaunch = await canLaunchUrl(uri);
-    if (!canLaunch) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Не удалось открыть ссылку')),
-        );
-      }
-      return;
-    }
-
-    final launched = await launchUrl(
-      uri,
-      mode: LaunchMode.platformDefault,
-      webOnlyWindowName: '_blank',
-    );
-    if (!launched && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Не удалось открыть ссылку')),
-      );
-    }
+    openLink(url);
   }
 
   @override
@@ -371,7 +356,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       children: [
                         TextButton(
                           onPressed: () {
-                            openLink(_contactModel!.whatsappUrl);
+                            _openWhatsappContact();
                           },
                           child: Text('Тіркелу кезінде қателік байқадыңыз ба?', style: TextStyle(color: AppColors.mainBlue, decoration: TextDecoration.underline, decorationColor: AppColors.mainBlue),),
                         ),

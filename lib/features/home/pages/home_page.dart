@@ -8,7 +8,7 @@ import 'package:brand_test/config/widgets/app_button.dart';
 import 'package:brand_test/config/route/go_router_help.dart';
 import 'package:brand_test/config/getit/get_injection.dart';
 import 'package:brand_test/features/home/pages/bloc/home_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'dart:html' as html;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -43,37 +43,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<void> openLink(String url) async {
-    final uri = Uri.tryParse(url);
-    if (uri == null) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Некорректная ссылка')),
-        );
-      }
-      return;
-    }
-
-    final canLaunch = await canLaunchUrl(uri);
-    if (!canLaunch) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Не удалось открыть ссылку')),
-        );
-      }
-      return;
-    }
-
-    final launched = await launchUrl(
-      uri,
-      mode: LaunchMode.platformDefault,
-      webOnlyWindowName: '_blank',
-    );
-    if (!launched && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Не удалось открыть ссылку')),
-      );
-    }
+  void openLink(String url) {
+    html.window.open(url, '_blank');
   }
 
   void _loadDataIfNeeded() {
@@ -151,7 +122,7 @@ class _HomePageState extends State<HomePage> {
           state.maybeWhen(
             loaded: (examModel) {
               if (examModel.testModel != null && !_hasNavigatedToTest) {
-                _hasNavigatedToTest = true; // Устанавливаем флаг перед навигацией
+                _hasNavigatedToTest = true;
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (mounted) {
                     appRouter.pushReplacement('/test', extra: examModel.testModel);
@@ -162,7 +133,7 @@ class _HomePageState extends State<HomePage> {
               }
             },
             loadingFailure: (message) {
-              _hasNavigatedToTest = false; // Сбрасываем флаг при ошибке
+              _hasNavigatedToTest = false;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(message)),
               );
@@ -253,6 +224,7 @@ class _HomePageState extends State<HomePage> {
                                       FlutterSecureStorageFunc.deleteToken();
                                       FlutterSecureStorageFunc.deleteRefreshToken();
                                       FlutterSecureStorageFunc.deleteRole();
+                                      FlutterSecureStorageFunc.deletePhone();
                                       appRouter.pushReplacement("/login");
                                     },
                                     style: ElevatedButton.styleFrom(
@@ -530,9 +502,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       const SizedBox(height: 16),
                                       AppButton(
-                                        onPressed: () {
-                                          openLink(contactModel!.whatsappUrl);
-                                        },
+                                        onPressed: () => openLink(contactModel!.whatsappUrl),
                                         text: "Мүмкіндік сатып алу",
                                       ),
                                     ],
@@ -555,9 +525,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 const SizedBox(height: 16),
                                 AppButton(
-                                  onPressed: () {
-                                    openLink(contactModel!.whatsappUrl);
-                                  },
+                                  onPressed: () => openLink(contactModel!.whatsappUrl),
                                   text: 'Мүмкіндік сатып алу',
                                 ),
                               ],
@@ -694,10 +662,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       const SizedBox(height: 16),
                                       AppButton(
-                                        onPressed: () {
-                                          print(contactModel!.whatsappUrl);
-                                          openLink(contactModel!.whatsappUrl);
-                                        },
+                                        onPressed: () => openLink(contactModel!.whatsappUrl),
                                         text: 'Мүмкіндік сатып алу',
                                       ),
                                     ],
@@ -721,11 +686,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 const SizedBox(height: 16),
                                 AppButton(
-                                  onPressed: () {
-                                    openLink(contactModel!.whatsappUrl);
-                                    print("contactModel!.whatsappUrl: ${contactModel!.whatsappUrl}");
-
-                                  },
+                                  onPressed: () => openLink(contactModel!.whatsappUrl),
                                   text: 'Мүмкіндік сатып алу',
                                 ),
                               ],

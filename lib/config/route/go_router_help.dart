@@ -1,3 +1,4 @@
+import 'package:brand_test/config/widgets/watermark_layer.dart';
 import 'package:brand_test/features/home/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -61,7 +62,11 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) {
         if (state.extra is ExamAttempt) {
           final examAttempt = state.extra as ExamAttempt;
-          return NoTransitionPage(child: TestPage(examAttempt: examAttempt));
+          return NoTransitionPage(child: AdaptiveWatermark(
+            phone: "8707XXXXXXX",
+            userId: "48291",
+            child: TestPage(examAttempt: examAttempt),
+          ));
         } else if (state.extra is int) {
           final pairId = state.extra as int;
           return NoTransitionPage(child: TestPage(pairId: pairId));

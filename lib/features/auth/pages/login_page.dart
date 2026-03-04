@@ -174,7 +174,6 @@ class _LoginPageState extends State<LoginPage> {
                     AppButton(
                       text: 'Кіру',
                       icon: Icons.login,
-                      // isLoading: _isLoading,
                       isDisabled: !_isFormValid,
                       onPressed: _isLoading
                           ? null

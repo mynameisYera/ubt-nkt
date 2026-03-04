@@ -85,6 +85,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await FlutterSecureStorageFunc.saveToken(userLogin.tokens.access);
         await FlutterSecureStorageFunc.saveRefreshToken(userLogin.tokens.refresh);
         await FlutterSecureStorageFunc.saveRole(userLogin.user.role);
+        await FlutterSecureStorageFunc.savePhone(event.loginRequest.phone);
         
         final savedToken = await FlutterSecureStorageFunc.getToken();
         final savedRefreshToken = await FlutterSecureStorageFunc.getRefreshToken();
@@ -143,6 +144,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           }
         );
         if(response.statusCode == 201 || response.statusCode == 200){
+          try {
+            await FlutterSecureStorageFunc.savePhone(event.phone);
+          } catch (e) {
+            debugPrint('Ошибка сохранения телефона: $e');
+          }
           emit(const AuthState.registered());
           appRouter.pushReplacement("/login");
         }else{

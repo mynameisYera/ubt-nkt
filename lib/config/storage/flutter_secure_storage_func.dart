@@ -7,6 +7,7 @@ class FlutterSecureStorageFunc {
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
   static const String _accessTokenKey = 'auth_token';
   static const String _refreshTokenKey = 'refresh_token';
+  static const String _phoneKey = 'phone';
   static const String _attemptIdKey = 'attempt_id';
   static const String _roleKey = 'role';
 
@@ -24,7 +25,6 @@ class FlutterSecureStorageFunc {
   }
 
 
-  // --- Save Attempt ID ---
   static Future<void> saveAttemptId(int id) async {
     await _storage.write(key: _attemptIdKey, value: id.toString());
   }
@@ -38,7 +38,6 @@ class FlutterSecureStorageFunc {
     await _storage.delete(key: _attemptIdKey);
   }
 
-  // --- Access Token ---
   static Future<void> saveToken(String token) async {
     await _storage.write(key: _accessTokenKey, value: token);
   }
@@ -55,7 +54,6 @@ class FlutterSecureStorageFunc {
     await _storage.delete(key: _accessTokenKey);
   }
 
-  // --- Refresh Token ---
   static Future<void> saveRefreshToken(String token) async {
     await _storage.write(key: _refreshTokenKey, value: token);
   }
@@ -70,5 +68,17 @@ class FlutterSecureStorageFunc {
 
   static Future<void> deleteRefreshToken() async {
     await _storage.delete(key: _refreshTokenKey);
+  }
+
+  static Future<String?> getPhone() async {
+    return _storage.read(key: _phoneKey);
+  }
+
+  static Future<void> savePhone(String phone) async {
+    await _storage.write(key: _phoneKey, value: phone);
+  }
+
+  static Future<void> deletePhone() async {
+    await _storage.delete(key: _phoneKey);
   }
 }
