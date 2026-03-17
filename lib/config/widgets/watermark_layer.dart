@@ -87,13 +87,13 @@ class _AdaptiveWatermarkState extends State<AdaptiveWatermark> {
         final width = constraints.maxWidth;
         final height = constraints.maxHeight;
 
-        final fontSize = width * 0.016;
+        final fontSize = width > 1000 ? width * 0.016 : width * 0.03;
 
         final columns = (width / 200).ceil();
-        final rows = (height / 100).ceil();
+        final rows = (height / 70).ceil();
 
         final displayPhone = _phone.isNotEmpty ? _phone : widget.phone;
-        final text = "$displayPhone\nID:${widget.userId}\n$currentTime";
+        final text = "$displayPhone\n@brandonline";
 
         return Stack(
           children: [
@@ -101,7 +101,7 @@ class _AdaptiveWatermarkState extends State<AdaptiveWatermark> {
 
             IgnorePointer(
               child: Opacity(
-                opacity: 0.07,
+                opacity: 0.09,
                 child: Column(
                   children: List.generate(rows, (row) {
                     return Row(
