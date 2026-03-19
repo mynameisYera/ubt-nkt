@@ -622,6 +622,41 @@ class _TestPageState extends State<TestPage> {
             backgroundColor: AppColors.mainBlue,
             foregroundColor: Colors.white,
             elevation: 2,
+            leading: isDesktop
+                ? IconButton(
+                    icon: Icon(_isSidebarCollapsed ? Icons.menu : Icons.menu_open),
+                    onPressed: () {
+                      setState(() {
+                        _isSidebarCollapsed = !_isSidebarCollapsed;
+                      });
+                    },
+                    tooltip: _isSidebarCollapsed ? 'Показать предметы' : 'Скрыть предметы',
+                  )
+                : null,
+            title: BlocBuilder<HomeBloc, HomeState>(
+              bloc: _homeBloc,
+              builder: (context, state) {
+                return state.maybeWhen(
+                  loaded: (examModel) {
+                    final testModel = examModel.testModel;
+                    final subjects = testModel?.subjects ?? [];
+                    if (subjects.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+                    final selectedSubject = subjects[_selectedSubjectIndex.clamp(0, subjects.length - 1)];
+                    return Text(
+                      selectedSubject.displayName,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    );
+                  },
+                  orElse: () => const SizedBox.shrink(),
+                );
+              },
+            ),
             actions: [
               BlocBuilder<HomeBloc, HomeState>(
                 bloc: _homeBloc,
@@ -1246,41 +1281,7 @@ class _TestPageState extends State<TestPage> {
           ),
           child: Row(
             children: [
-              // Кнопка для показа/скрытия боковой панели (только на десктопе)
-              if (isDesktop)
-                IconButton(
-                  icon: Icon(_isSidebarCollapsed ? Icons.menu : Icons.menu_open),
-                  onPressed: () {
-                    setState(() {
-                      _isSidebarCollapsed = !_isSidebarCollapsed;
-                    });
-                  },
-                  tooltip: _isSidebarCollapsed ? 'Показать предметы' : 'Скрыть предметы',
-                ),
-              // Компактная информация о предмете
-              Expanded(
-                child: Row(
-                  children: [
-                    Text(
-                      selectedSubject.displayName,
-                      style: TextStyle(
-                        fontSize: isDesktop ? 14 : 12,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.mainBlue,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      '${_currentQuestionIndex + 1}/${questions.length}',
-                      style: TextStyle(
-                        fontSize: isDesktop ? 12 : 11,
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Компактная навигация по вопросам с прокруткой
+              // Компактная навигация по вопросам с прокруткой (слева)
               if (questions.isNotEmpty)
                 Flexible(
                   child: SizedBox(
@@ -1333,6 +1334,15 @@ class _TestPageState extends State<TestPage> {
                     ),
                   ),
                 ),
+              const SizedBox(width: 8),
+              // Счетчик вопроса справа
+              Text(
+                '${_currentQuestionIndex + 1}/${questions.length}',
+                style: TextStyle(
+                  fontSize: isDesktop ? 12 : 11,
+                  color: Colors.grey[700],
+                ),
+              ),
             ],
           ),
         ),

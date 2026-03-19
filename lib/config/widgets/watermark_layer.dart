@@ -101,7 +101,7 @@ class _AdaptiveWatermarkState extends State<AdaptiveWatermark> {
 
             IgnorePointer(
               child: Opacity(
-                opacity: 0.09,
+                opacity: 0.06,
                 child: Column(
                   children: List.generate(rows, (row) {
                     return Row(
